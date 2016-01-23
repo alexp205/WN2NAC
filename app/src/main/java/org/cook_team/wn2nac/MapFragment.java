@@ -75,9 +75,10 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
         mMap.setMyLocationEnabled(true);
 
         // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(-34, 151);
+        LatLng NTUAS = new LatLng(25.014852, 121.538715);
         //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(NTUAS));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(12));
     }
 
     public void onEventMainThread(WindooMeasureFragment.ShowEvent event) {

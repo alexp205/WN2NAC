@@ -13,11 +13,11 @@ import de.greenrobot.event.EventBus;
 
 public class WindooMeasureFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
 
-    //private static EventBus bus = EventBus.getDefault();
+    private static EventBus bus = EventBus.getDefault();
     public static class ShowEvent {}
     public static class HideEvent {}
 
-    Button buttonLast, buttonNext;
+    Button buttonLast, buttonNext, buttonClose;
     WindooMeasureFragment1 windooMeasureFragment1;
     WindooMeasureFragment2 windooMeasureFragment2;
     WindooMeasureFragment3 windooMeasureFragment3;
@@ -36,8 +36,10 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
 
         buttonLast = (Button) rootView.findViewById(R.id.buttonLast);
         buttonNext = (Button) rootView.findViewById(R.id.buttonNext);
+        buttonClose = (Button) rootView.findViewById(R.id.buttonClose);
         buttonLast.setOnClickListener(this);
         buttonNext.setOnClickListener(this);
+        buttonClose.setOnClickListener(this);
         windooMeasureFragment1 = (WindooMeasureFragment1) getChildFragmentManager().findFragmentById(R.id.windoo_measure_1);
         windooMeasureFragment2 = (WindooMeasureFragment2) getChildFragmentManager().findFragmentById(R.id.windoo_measure_2);
         windooMeasureFragment3 = (WindooMeasureFragment3) getChildFragmentManager().findFragmentById(R.id.windoo_measure_3);
@@ -96,6 +98,9 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
                     getChildFragmentManager().beginTransaction().hide(windooMeasureFragment2).commit();
                     getChildFragmentManager().beginTransaction().hide(windooMeasureFragment3).commit();
                 }
+                break;
+            case R.id.buttonClose:
+                bus.post(new HideEvent());
                 break;
         }
     }

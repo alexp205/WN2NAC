@@ -26,7 +26,7 @@ public class WindooMeasureFragment1 extends android.support.v4.app.Fragment {
         minPicker = (NumberPicker) rootView.findViewById(R.id.minPicker);
         secPicker = (NumberPicker) rootView.findViewById(R.id.secPicker);
         minPicker.setMinValue(0); minPicker.setMaxValue(60);
-        secPicker.setMinValue(0); secPicker.setMaxValue(60);
+        secPicker.setMinValue(0); secPicker.setMaxValue(59);
         minPicker.setValue(1);
 
         return rootView;

@@ -109,16 +109,21 @@ public class WindooBarFragment extends android.support.v4.app.Fragment implement
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.button_start:
-                if (!measureFragmentVisible) {
+                if (!measureFragmentVisible)
                     bus.post(new WindooMeasureFragment.ShowEvent());
-                    button_start.setText("取消量測");
-                }
-                else {
+                else
                     bus.post(new WindooMeasureFragment.HideEvent());
-                    button_start.setText("新量測");
-                }
-                measureFragmentVisible = !measureFragmentVisible;
                 break;
         }
+    }
+
+    public void onEventMainThread(WindooMeasureFragment.ShowEvent event) {
+        button_start.setText("取消量測");
+        measureFragmentVisible = true;
+    }
+
+    public void onEventMainThread(WindooMeasureFragment.HideEvent event) {
+        button_start.setText("新量測");
+        measureFragmentVisible = false;
     }
 }

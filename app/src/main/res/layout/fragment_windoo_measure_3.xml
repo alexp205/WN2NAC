@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="測量期間請保持手機直立不動" />
+        android:text="測量期間請保持儀器直立不動" />
 
     <CheckBox
         android:layout_width="wrap_content"

@@ -4,14 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".WindooMeasureFragment"
-    android:background="#ee264459">
+    android:background="@android:drawable/dialog_holo_dark_frame">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="210dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonClose"
+            android:layout_gravity="top|right"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:background="@android:drawable/ic_menu_close_clear_cancel" />
 
         <fragment
             android:id="@+id/windoo_measure_1"
