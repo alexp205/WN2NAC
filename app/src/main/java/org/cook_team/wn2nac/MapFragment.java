@@ -12,19 +12,40 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import de.greenrobot.event.EventBus;
+
 public class MapFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback {
 
+    private static EventBus bus = EventBus.getDefault();
+    WindooMeasureFragment windooMeasureFragment;
     private GoogleMap mMap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!bus.isRegistered(this)) bus.register(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!bus.isRegistered(this)) bus.register(this);
+    }
+
+    @Override
+    public void onPause() {
+        bus.unregister(this);
+        super.onPause();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+
+        windooMeasureFragment = (WindooMeasureFragment) getChildFragmentManager().findFragmentById(R.id.windoo_measure);
+        getChildFragmentManager().beginTransaction().hide(windooMeasureFragment).commit();
+
         return rootView;
     }
 
@@ -54,8 +75,16 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
         mMap.setMyLocationEnabled(true);
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //LatLng sydney = new LatLng(-34, 151);
+        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    public void onEventMainThread(WindooMeasureFragment.ShowEvent event) {
+        getChildFragmentManager().beginTransaction().show(windooMeasureFragment).commit();
+    }
+
+    public void onEventMainThread(WindooMeasureFragment.HideEvent event) {
+        getChildFragmentManager().beginTransaction().hide(windooMeasureFragment).commit();
     }
 }

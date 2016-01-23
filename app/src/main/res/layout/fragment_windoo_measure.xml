@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".WindooMeasureFragment"
+    android:background="#ee264459">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="210dp">
+
+        <fragment
+            android:id="@+id/windoo_measure_1"
+            android:name="org.cook_team.wn2nac.WindooMeasureFragment1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/fragment_windoo_measure_1" />
+
+        <fragment
+            android:id="@+id/windoo_measure_2"
+            android:name="org.cook_team.wn2nac.WindooMeasureFragment2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/fragment_windoo_measure_2" />
+
+        <fragment
+            android:id="@+id/windoo_measure_3"
+            android:name="org.cook_team.wn2nac.WindooMeasureFragment3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/fragment_windoo_measure_3" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="上一步"
+            android:id="@+id/buttonLast"
+            android:layout_gravity="start"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="下一步"
+            android:id="@+id/buttonNext"
+            android:layout_gravity="end"/>
+
+    </LinearLayout>
+
+</LinearLayout>

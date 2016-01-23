@@ -12,10 +12,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <fragment
-        android:id="@+id/windoo_bar"
-        android:name="org.cook_team.wn2nac.WindooBarFragment"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal">
+
+        <fragment
+            android:id="@+id/windoo_measure"
+            android:name="org.cook_team.wn2nac.WindooMeasureFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/fragment_windoo_measure" />
+
+        <fragment
+            android:id="@+id/windoo_bar"
+            android:name="org.cook_team.wn2nac.WindooBarFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/fragment_windoo_bar" />
+
+    </LinearLayout>
 
 </FrameLayout>

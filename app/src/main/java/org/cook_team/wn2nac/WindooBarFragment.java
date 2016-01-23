@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -22,12 +23,11 @@ import java.util.Calendar;
 import ch.skywatch.windoo.api.JDCWindooEvent;
 import de.greenrobot.event.EventBus;
 
-public class WindooBarFragment extends android.support.v4.app.Fragment implements  SensorEventListener {
+public class WindooBarFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
 
     private static EventBus bus = EventBus.getDefault();
     private TextView status, wind, temperature, humidity, pressure;
-    private TextView degreeTextView;
-    private ImageView mPointer;
+    private Button button_start;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,17 +40,13 @@ public class WindooBarFragment extends android.support.v4.app.Fragment implement
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_windoo_bar, container, false);
 
+        button_start = (Button) rootView.findViewById(R.id.button_start);
+        button_start.setOnClickListener(this);
         status = (TextView) rootView.findViewById(R.id.bar_status);
         wind = (TextView) rootView.findViewById(R.id.bar_wind);
         temperature = (TextView) rootView.findViewById(R.id.bar_temperature);
         humidity = (TextView) rootView.findViewById(R.id.bar_humidity);
         pressure = (TextView) rootView.findViewById(R.id.bar_pressure);
-
-        degreeTextView = (TextView) rootView.findViewById(R.id.bar_degreeTextView);
-        mPointer = (ImageView) rootView.findViewById(R.id.bar_pointer);
-        mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         updateDisplay();
 
@@ -62,22 +58,18 @@ public class WindooBarFragment extends android.support.v4.app.Fragment implement
         super.onResume();
         if (!bus.isRegistered(this)) bus.register(this);
         updateDisplay();
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
-        mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
     public void onPause() {
         bus.unregister(this);
-        mSensorManager.unregisterListener(this, mAccelerometer);
-        mSensorManager.unregisterListener(this, mMagnetometer);
         super.onPause();
     }
 
     public void updateDisplay() {
-        if (Wn2nacService.calibrated) status.setText("已校正");
-        else if (Wn2nacService.available) status.setText("已連接 (需校正)");
-        else status.setText("未連接");
+        if (Wn2nacService.calibrated) status.setText("Windoo儀器已校正");
+        else if (Wn2nacService.available) status.setText("Windoo儀器已連接 (需校正)");
+        else status.setText("Windoo儀器未連接");
 
         if (Wn2nacService.liveMeasurement.hasWindSpeed())
             wind.setText(String.format("%.2f", (double) Wn2nacService.liveMeasurement.getWind()));
@@ -112,51 +104,21 @@ public class WindooBarFragment extends android.support.v4.app.Fragment implement
             pressure.setText(String.format("%.2f", (double) event.getData()));
     }
 
-    private SensorManager mSensorManager;
-    private Sensor mAccelerometer;
-    private Sensor mMagnetometer;
-    private float[] mLastAccelerometer = new float[3];
-    private float[] mLastMagnetometer = new float[3];
-    private boolean mLastAccelerometerSet = false;
-    private boolean mLastMagnetometerSet = false;
-    private float[] mR = new float[9];
-    private float[] mOrientation = new float[3];
-    private float mCurrentDegree = 0f;
-
+    boolean measureFragmentVisible = false;
     @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor == mAccelerometer) {
-            System.arraycopy(event.values, 0, mLastAccelerometer, 0, event.values.length);
-            mLastAccelerometerSet = true;
-        } else if (event.sensor == mMagnetometer) {
-            System.arraycopy(event.values, 0, mLastMagnetometer, 0, event.values.length);
-            mLastMagnetometerSet = true;
-        }
-        if (mLastAccelerometerSet && mLastMagnetometerSet) {
-            SensorManager.getRotationMatrix(mR, null, mLastAccelerometer, mLastMagnetometer);
-            SensorManager.getOrientation(mR, mOrientation);
-            float azimuthInRadians = mOrientation[0];
-            float azimuthInDegress = (float)(Math.toDegrees(azimuthInRadians)+360)%360;
-            RotateAnimation ra = new RotateAnimation(
-                    mCurrentDegree,
-                    -azimuthInDegress,
-                    Animation.RELATIVE_TO_SELF, 0.5f,
-                    Animation.RELATIVE_TO_SELF,
-                    0.5f);
-
-            ra.setDuration(250);
-
-            ra.setFillAfter(true);
-
-            mPointer.startAnimation(ra);
-            mCurrentDegree = -azimuthInDegress;
-            degreeTextView.setText(String.format("%.0f", (double) azimuthInDegress));
+    public void onClick(View view) {
+        switch(view.getId()){
+            case R.id.button_start:
+                if (!measureFragmentVisible) {
+                    bus.post(new WindooMeasureFragment.ShowEvent());
+                    button_start.setText("取消量測");
+                }
+                else {
+                    bus.post(new WindooMeasureFragment.HideEvent());
+                    button_start.setText("新量測");
+                }
+                measureFragmentVisible = !measureFragmentVisible;
+                break;
         }
     }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // TODO Auto-generated method stub
-    }
-
 }

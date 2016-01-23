@@ -95,12 +95,12 @@ public class MainFragment extends android.support.v4.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //if (!bus.isRegistered(this)) bus.register(this);
+        if (!bus.isRegistered(this)) bus.register(this);
     }
 
     @Override
     public void onPause() {
-        //bus.unregister(this);
+        bus.unregister(this);
         super.onPause();
     }
 

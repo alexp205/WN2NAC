@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="3. 測量"
+        style="@android:style/TextAppearance.DeviceDefault.Large"
+        android:gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="測量期間請保持手機直立不動" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="測量結束後震動提示"
+        android:id="@+id/checkBox"
+        android:layout_gravity="center_horizontal"
+        android:checked="false" />
+
+    <TextView
+        style="@android:style/TextAppearance.DeviceDefault.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="測量時間長度: 0分0秒"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>
