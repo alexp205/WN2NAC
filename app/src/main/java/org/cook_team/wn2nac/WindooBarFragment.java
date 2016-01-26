@@ -118,12 +118,19 @@ public class WindooBarFragment extends android.support.v4.app.Fragment implement
     }
 
     public void onEventMainThread(WindooMeasureFragment.ShowEvent event) {
-        button_start.setText("取消量測");
+        button_start.setText("回到地圖");
         measureFragmentVisible = true;
     }
 
     public void onEventMainThread(WindooMeasureFragment.HideEvent event) {
-        button_start.setText("新量測");
+        button_start.setText("測量");
         measureFragmentVisible = false;
+    }
+
+    public void onEventMainThread(Wn2nacMeasure.UpdateDisplayEvent event) {
+        if(Wn2nacMeasure.measuring)
+            button_start.setVisibility(View.INVISIBLE);
+        else
+            button_start.setVisibility(View.VISIBLE);
     }
 }

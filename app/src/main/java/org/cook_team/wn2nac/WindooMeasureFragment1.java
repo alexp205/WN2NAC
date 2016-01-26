@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
 
-public class WindooMeasureFragment1 extends android.support.v4.app.Fragment {
+public class WindooMeasureFragment1 extends android.support.v4.app.Fragment implements NumberPicker.OnValueChangeListener {
 
     //private static EventBus bus = EventBus.getDefault();
 
@@ -27,7 +27,10 @@ public class WindooMeasureFragment1 extends android.support.v4.app.Fragment {
         secPicker = (NumberPicker) rootView.findViewById(R.id.secPicker);
         minPicker.setMinValue(0); minPicker.setMaxValue(60);
         secPicker.setMinValue(0); secPicker.setMaxValue(59);
-        minPicker.setValue(1);
+        minPicker.setValue(Wn2nacMeasure.min);
+        secPicker.setValue(Wn2nacMeasure.sec);
+        minPicker.setOnValueChangedListener(this);
+        secPicker.setOnValueChangedListener(this);
 
         return rootView;
     }
@@ -44,4 +47,9 @@ public class WindooMeasureFragment1 extends android.support.v4.app.Fragment {
         super.onPause();
     }
 
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+        Wn2nacMeasure.min = minPicker.getValue();
+        Wn2nacMeasure.sec = secPicker.getValue();
+    }
 }

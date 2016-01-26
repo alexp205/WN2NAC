@@ -24,18 +24,18 @@ public class Wn2nacHistory extends BaseExpandableListAdapter {
     private static EventBus bus = EventBus.getDefault();
 
     public Wn2nacHistory() {
-        if (!bus.isRegistered(this)) bus.register(this);
+       // if (!bus.isRegistered(this)) bus.register(this);
     }
 
     public static List<WindooMeasurement> measurement = new ArrayList<>();
     public static int nextSeq = 0;
 
-    public void onEventMainThread(Wn2nacMeasure.MeasureSaveEvent event) {
+    /*public void onEventMainThread(Wn2nacMeasure.MeasureSaveEvent event) {
         Wn2nacMeasure.currentMeasurement.setSeq(nextSeq++);
         measurement.add(Wn2nacMeasure.currentMeasurement);
         Wn2nacPreferences.write();
         write(Wn2nacMeasure.currentMeasurement);
-    }
+    }*/
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {

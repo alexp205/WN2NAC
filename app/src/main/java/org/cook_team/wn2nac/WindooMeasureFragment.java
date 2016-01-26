@@ -1,6 +1,8 @@
 package org.cook_team.wn2nac;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +20,12 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
     public static class HideEvent {}
 
     Button buttonLast, buttonNext, buttonClose;
-    WindooMeasureFragment1 windooMeasureFragment1;
-    WindooMeasureFragment2 windooMeasureFragment2;
-    WindooMeasureFragment3 windooMeasureFragment3;
     int currentStep;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //if (!bus.isRegistered(this)) bus.register(this);
+        if (!bus.isRegistered(this)) bus.register(this);
     }
 
     @Override
@@ -40,11 +39,7 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
         buttonLast.setOnClickListener(this);
         buttonNext.setOnClickListener(this);
         buttonClose.setOnClickListener(this);
-        windooMeasureFragment1 = (WindooMeasureFragment1) getChildFragmentManager().findFragmentById(R.id.windoo_measure_1);
-        windooMeasureFragment2 = (WindooMeasureFragment2) getChildFragmentManager().findFragmentById(R.id.windoo_measure_2);
-        windooMeasureFragment3 = (WindooMeasureFragment3) getChildFragmentManager().findFragmentById(R.id.windoo_measure_3);
-        getChildFragmentManager().beginTransaction().hide(windooMeasureFragment2).commit();
-        getChildFragmentManager().beginTransaction().hide(windooMeasureFragment3).commit();
+        getChildFragmentManager().beginTransaction().replace(R.id.container, new WindooMeasureFragment1()).commit();
         buttonLast.setVisibility(View.INVISIBLE);
         currentStep = 1;
 
@@ -54,12 +49,12 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
     @Override
     public void onResume() {
         super.onResume();
-        //if (!bus.isRegistered(this)) bus.register(this);
+        if (!bus.isRegistered(this)) bus.register(this);
     }
 
     @Override
     public void onPause() {
-        //bus.unregister(this);
+        bus.unregister(this);
         super.onPause();
     }
 
@@ -67,41 +62,71 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.buttonNext:
-                if (currentStep == 1) {
-                    currentStep = 2;
-                    buttonLast.setVisibility(View.VISIBLE);
-                    getChildFragmentManager().beginTransaction().hide(windooMeasureFragment1).commit();
-                    getChildFragmentManager().beginTransaction().show(windooMeasureFragment2).commit();
-                    getChildFragmentManager().beginTransaction().hide(windooMeasureFragment3).commit();
-                }
-                else if (currentStep == 2) {
-                    currentStep = 3;
-                    buttonNext.setText("開始測量");
-                    getChildFragmentManager().beginTransaction().hide(windooMeasureFragment1).commit();
-                    getChildFragmentManager().beginTransaction().hide(windooMeasureFragment2).commit();
-                    getChildFragmentManager().beginTransaction().show(windooMeasureFragment3).commit();
-                }
+                if (currentStep<4) currentStep++;
+                else if (currentStep==4) currentStep = 1;
                 break;
             case R.id.buttonLast:
-                if (currentStep == 3) {
-                    currentStep = 2;
-                    buttonNext.setText("下一步");
-                    getChildFragmentManager().beginTransaction().hide(windooMeasureFragment1).commit();
-                    getChildFragmentManager().beginTransaction().show(windooMeasureFragment2).commit();
-                    getChildFragmentManager().beginTransaction().hide(windooMeasureFragment3).commit();
-
-                }
-                else if (currentStep == 2) {
-                    currentStep = 1;
-                    buttonLast.setVisibility(View.INVISIBLE);
-                    getChildFragmentManager().beginTransaction().show(windooMeasureFragment1).commit();
-                    getChildFragmentManager().beginTransaction().hide(windooMeasureFragment2).commit();
-                    getChildFragmentManager().beginTransaction().hide(windooMeasureFragment3).commit();
-                }
+                if (currentStep==4) bus.post(new Wn2nacMeasure.AbandonEvent());
+                if (currentStep>1) currentStep--;
                 break;
             case R.id.buttonClose:
                 bus.post(new HideEvent());
                 break;
+        }
+        Fragment fragment = new WindooMeasureFragment1();
+        switch(currentStep) {
+            case 1:
+                buttonLast.setVisibility(View.INVISIBLE);
+                buttonNext.setVisibility(View.VISIBLE);
+                buttonClose.setVisibility(View.VISIBLE);
+                buttonNext.setText("下一步");
+                fragment = new WindooMeasureFragment1();
+                break;
+            case 2:
+                buttonLast.setVisibility(View.VISIBLE);
+                buttonNext.setVisibility(View.VISIBLE);
+                buttonClose.setVisibility(View.VISIBLE);
+                buttonLast.setText("上一步");
+                buttonNext.setText("下一步");
+                fragment = new WindooMeasureFragment2();
+                break;
+            case 3:
+                buttonLast.setVisibility(View.VISIBLE);
+                buttonNext.setVisibility(View.VISIBLE);
+                buttonClose.setVisibility(View.VISIBLE);
+                buttonLast.setText("上一步");
+                buttonNext.setText("開始測量");
+                fragment = new WindooMeasureFragment3();
+                break;
+            case 4:
+                buttonLast.setVisibility(View.VISIBLE);
+                buttonNext.setVisibility(View.INVISIBLE);
+                buttonClose.setVisibility(View.INVISIBLE);
+                buttonLast.setText("取消測量");
+                fragment = new WindooMeasuringFragment();
+                break;
+        }
+        getChildFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+    }
+
+    public void onEventMainThread(Wn2nacMeasure.UpdateDisplayEvent event) {
+        if(Wn2nacMeasure.measuring) {
+            buttonLast.setVisibility(View.VISIBLE);
+            buttonNext.setVisibility(View.INVISIBLE);
+            buttonClose.setVisibility(View.INVISIBLE);
+            buttonLast.setText("取消測量");
+        }
+        else if(Wn2nacMeasure.measured) {
+            /*buttonLast.setVisibility(View.INVISIBLE);
+            buttonNext.setVisibility(View.VISIBLE);
+            buttonClose.setVisibility(View.VISIBLE);
+            buttonNext.setText("重新測量");*/
+            bus.post(new HideEvent());
+            buttonLast.setVisibility(View.INVISIBLE);
+            buttonNext.setVisibility(View.VISIBLE);
+            buttonClose.setVisibility(View.VISIBLE);
+            buttonNext.setText("下一步");
+            getChildFragmentManager().beginTransaction().replace(R.id.container, new WindooMeasureFragment1()).commit();
         }
     }
 

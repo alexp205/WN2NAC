@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#ee113918"
+    android:padding="8dp">
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2016/1/26\n17:24"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:paddingBottom="12dp"
+                android:layout_column="0"
+                android:layout_span="2"
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:textColor="@android:color/primary_text_dark" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="溫度 (°C)"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:paddingRight="24dp" />
+
+            <TextView
+                style="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="壓力 (hPa)"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:id="@+id/temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="N/A"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:paddingRight="24dp"
+                android:paddingBottom="12dp" />
+
+            <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:id="@+id/pressure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="N/A"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="濕度 (%)"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:layout_column="0"
+                android:paddingRight="24dp" />
+
+            <TextView
+                style="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="風速 (m/s)"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:layout_column="1" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:id="@+id/humidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="N/A"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:layout_column="0"
+                android:paddingRight="24dp" />
+
+            <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:id="@+id/wind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="N/A"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:layout_column="1" />
+        </TableRow>
+
+    </TableLayout>
+
+</LinearLayout>

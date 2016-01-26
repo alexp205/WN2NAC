@@ -4,16 +4,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 
-public class WindooMeasureFragment3 extends android.support.v4.app.Fragment {
+import com.github.lzyzsd.circleprogress.DonutProgress;
 
-    //private static EventBus bus = EventBus.getDefault();
+import de.greenrobot.event.EventBus;
 
-    CheckBox checkBox;
-    TextView textViewTime;
+public class WindooMeasuredFragment extends android.support.v4.app.Fragment {
+
+    private static EventBus bus = EventBus.getDefault();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,11 +23,7 @@ public class WindooMeasureFragment3 extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_windoo_measure_3, container, false);
-
-        checkBox = (CheckBox) rootView.findViewById(R.id.checkBox);
-        textViewTime = (TextView) rootView.findViewById(R.id.textViewTime);
-        textViewTime.setText("測量時間長度: " + String.format("%02d",Wn2nacMeasure.min) + "分" + String.format("%02d",Wn2nacMeasure.sec) + "秒");
+        View rootView = inflater.inflate(R.layout.fragment_windoo_measured, container, false);
 
         return rootView;
     }
@@ -44,5 +39,4 @@ public class WindooMeasureFragment3 extends android.support.v4.app.Fragment {
         //bus.unregister(this);
         super.onPause();
     }
-
 }

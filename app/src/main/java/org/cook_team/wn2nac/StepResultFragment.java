@@ -23,7 +23,7 @@ public class StepResultFragment extends android.support.v4.app.Fragment implemen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!bus.isRegistered(this)) bus.register(this);
+       // if (!bus.isRegistered(this)) bus.register(this);
     }
 
     @Override
@@ -42,29 +42,29 @@ public class StepResultFragment extends android.support.v4.app.Fragment implemen
 
         sendButton.setEnabled(Wn2nacMeasure.measured);
 
-        bus.post(new Wn2nacMeasure.MeasureDisplayEvent());
+        //bus.post(new Wn2nacMeasure.MeasureDisplayEvent());
         return rootView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (!bus.isRegistered(this)) bus.register(this);
+       // if (!bus.isRegistered(this)) bus.register(this);
 
     }
 
     @Override
     public void onPause() {
-        bus.unregister(this);
+        //bus.unregister(this);
         super.onPause();
     }
 
-    public void onEventMainThread(Wn2nacMeasure.MeasureDisplayEvent event) {
+    /*public void onEventMainThread(Wn2nacMeasure.MeasureDisplayEvent event) {
         avgWindTextView.setText(String.format("%.2f", (double) Wn2nacMeasure.currentMeasurement.getWind()));
         avgTemperatureTextView.setText(String.format("%.2f", (double) Wn2nacMeasure.currentMeasurement.getTemperature()));
         avgHumidityTextView.setText(String.format("%.2f", (double) Wn2nacMeasure.currentMeasurement.getHumidity()));
         avgPressureTextView.setText(String.format("%.2f", (double) Wn2nacMeasure.currentMeasurement.getPressure()));
-    }
+    }*/
 
     @Override
     public void onClick(View view) {
@@ -90,11 +90,6 @@ public class StepResultFragment extends android.support.v4.app.Fragment implemen
 
     public void onEventMainThread(Wn2nacNetwork.NetworkNotAvailableEvent event) {
         networkTextView.setText("網路無法使用");
-    }
-
-    public void onEventMainThread(Wn2nacMeasure.MeasureFinishEvent event) {
-        networkTextView.setText("未傳送");
-        sendButton.setEnabled(true);
     }
 
     public void onEventMainThread(Wn2nacNetwork.MeasurementSentEvent event) {

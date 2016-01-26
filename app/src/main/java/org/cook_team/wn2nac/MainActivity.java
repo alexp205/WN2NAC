@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
@@ -59,13 +58,13 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks {
         switch(position) {
             default:
             case 0:
-                fragment = new MainFragment();
+                fragment = new Depr_MainFragment();
                 break;
             case 1:
                 fragment = new HistoryFragment();
                 break;
             case 2:
-                fragment = new MapFragment();
+                fragment = new WindooMapFragment();
                 break;
             case 3:
                 fragment = new ConfigFragment();

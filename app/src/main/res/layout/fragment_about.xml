@@ -70,7 +70,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=" 版本: \n 2015/11/22"
+        android:text=" 版本: \n 2016/1/26"
         android:layout_gravity="center_horizontal|top"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:gravity="center_horizontal" />
@@ -89,7 +89,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="seanstone5923@gmail.com"
+        android:text="r01222055@ntu.edu.tw"
         android:layout_gravity="center_horizontal|top"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:gravity="center_horizontal"

@@ -23,26 +23,12 @@
             android:minWidth="0dp"
             android:background="@android:drawable/ic_menu_close_clear_cancel" />
 
-        <fragment
-            android:id="@+id/windoo_measure_1"
-            android:name="org.cook_team.wn2nac.WindooMeasureFragment1"
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:layout="@layout/fragment_windoo_measure_1" />
-
-        <fragment
-            android:id="@+id/windoo_measure_2"
-            android:name="org.cook_team.wn2nac.WindooMeasureFragment2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:layout="@layout/fragment_windoo_measure_2" />
-
-        <fragment
-            android:id="@+id/windoo_measure_3"
-            android:name="org.cook_team.wn2nac.WindooMeasureFragment3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:layout="@layout/fragment_windoo_measure_3" />
+            android:layout_height="wrap_content">
+        </LinearLayout>
 
     </FrameLayout>
 
