@@ -167,7 +167,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="開始新量測"
+        android:text="測量"
         android:id="@+id/button_start"
         android:layout_weight="0" />
 

@@ -9,15 +9,50 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="3. 測量"
+        android:text="2. 定時測量"
         style="@android:style/TextAppearance.DeviceDefault.Large"
-        android:gravity="center_horizontal" />
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="16dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="測量期間請保持儀器直立不動" />
+        android:text="時間長度"
+        style="@android:style/TextAppearance.DeviceDefault.Large"
+        android:gravity="center_horizontal"
+        android:textColor="@android:color/secondary_text_dark" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp">
+
+        <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/minPicker" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="分"
+            android:layout_gravity="center_vertical" />
+
+        <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/secPicker" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="秒"
+            android:layout_gravity="center_vertical" />
+
+    </LinearLayout>
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -25,14 +60,15 @@
         android:text="測量結束後震動提示"
         android:id="@+id/checkBox"
         android:layout_gravity="center_horizontal"
-        android:checked="false" />
+        android:checked="false"
+        android:layout_marginBottom="16dp" />
 
     <TextView
-        style="@android:style/TextAppearance.DeviceDefault.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="測量時間長度: 0分0秒"
-        android:id="@+id/textViewTime"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:text="測量期間請保持儀器不動"
+        style="@android:style/TextAppearance.DeviceDefault.Large"
+        android:textColor="@android:color/secondary_text_dark" />
 
 </LinearLayout>

@@ -16,6 +16,7 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,16 +27,6 @@ public class Wn2nacNetwork {
 
     private static EventBus bus = EventBus.getDefault();
 
-    public Wn2nacNetwork() {
-        if (!bus.isRegistered(this)) bus.register(this);
-    }
-
-    public static String server_address;
-
-    public static class CheckNetworkEvent {}
-    public static class NetworkAvailableEvent {}
-    public static class NetworkNotAvailableEvent {}
-    public static class MeasurementSentEvent {}
     public static class ResponseReceivedEvent {
         public final String response;
         public ResponseReceivedEvent(String response) {
@@ -48,18 +39,6 @@ public class Wn2nacNetwork {
             this.error = error;
         }
     }
-    public static class SendMeasurementEvent {
-        public final int no;
-        public SendMeasurementEvent(int no) {
-            this.no = no;
-        }
-    }
-    public static class NetworkEvent {
-        public final String message;
-        public NetworkEvent(String message) {
-            this.message = message;
-        }
-    }
 
     private static Cache cache;
     private static Network network;
@@ -70,23 +49,16 @@ public class Wn2nacNetwork {
 
     public static void init() {
 
-        // Instantiate the cache
-        cache = new DiskBasedCache(Wn2nacService.context.getCacheDir(), 1024 * 1024); // 1MB cap
-
-        // Set up the network to use HttpURLConnection as the HTTP client.
-        network = new BasicNetwork(new HurlStack());
-
-        // Instantiate the RequestQueue with the cache and network.
-        requestQueue = new RequestQueue(cache, network);
-
-        // Start the queue
-        requestQueue.start();
+        cache = new DiskBasedCache(Wn2nacService.context.getCacheDir(), 1024 * 1024); // Instantiate the cache (1MB ca)p
+        network = new BasicNetwork(new HurlStack()); // Set up the network to use HttpURLConnection as the HTTP client.
+        requestQueue = new RequestQueue(cache, network); // Instantiate the RequestQueue with the cache and network.
+        requestQueue.start(); // Start the queue
 
         responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 bus.post(new ResponseReceivedEvent(response));
-                bus.post(new NetworkEvent("傳送成功"));
+                bus.post(new Wn2nacService.ToastEvent("量測資料傳送成功"));
                 bus.post(new MeasurementSentEvent());
             }
         };
@@ -95,31 +67,28 @@ public class Wn2nacNetwork {
             @Override
             public void onErrorResponse(VolleyError error) {
                 bus.post(new NetworkErrorEvent(error));
-                bus.post(new NetworkEvent("傳送失敗\n請再試一次\n" + error.toString() + "\n" + error.getCause() + "\n" + error.getMessage() + "\n" + error.getStackTrace()));
+                bus.post(new  Wn2nacService.ToastEvent("量測資料傳送失敗\n資料已儲存\n請稍後再傳送"));
             }
         };
     }
 
-    public void onEventAsync(CheckNetworkEvent event) {
-        ConnectivityManager connMgr = (ConnectivityManager)
-                Wn2nacService.context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            bus.post(new NetworkAvailableEvent());
-        } else {
-            bus.post(new NetworkNotAvailableEvent());
+    public static String server_address;
+    public static WindooMeasurement measurement;
+
+    public static class SendMeasurementEvent {
+        public final WindooMeasurement measurement;
+        public SendMeasurementEvent(WindooMeasurement measurement) {
+            this.measurement = measurement;
         }
     }
-
-    public void onEventAsync(final SendMeasurementEvent event)  {
-
-        bus.post(new NetworkEvent("傳送中..."));
+    public static void send() {
+        bus.post(new Wn2nacService.ToastEvent("傳送中..."));
         StringRequest stringRequest = new StringRequest(Request.Method.POST, server_address, responseListener, errorListener) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                WindooMeasurement measurement = Wn2nacHistory.measurement.get(event.no);
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("user_id", String.valueOf(measurement.getNickname()));
+                Map<String, String> map = new HashMap<>();
+                map.put("user_id", String.valueOf(Wn2nacPreferences.ID));
+                map.put("windoo_id", String.valueOf(Wn2nacPreferences.WindooID));
                 map.put("time_start", WindooEvent.dateFormat.format(measurement.getCreatedAt()));
                 map.put("time_finish", WindooEvent.dateFormat.format(measurement.getUpdatedAt()));
                 map.put("location_latitude", String.valueOf(measurement.getLatitude()));
@@ -129,11 +98,13 @@ public class Wn2nacNetwork {
                 map.put("windoo_temperature", String.valueOf(measurement.getTemperature()));
                 map.put("windoo_humidity", String.valueOf(measurement.getHumidity()));
                 map.put("windoo_pressure", String.valueOf(measurement.getPressure()));
+                map.put("location_heading", String.valueOf(measurement.getOrientation()));
+                map.put("time_sent", WindooEvent.dateFormat.format(new Date()));
                 return map;
             }
         };
-
-        // Add the request to the RequestQueue.
-        requestQueue.add(stringRequest);
+        requestQueue.add(stringRequest);  // Add the request to the RequestQueue.
     }
+
+    public static class MeasurementSentEvent {}
 }

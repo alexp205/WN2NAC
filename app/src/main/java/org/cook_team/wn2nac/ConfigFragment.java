@@ -13,7 +13,7 @@ public class ConfigFragment extends android.support.v4.app.Fragment implements V
 
     private static EventBus bus = EventBus.getDefault();
 
-    private EditText idEditText, ipEditText;
+    private EditText idEditText, windooEditText;
     private Button applyButton;
 
     public ConfigFragment() {
@@ -31,12 +31,12 @@ public class ConfigFragment extends android.support.v4.app.Fragment implements V
         View rootView = inflater.inflate(R.layout.fragment_config, container, false);
 
         idEditText = (EditText) rootView.findViewById(R.id.idEditText);
-        ipEditText = (EditText) rootView.findViewById(R.id.ipEditText);
+        windooEditText = (EditText) rootView.findViewById(R.id.windooEditText);
         applyButton = (Button) rootView.findViewById(R.id.applyButton);
         applyButton.setOnClickListener(this);
 
         idEditText.setText(Wn2nacPreferences.ID);
-        ipEditText.setText(Wn2nacNetwork.server_address);
+        windooEditText.setText(Wn2nacPreferences.WindooID);
 
         return rootView;
     }
@@ -59,9 +59,10 @@ public class ConfigFragment extends android.support.v4.app.Fragment implements V
             case R.id.applyButton:
                 Wn2nacPreferences.IDset = true;
                 Wn2nacPreferences.ID = String.valueOf(idEditText.getText());
-                Wn2nacNetwork.server_address = String.valueOf(ipEditText.getText());
+                Wn2nacPreferences.WindooID = String.valueOf(windooEditText.getText());
                 Wn2nacPreferences.write();
                 bus.post(new Wn2nacService.ToastEvent("設定已儲存"));
+                bus.post(new Wn2nacMap.OpenEvent());
                 break;
         }
     }

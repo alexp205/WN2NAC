@@ -9,15 +9,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="2. 風向"
+        android:text="1. 紀錄風向"
         style="@android:style/TextAppearance.DeviceDefault.Large"
-        android:gravity="center_horizontal" />
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="16dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="將手機平放，轉到逆風方向，按「紀錄風向」" />
+        android:text="將手機平放，轉到逆風方向，按「紀錄風向」"
+        android:layout_marginBottom="16dp" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -29,7 +31,8 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="16dp">
 
             <ImageView
                 android:id="@+id/heading_pointer"

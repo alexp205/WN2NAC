@@ -3,8 +3,13 @@ package org.cook_team.wn2nac;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.os.Vibrator;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -15,6 +20,8 @@ import de.greenrobot.event.EventBus;
 
 public class Wn2nacService extends Service implements Observer {
 
+    public static boolean initialized = false;
+
     public static boolean available = false;
     public static boolean calibrated = false;
 
@@ -22,20 +29,22 @@ public class Wn2nacService extends Service implements Observer {
     public static Wn2nacMeasure wn2NacMeasure = new Wn2nacMeasure();
     public static Wn2nacHistory wn2NacHistory = new Wn2nacHistory();
     public static Wn2nacNetwork wn2NacNetwork = new Wn2nacNetwork();
-    public static Wn2nacLocation wn2NacLocation = new Wn2nacLocation();
+    public static Wn2nacMap wn2NacMap = new Wn2nacMap();
     public static Wn2nacException wn2NacException = new Wn2nacException();
 
     @Override
     public void onCreate() {
-        context = this;
         if (!bus.isRegistered(this)) bus.register(this);
+        context = this;
         init();
         Wn2nacPreferences.read();
+        if (Wn2nacPreferences.ID.equals("")) {
+            bus.post(new Wn2nacPreferences.SetIDEvent());
+        }
         Wn2nacHistory.read();
         Wn2nacNetwork.init();
-        Wn2nacLocation.init();
+        Wn2nacMap.init();
         bus.post(new StartObservationEvent());
-        bus.post(new Wn2nacLocation.LocationFetchEvent());
     }
 
     @Override
@@ -144,6 +153,45 @@ public class Wn2nacService extends Service implements Observer {
         public MessageEvent(String message) {
             this.message = message;
         }
+    }
+
+    /** MEASURING **/
+
+    public void onEventMainThread(Wn2nacMeasure.StartEvent event) {
+        Wn2nacMeasure.start();
+    }
+
+    public void onEventMainThread(Wn2nacMeasure.FinishEvent event) {
+        Wn2nacMeasure.finish();
+        if (Wn2nacMeasure.vibrate) {
+            Vibrator myVibrator = (Vibrator) getApplication().getSystemService(Service.VIBRATOR_SERVICE);
+            myVibrator.vibrate(300);
+        }
+    }
+
+    public void onEventMainThread(Wn2nacMeasure.AbandonEvent event) {
+        Wn2nacMeasure.abandon();
+    }
+
+    /** HISTORY **/
+
+    public void onEventBackgroundThread(Wn2nacHistory.SaveEvent event) {
+        Wn2nacHistory.save(event.measurement);
+    }
+
+    /** NETWORK **/
+
+    public void onEventAsync(final Wn2nacNetwork.SendMeasurementEvent event) {
+        Wn2nacNetwork.measurement = event.measurement;
+        Wn2nacNetwork.send();
+    }
+
+    public void onEventBackgroundThread(final Wn2nacNetwork.MeasurementSentEvent event) {
+        Wn2nacNetwork.measurement.setSentAt(new Date());
+        Wn2nacHistory.save(Wn2nacNetwork.measurement);
+        Wn2nacPreferences.write();
+        Wn2nacHistory.read();
+        bus.post(new Wn2nacHistory.RefreshEvent());
     }
 }
 

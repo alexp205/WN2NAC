@@ -1,6 +1,8 @@
 package org.cook_team.wn2nac;
 
+import android.app.Service;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -20,7 +22,6 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
     public static class HideEvent {}
 
     Button buttonLast, buttonNext, buttonClose;
-    int currentStep;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,11 +40,20 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
         buttonLast.setOnClickListener(this);
         buttonNext.setOnClickListener(this);
         buttonClose.setOnClickListener(this);
-        getChildFragmentManager().beginTransaction().replace(R.id.container, new WindooMeasureFragment1()).commit();
+        getChildFragmentManager().beginTransaction().replace(R.id.container, new WindooMeasureFragment2()).commit();
         buttonLast.setVisibility(View.INVISIBLE);
-        currentStep = 1;
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        updateStep();
+        if (Wn2nacMap.measureFragmentVisible)
+            bus.post(new WindooMeasureFragment.ShowEvent());
+        else
+            bus.post(new WindooMeasureFragment.HideEvent());
     }
 
     @Override
@@ -62,19 +72,24 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.buttonNext:
-                if (currentStep<4) currentStep++;
-                else if (currentStep==4) currentStep = 1;
+                if (Wn2nacMap.currentStep<4) Wn2nacMap.currentStep++;
+                else if (Wn2nacMap.currentStep==4) Wn2nacMap.currentStep = 2;
+                if (Wn2nacMap.currentStep==4) bus.post(new Wn2nacMeasure.StartEvent());
                 break;
             case R.id.buttonLast:
-                if (currentStep==4) bus.post(new Wn2nacMeasure.AbandonEvent());
-                if (currentStep>1) currentStep--;
+                if (Wn2nacMap.currentStep==4) bus.post(new Wn2nacMeasure.AbandonEvent());
+                if (Wn2nacMap.currentStep>2) Wn2nacMap.currentStep--;
                 break;
             case R.id.buttonClose:
                 bus.post(new HideEvent());
                 break;
         }
+        updateStep();
+    }
+
+    public void updateStep() {
         Fragment fragment = new WindooMeasureFragment1();
-        switch(currentStep) {
+        switch(Wn2nacMap.currentStep) {
             case 1:
                 buttonLast.setVisibility(View.INVISIBLE);
                 buttonNext.setVisibility(View.VISIBLE);
@@ -83,7 +98,9 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
                 fragment = new WindooMeasureFragment1();
                 break;
             case 2:
-                buttonLast.setVisibility(View.VISIBLE);
+                Wn2nacMeasure.hasHeading = false;
+                Wn2nacMeasure.heading = -9999;
+                buttonLast.setVisibility(View.INVISIBLE);
                 buttonNext.setVisibility(View.VISIBLE);
                 buttonClose.setVisibility(View.VISIBLE);
                 buttonLast.setText("上一步");

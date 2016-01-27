@@ -70,7 +70,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=" 版本: \n 2016/1/26"
+        android:text=" 版本: \n 2016/1/28"
         android:layout_gravity="center_horizontal|top"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:gravity="center_horizontal" />

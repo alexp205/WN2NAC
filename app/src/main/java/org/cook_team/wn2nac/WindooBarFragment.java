@@ -104,12 +104,11 @@ public class WindooBarFragment extends android.support.v4.app.Fragment implement
             pressure.setText(String.format("%.2f", (double) event.getData()));
     }
 
-    boolean measureFragmentVisible = false;
     @Override
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.button_start:
-                if (!measureFragmentVisible)
+                if (!Wn2nacMap.measureFragmentVisible)
                     bus.post(new WindooMeasureFragment.ShowEvent());
                 else
                     bus.post(new WindooMeasureFragment.HideEvent());
@@ -119,12 +118,12 @@ public class WindooBarFragment extends android.support.v4.app.Fragment implement
 
     public void onEventMainThread(WindooMeasureFragment.ShowEvent event) {
         button_start.setText("回到地圖");
-        measureFragmentVisible = true;
+        Wn2nacMap.measureFragmentVisible = true;
     }
 
     public void onEventMainThread(WindooMeasureFragment.HideEvent event) {
         button_start.setText("測量");
-        measureFragmentVisible = false;
+        Wn2nacMap.measureFragmentVisible = false;
     }
 
     public void onEventMainThread(Wn2nacMeasure.UpdateDisplayEvent event) {

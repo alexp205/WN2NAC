@@ -4,15 +4,199 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp" >
+    android:padding="8dp">
     <!--android:background="#000000"-->
 
-    <TextView
-        android:id="@+id/lblListHeader"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:textSize="17dp"
-        android:textColor="#f9f93d" />
+        android:layout_marginBottom="8dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2016/1/26"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:textColor="@android:color/primary_text_dark" />
+
+            <TextView
+                android:id="@+id/time2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="17:24:00 ~ 17:25:00"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/primary_text_dark" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/latlon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="25.017988\n121.533779"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/primary_text_dark" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="前往"
+                    android:id="@+id/buttonGo"
+                    android:minHeight="0dp"
+                    android:layout_gravity="center_horizontal"
+                    android:focusable="false"
+                    android:minWidth="60dp" />
+
+            </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/sent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已傳送"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/primary_text_dark" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="傳送"
+                android:id="@+id/buttonSend"
+                android:minHeight="0dp"
+                android:layout_gravity="center_horizontal"
+                android:focusable="false"
+                android:minWidth="60dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="溫度 (°C)"
+                android:layout_column="0"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="濕度 (%)"
+                android:layout_column="1"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="壓力 (hPa)"
+                android:layout_column="2"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="風速 (m/s)"
+                android:layout_column="3"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="N/A"
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:textColor="@android:color/primary_text_dark"
+                android:layout_column="0"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/humidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="N/A"
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:textColor="@android:color/primary_text_dark"
+                android:layout_column="1"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/pressure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="N/A"
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:textColor="@android:color/primary_text_dark"
+                android:layout_column="2"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/wind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="N/A"
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:textColor="@android:color/primary_text_dark"
+                android:layout_column="3"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal" />
+        </TableRow>
+
+    </TableLayout>
 
 </LinearLayout>

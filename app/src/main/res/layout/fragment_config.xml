@@ -21,13 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="識別"
-                style="@style/Base.TextAppearance.AppCompat.Large"
-                android:layout_gravity="start" />
-
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="30dip" />
@@ -36,50 +29,37 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ID"
+                android:text="使用者ID"
                 android:layout_gravity="start" />
             <EditText
                 android:id="@+id/idEditText"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="ID"
-                android:layout_gravity="center_horizontal" />
+                android:text="0"
+                android:layout_gravity="center_horizontal"
+                android:inputType="number"
+                android:numeric="integer" />
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="30dip" />
-
-            <!--NETWORK-->
-
+            <!--ID-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="網路"
-                style="@style/Base.TextAppearance.AppCompat.Large"
-                android:layout_gravity="start" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="30dip" />
-
-            <!--Server IP-->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="伺服器 IP"
+                android:text="儀器ID"
                 android:layout_gravity="start" />
             <EditText
-                android:id="@+id/ipEditText"
+                android:id="@+id/windooEditText"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="IP"
-                android:layout_gravity="center_horizontal" />
+                android:text="0"
+                android:layout_gravity="center_horizontal"
+                android:inputType="number"
+                android:numeric="integer" />
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="30dip" />
+            <!--NETWORK-->
+
+            <!--Server IP-->
 
             <Button
                 android:layout_width="wrap_content"

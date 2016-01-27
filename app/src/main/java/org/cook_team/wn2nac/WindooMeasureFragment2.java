@@ -11,17 +11,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
 
-public class WindooMeasureFragment2 extends android.support.v4.app.Fragment implements SensorEventListener {
+public class WindooMeasureFragment2 extends android.support.v4.app.Fragment implements SensorEventListener, View.OnClickListener {
 
     //private static EventBus bus = EventBus.getDefault();
 
     ImageView heading_pointer;
     TextView heading_degrees;
+
+    Button buttonWind;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,9 @@ public class WindooMeasureFragment2 extends android.support.v4.app.Fragment impl
 
         heading_pointer = (ImageView) rootView.findViewById(R.id.heading_pointer);
         heading_degrees = (TextView) rootView.findViewById(R.id.heading_degrees);
+        buttonWind = (Button) rootView.findViewById(R.id.buttonWind);
+        buttonWind.setOnClickListener(this);
+        buttonWind.setEnabled(!Wn2nacMeasure.hasHeading);
 
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -96,15 +102,24 @@ public class WindooMeasureFragment2 extends android.support.v4.app.Fragment impl
 
             ra.setFillAfter(true);
 
-            heading_pointer.startAnimation(ra);
-            mCurrentDegree = -azimuthInDegress;
-            heading_degrees.setText(String.format("%.0f", (double) azimuthInDegress));
+            if (!Wn2nacMeasure.hasHeading) {
+                heading_pointer.startAnimation(ra);
+                mCurrentDegree = -azimuthInDegress;
+                heading_degrees.setText(String.format("%.0f", (double) azimuthInDegress));
+            }
         }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onClick(View view) {
+        Wn2nacMeasure.hasHeading = true;
+        Wn2nacMeasure.heading = mCurrentDegree;
+        buttonWind.setEnabled(false);
     }
 
 }

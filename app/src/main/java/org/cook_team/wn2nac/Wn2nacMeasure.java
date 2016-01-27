@@ -1,43 +1,43 @@
 package org.cook_team.wn2nac;
 
+import android.app.Service;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ch.skywatch.windoo.api.JDCWindooMeasurement;
 import de.greenrobot.event.EventBus;
 
 public class Wn2nacMeasure {
 
-    /** EVENT BUS */
     private static EventBus bus = EventBus.getDefault();
-    public Wn2nacMeasure() {
-        if (!bus.isRegistered(this)) bus.register(this);
-    }
 
-    /** MEASUREMENT */
+    /** MEASUREMENT OPTIONS **/
+    public static boolean hasHeading = false;
+    public static float heading = -9999;
+    public static boolean vibrate = false;
+    public static int min = 1, sec = 0;
+
+    /** MEASUREMENT STATUS**/
     public static boolean measuring = false;
     public static boolean measured = false;
-    public static int min = 1, sec = 0;
+    public static CountDownTimer countDownTimer;
     public static int duration = 60;
-    private static CountDownTimer countDownTimer;
     public static long tick = 0;
     public static List<Double> wind, temperature, humidity, pressure;
-    public static WindooMeasurement currentMeasurement = new WindooMeasurement();
+    public static WindooMeasurement measurement = new WindooMeasurement();
 
-    /** Measurement Start EVENT */
+    /** MEASUREMENT Start**/
     public static class StartEvent {}
-    public void onEventMainThread(StartEvent event) {
+    public static void start() {
         if (!measuring) {
-            currentMeasurement = new WindooMeasurement();
-            currentMeasurement.setCreatedAt(new Date());
-            wind = new ArrayList<>();
-            temperature = new ArrayList<>();
-            humidity = new ArrayList<>();
-            pressure = new ArrayList<>();
             measuring = true;
+            measurement = new WindooMeasurement();
+            measurement.setCreatedAt(new Date());
+            wind = new ArrayList<>(); temperature = new ArrayList<>(); humidity = new ArrayList<>(); pressure = new ArrayList<>();
+
             duration = min*60 + sec;
             countDownTimer = new CountDownTimer(duration*1000, 1000) {
                 public void onTick(long millisUntilFinished) {
@@ -52,16 +52,19 @@ public class Wn2nacMeasure {
         bus.post(new UpdateDisplayEvent());
     }
 
-    /** Measurement Finish EVENT */
+    /** MEASUREMENT Finish**/
     public static class FinishEvent {}
-    public void onEventBackgroundThread(FinishEvent event) {
-        currentMeasurement.setUpdatedAt(new Date());
-        currentMeasurement.setNickname(Wn2nacPreferences.ID);
-        currentMeasurement.setLatitude(Wn2nacLocation.lastLocation.getLatitude());
-        currentMeasurement.setLongitude(Wn2nacLocation.lastLocation.getLongitude());
-        currentMeasurement.setAltitude(Wn2nacLocation.lastLocation.getAltitude());
+    public static void finish() {
 
         measured = true; measuring = false;
+
+        measurement.setUpdatedAt(new Date());
+        measurement.setNickname(Wn2nacPreferences.ID);
+        measurement.setLatitude(Wn2nacMap.lastLocation.getLatitude());
+        measurement.setLongitude(Wn2nacMap.lastLocation.getLongitude());
+        measurement.setAltitude(Wn2nacMap.lastLocation.getAltitude());
+        measurement.setOrientation(heading); heading = -9999; hasHeading = false;
+
         double avgWind = 0, avgTemperature = 0, avgHumidity = 0, avgPressure = 0;
         for (int i = 0; i < wind.size(); i++) avgWind += wind.get(i);
         avgWind /= wind.size();
@@ -72,21 +75,31 @@ public class Wn2nacMeasure {
         for (int i = 0; i < pressure.size(); i++) avgPressure += pressure.get(i);
         avgPressure /= pressure.size();
 
-        currentMeasurement.setWind(avgWind);
-        currentMeasurement.setTemperature(avgTemperature);
-        currentMeasurement.setHumidity(avgHumidity);
-        currentMeasurement.setPressure(avgPressure);
+        measurement.setWind(avgWind);
+        measurement.setTemperature(avgTemperature);
+        measurement.setHumidity(avgHumidity);
+        measurement.setPressure(avgPressure);
+
+        measurement.setSeq(Wn2nacHistory.nextSeq++);
+        Wn2nacPreferences.write();
+        Wn2nacHistory.history.add(0, measurement);
+        bus.post(new Wn2nacHistory.RefreshEvent());
+
+        bus.post(new Wn2nacHistory.SaveEvent(measurement));
+        bus.post(new Wn2nacNetwork.SendMeasurementEvent(measurement));
         bus.post(new UpdateDisplayEvent());
+        bus.post(new DoneEvent());
     }
 
-    /** Measurement Abandon EVENT */
+    /** MEASUREMENT Abandon **/
     public static class AbandonEvent {}
-    public void onEventMainThread(AbandonEvent event) {
+    public static void abandon() {
         measuring = false;
         countDownTimer.cancel();
         bus.post(new UpdateDisplayEvent());
     }
 
-    /** Measurement UpdateDisplay EVENT */
+    /** MEASUREMENT Update display **/
     public static class UpdateDisplayEvent {}
+    public static class DoneEvent {}
 }

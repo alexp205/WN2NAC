@@ -4,9 +4,8 @@
     <string name="default_server_address">http://mospc.cook.as.ntu.edu.tw/post.php</string>
 
     <string-array name="titles">
-        <item>Windoo 量測</item>
-        <item>量測記錄</item>
-        <item>地圖</item>
+        <item>Windoo測量</item>
+        <item>測量記錄</item>
         <item>設定</item>
         <item>關於</item>
     </string-array>

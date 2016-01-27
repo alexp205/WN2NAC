@@ -20,13 +20,28 @@
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2016/1/26\n17:24"
+                android:text="2016/1/26"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:layout_column="0"
+                android:layout_span="2"
+                android:textColor="@android:color/primary_text_dark" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/time2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="17:24:00 ~ 17:25:00"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:paddingBottom="12dp"
                 android:layout_column="0"
                 android:layout_span="2"
-                style="@android:style/TextAppearance.DeviceDefault.Large"
                 android:textColor="@android:color/primary_text_dark" />
         </TableRow>
 

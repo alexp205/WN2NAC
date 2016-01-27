@@ -22,7 +22,7 @@ import java.util.Calendar;
 import ch.skywatch.windoo.api.JDCWindooEvent;
 import de.greenrobot.event.EventBus;
 
-public class Depr_StepWindooFragment extends android.support.v4.app.Fragment implements Switch.OnCheckedChangeListener, SensorEventListener {
+public class _Depr_StepWindooFragment extends android.support.v4.app.Fragment implements Switch.OnCheckedChangeListener, SensorEventListener {
 
     private static EventBus bus = EventBus.getDefault();
     private TextView status, wind, temperature, humidity, pressure;
@@ -39,7 +39,7 @@ public class Depr_StepWindooFragment extends android.support.v4.app.Fragment imp
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.depr_fragment_step_windoo, container, false);
+        View rootView = inflater.inflate(R.layout._depr_fragment_step_windoo, container, false);
 
         status = (TextView) rootView.findViewById(R.id.status);
         wind = (TextView) rootView.findViewById(R.id.wind);
@@ -54,9 +54,9 @@ public class Depr_StepWindooFragment extends android.support.v4.app.Fragment imp
         locationTime = (TextView) rootView.findViewById(R.id.locationTime);
 
         locationSwitch.setOnCheckedChangeListener(null);
-        locationSwitch.setChecked(Wn2nacLocation.locationEnabled);
+        locationSwitch.setChecked(Wn2nacMap.locationEnabled);
         locationSwitch.setOnCheckedChangeListener(this);
-        bus.post(new Wn2nacLocation.LocationDisplayEvent(Wn2nacLocation.lastLocation));
+        bus.post(new Wn2nacMap.LocationDisplayEvent(Wn2nacMap.lastLocation));
 
         degreeTextView = (TextView) rootView.findViewById(R.id.degreeTextView);
         mPointer = (ImageView) rootView.findViewById(R.id.pointer);
@@ -127,45 +127,20 @@ public class Depr_StepWindooFragment extends android.support.v4.app.Fragment imp
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         locationSwitch.setOnCheckedChangeListener(null);
-        locationSwitch.setChecked(Wn2nacLocation.locationEnabled);
+        locationSwitch.setChecked(Wn2nacMap.locationEnabled);
         locationSwitch.setOnCheckedChangeListener(this);
         if(isChecked) {
-            if(Wn2nacLocation.lastLocation == null) bus.post(new Wn2nacLocation.LocationFetchEvent());
-            bus.post(new Wn2nacLocation.LocationEnableEvent());
+            if(Wn2nacMap.lastLocation == null) bus.post(new Wn2nacMap.LocationFetchEvent());
+            bus.post(new Wn2nacMap.LocationEnableEvent());
         } else{
-            bus.post(new Wn2nacLocation.LocationDisableEvent());
+            bus.post(new Wn2nacMap.LocationDisableEvent());
         }
     }
 
-    public void onEventMainThread(Wn2nacLocation.LocationEnabledEvent event) {
-        locationSwitch.setOnCheckedChangeListener(null);
-        locationSwitch.setChecked(true);
-        locationSwitch.setOnCheckedChangeListener(this);
+    public void onEventMainThread(Wn2nacMap.LocationEnabledEvent event) {
     }
 
-    public void onEventMainThread(Wn2nacLocation.LocationDisabledEvent event) {
-        locationSwitch.setOnCheckedChangeListener(null);
-        locationSwitch.setChecked(false);
-        locationSwitch.setOnCheckedChangeListener(this);
-    }
-
-    public void onEventMainThread(Wn2nacLocation.LocationFetchedEvent event) {
-        bus.post(new Wn2nacLocation.LocationDisplayEvent(Wn2nacLocation.lastLocation));
-    }
-
-    public void onEventMainThread(Wn2nacLocation.LocationUpdateEvent event) {
-        bus.post(new Wn2nacLocation.LocationDisplayEvent(Wn2nacLocation.lastLocation));
-    }
-
-    public void onEventMainThread(Wn2nacLocation.LocationDisplayEvent event) {
-        latitude.setText(String.valueOf(Wn2nacLocation.lastLocation.getLatitude()));
-        longitude.setText(String.valueOf(Wn2nacLocation.lastLocation.getLongitude()));
-        if(Wn2nacLocation.lastLocation.hasAltitude()) altitude.setText(String.valueOf(Wn2nacLocation.lastLocation.getAltitude()));
-
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(Wn2nacLocation.lastLocation.getTime());
-        locationTime.setText(formatter.format(calendar.getTime()));
+    public void onEventMainThread(Wn2nacMap.LocationDisplayEvent event) {
     }
 
     private SensorManager mSensorManager;

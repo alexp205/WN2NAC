@@ -9,38 +9,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="1. 選擇測量時間長度"
+        android:text="1. 測量說明"
         style="@android:style/TextAppearance.DeviceDefault.Large"
-        android:gravity="center_horizontal" />
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="16dp" />
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
-
-        <NumberPicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/minPicker" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="分"
-            android:layout_gravity="center_vertical" />
-
-        <NumberPicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/secPicker" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="秒"
-            android:layout_gravity="center_vertical" />
-
-    </LinearLayout>
+        android:text="手伸直1分鐘保持不動 "
+        style="@android:style/TextAppearance.DeviceDefault.Large"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

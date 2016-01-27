@@ -40,7 +40,7 @@ public class WindooMeasuringFragment extends android.support.v4.app.Fragment imp
         donut_progress = (DonutProgress) rootView.findViewById(R.id.donut_progress);
         countdown = (TextView) rootView.findViewById(R.id.countdown);
 
-        bus.post(new Wn2nacMeasure.StartEvent());
+        bus.post(new Wn2nacMeasure.UpdateDisplayEvent());
 
         return rootView;
     }

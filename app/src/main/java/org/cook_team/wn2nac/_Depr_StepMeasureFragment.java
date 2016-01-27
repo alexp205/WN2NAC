@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import de.greenrobot.event.EventBus;
 
-public class Depr_StepMeasureFragment extends android.support.v4.app.Fragment implements TextWatcher {
+public class _Depr_StepMeasureFragment extends android.support.v4.app.Fragment implements TextWatcher {
 
     private static EventBus bus = EventBus.getDefault();
 
@@ -31,7 +31,7 @@ public class Depr_StepMeasureFragment extends android.support.v4.app.Fragment im
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.depr_fragment_step_measure, container, false);
+        View rootView = inflater.inflate(R.layout._depr_fragment_step_measure, container, false);
 
         minEditText = (EditText) rootView.findViewById(R.id.minEditText);
         secEditText = (EditText) rootView.findViewById(R.id.secEditText);
@@ -70,12 +70,6 @@ public class Depr_StepMeasureFragment extends android.support.v4.app.Fragment im
     public void onTextChanged(CharSequence s, int start, int before, int count){}
     @Override
     public void afterTextChanged(Editable s) {
-        try{
-            int min = Integer.parseInt(String.valueOf(minEditText.getText()));
-            int sec = Integer.parseInt(String.valueOf(secEditText.getText()));
-            Wn2nacMeasure.duration = min * 60 + sec;
-        }
-        catch (Exception ex) {}
     }
 
     private void updateDisplay() {
