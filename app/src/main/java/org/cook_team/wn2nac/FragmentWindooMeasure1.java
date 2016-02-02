@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
 
-public class WindooMeasureFragment1 extends android.support.v4.app.Fragment {
+public class FragmentWindooMeasure1 extends android.support.v4.app.Fragment {
 
     //private static EventBus bus = EventBus.getDefault();
 
@@ -20,7 +20,6 @@ public class WindooMeasureFragment1 extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_windoo_measure_1, container, false);
-
         return rootView;
     }
 

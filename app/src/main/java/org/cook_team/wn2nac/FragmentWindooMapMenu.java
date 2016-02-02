@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 
-public class WindooMapMenuFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
+public class FragmentWindooMapMenu extends android.support.v4.app.Fragment implements View.OnClickListener {
 
     //private static EventBus bus = EventBus.getDefault();
     Button buttonCancel, buttonMenu, buttonRecord;

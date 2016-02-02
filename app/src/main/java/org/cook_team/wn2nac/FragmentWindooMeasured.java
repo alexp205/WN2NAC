@@ -10,7 +10,7 @@ import com.github.lzyzsd.circleprogress.DonutProgress;
 
 import de.greenrobot.event.EventBus;
 
-public class WindooMeasuredFragment extends android.support.v4.app.Fragment {
+public class FragmentWindooMeasured extends android.support.v4.app.Fragment {
 
     private static EventBus bus = EventBus.getDefault();
 
@@ -24,7 +24,6 @@ public class WindooMeasuredFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_windoo_measured, container, false);
-
         return rootView;
     }
 

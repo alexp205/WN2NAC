@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">都市微氣象觀測</string>
+    <string name="app_name">微氣象觀測網實驗</string>
     <string name="token">4a38879a-ff50-4103-8f44-ab9a84b72c21</string>
     <string name="default_server_address">http://mospc.cook.as.ntu.edu.tw/post.php</string>
 

@@ -13,11 +13,9 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.NumberPicker;
-import android.widget.Switch;
 import android.widget.TextView;
 
-public class WindooMeasureFragment2 extends android.support.v4.app.Fragment implements SensorEventListener, View.OnClickListener {
+public class FragmentWindooMeasure2 extends android.support.v4.app.Fragment implements SensorEventListener, View.OnClickListener {
 
     //private static EventBus bus = EventBus.getDefault();
 
@@ -41,7 +39,7 @@ public class WindooMeasureFragment2 extends android.support.v4.app.Fragment impl
         heading_degrees = (TextView) rootView.findViewById(R.id.heading_degrees);
         buttonWind = (Button) rootView.findViewById(R.id.buttonWind);
         buttonWind.setOnClickListener(this);
-        buttonWind.setEnabled(!Wn2nacMeasure.hasHeading);
+        buttonWind.setEnabled(!WnMeasurement.hasHeading);
 
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -102,7 +100,7 @@ public class WindooMeasureFragment2 extends android.support.v4.app.Fragment impl
 
             ra.setFillAfter(true);
 
-            if (!Wn2nacMeasure.hasHeading) {
+            if (!WnMeasurement.hasHeading) {
                 heading_pointer.startAnimation(ra);
                 mCurrentDegree = -azimuthInDegress;
                 heading_degrees.setText(String.format("%.0f", (double) azimuthInDegress));
@@ -117,8 +115,8 @@ public class WindooMeasureFragment2 extends android.support.v4.app.Fragment impl
 
     @Override
     public void onClick(View view) {
-        Wn2nacMeasure.hasHeading = true;
-        Wn2nacMeasure.heading = mCurrentDegree;
+        WnMeasurement.hasHeading = true;
+        WnMeasurement.heading = mCurrentDegree;
         buttonWind.setEnabled(false);
     }
 

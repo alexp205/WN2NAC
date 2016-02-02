@@ -5,8 +5,11 @@ import java.util.Date;
 import ch.skywatch.windoo.api.JDCWindooMeasurement;
 
 public class WindooMeasurement extends JDCWindooMeasurement {
-    private Date sentAt;
+
     private int seq;
+    private Date sentAt;
+    private int UserID;
+    private int WindooID;
 
     public int getSeq() {
         return seq;
@@ -19,5 +22,13 @@ public class WindooMeasurement extends JDCWindooMeasurement {
     }
     public void setSentAt(Date sentAt) {
         this.sentAt = sentAt;
+    }
+    public int getUserID() { return UserID; }
+    public void setUserID(int UserID) {
+        this.UserID = UserID;
+    }
+    public int getWindooID() { return WindooID; }
+    public void setWindooID(int WindooID) {
+        this.WindooID = WindooID;
     }
 }

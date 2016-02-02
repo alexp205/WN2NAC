@@ -1,21 +1,15 @@
 package org.cook_team.wn2nac;
 
-import android.app.Service;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.NumberPicker;
-import android.widget.TextView;
 
-import ch.skywatch.windoo.api.JDCWindooEvent;
 import de.greenrobot.event.EventBus;
 
-public class WindooMeasureFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
+public class FragmentWindooMeasure extends android.support.v4.app.Fragment implements View.OnClickListener {
 
     private static EventBus bus = EventBus.getDefault();
     public static class ShowEvent {}
@@ -40,7 +34,7 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
         buttonLast.setOnClickListener(this);
         buttonNext.setOnClickListener(this);
         buttonClose.setOnClickListener(this);
-        getChildFragmentManager().beginTransaction().replace(R.id.container, new WindooMeasureFragment2()).commit();
+        getChildFragmentManager().beginTransaction().replace(R.id.container, new FragmentWindooMeasure2()).commit();
         buttonLast.setVisibility(View.INVISIBLE);
 
         return rootView;
@@ -50,16 +44,17 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         updateStep();
-        if (Wn2nacMap.measureFragmentVisible)
-            bus.post(new WindooMeasureFragment.ShowEvent());
+        if (WnMap.measureFragmentVisible)
+            bus.post(new FragmentWindooMeasure.ShowEvent());
         else
-            bus.post(new WindooMeasureFragment.HideEvent());
+            bus.post(new FragmentWindooMeasure.HideEvent());
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (!bus.isRegistered(this)) bus.register(this);
+        bus.post(new WnMeasurement.UpdateEvent());
     }
 
     @Override
@@ -72,13 +67,13 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.buttonNext:
-                if (Wn2nacMap.currentStep<4) Wn2nacMap.currentStep++;
-                else if (Wn2nacMap.currentStep==4) Wn2nacMap.currentStep = 2;
-                if (Wn2nacMap.currentStep==4) bus.post(new Wn2nacMeasure.StartEvent());
+                if (WnMap.currentStep<4) WnMap.currentStep++;
+                else if (WnMap.currentStep==4) WnMap.currentStep = 2;
+                if (WnMap.currentStep==4) bus.post(new WnMeasurement.StartEvent());
                 break;
             case R.id.buttonLast:
-                if (Wn2nacMap.currentStep==4) bus.post(new Wn2nacMeasure.AbandonEvent());
-                if (Wn2nacMap.currentStep>2) Wn2nacMap.currentStep--;
+                if (WnMap.currentStep==4) bus.post(new WnMeasurement.AbandonEvent());
+                if (WnMap.currentStep>2) WnMap.currentStep--;
                 break;
             case R.id.buttonClose:
                 bus.post(new HideEvent());
@@ -88,24 +83,24 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
     }
 
     public void updateStep() {
-        Fragment fragment = new WindooMeasureFragment1();
-        switch(Wn2nacMap.currentStep) {
+        Fragment fragment = new FragmentWindooMeasure1();
+        switch(WnMap.currentStep) {
             case 1:
                 buttonLast.setVisibility(View.INVISIBLE);
                 buttonNext.setVisibility(View.VISIBLE);
                 buttonClose.setVisibility(View.VISIBLE);
                 buttonNext.setText("下一步");
-                fragment = new WindooMeasureFragment1();
+                fragment = new FragmentWindooMeasure1();
                 break;
             case 2:
-                Wn2nacMeasure.hasHeading = false;
-                Wn2nacMeasure.heading = -9999;
+                WnMeasurement.hasHeading = false;
+                WnMeasurement.heading = -9999;
                 buttonLast.setVisibility(View.INVISIBLE);
                 buttonNext.setVisibility(View.VISIBLE);
                 buttonClose.setVisibility(View.VISIBLE);
                 buttonLast.setText("上一步");
                 buttonNext.setText("下一步");
-                fragment = new WindooMeasureFragment2();
+                fragment = new FragmentWindooMeasure2();
                 break;
             case 3:
                 buttonLast.setVisibility(View.VISIBLE);
@@ -113,27 +108,27 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
                 buttonClose.setVisibility(View.VISIBLE);
                 buttonLast.setText("上一步");
                 buttonNext.setText("開始測量");
-                fragment = new WindooMeasureFragment3();
+                fragment = new FragmentWindooMeasure3();
                 break;
             case 4:
                 buttonLast.setVisibility(View.VISIBLE);
                 buttonNext.setVisibility(View.INVISIBLE);
                 buttonClose.setVisibility(View.INVISIBLE);
                 buttonLast.setText("取消測量");
-                fragment = new WindooMeasuringFragment();
+                fragment = new FragmentWindooMeasuring();
                 break;
         }
         getChildFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
     }
 
-    public void onEventMainThread(Wn2nacMeasure.UpdateDisplayEvent event) {
-        if(Wn2nacMeasure.measuring) {
+    public void onEventMainThread(WnMeasurement.UpdateEvent event) {
+        if(WnMeasurement.measuring) {
             buttonLast.setVisibility(View.VISIBLE);
             buttonNext.setVisibility(View.INVISIBLE);
             buttonClose.setVisibility(View.INVISIBLE);
             buttonLast.setText("取消測量");
         }
-        else if(Wn2nacMeasure.measured) {
+        else if(WnMeasurement.measured) {
             /*buttonLast.setVisibility(View.INVISIBLE);
             buttonNext.setVisibility(View.VISIBLE);
             buttonClose.setVisibility(View.VISIBLE);
@@ -143,7 +138,7 @@ public class WindooMeasureFragment extends android.support.v4.app.Fragment imple
             buttonNext.setVisibility(View.VISIBLE);
             buttonClose.setVisibility(View.VISIBLE);
             buttonNext.setText("下一步");
-            getChildFragmentManager().beginTransaction().replace(R.id.container, new WindooMeasureFragment1()).commit();
+            getChildFragmentManager().beginTransaction().replace(R.id.container, new FragmentWindooMeasure2()).commit();
         }
     }
 

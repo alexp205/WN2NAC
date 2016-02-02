@@ -8,9 +8,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.Switch;
-import android.widget.TextView;
 
-public class WindooMeasureFragment3 extends android.support.v4.app.Fragment implements Switch.OnCheckedChangeListener,NumberPicker.OnValueChangeListener {
+public class FragmentWindooMeasure3 extends android.support.v4.app.Fragment implements Switch.OnCheckedChangeListener, NumberPicker.OnValueChangeListener {
 
     //private static EventBus bus = EventBus.getDefault();
 
@@ -32,14 +31,14 @@ public class WindooMeasureFragment3 extends android.support.v4.app.Fragment impl
         secPicker = (NumberPicker) rootView.findViewById(R.id.secPicker);
         minPicker.setMinValue(0); minPicker.setMaxValue(60);
         secPicker.setMinValue(0); secPicker.setMaxValue(59);
-        minPicker.setValue(Wn2nacMeasure.min);
-        secPicker.setValue(Wn2nacMeasure.sec);
+        minPicker.setValue(WnMeasurement.min);
+        secPicker.setValue(WnMeasurement.sec);
         minPicker.setOnValueChangedListener(this);
         secPicker.setOnValueChangedListener(this);
 
         checkBox = (CheckBox) rootView.findViewById(R.id.checkBox);
         checkBox.setOnCheckedChangeListener(this);
-        checkBox.setChecked(Wn2nacMeasure.vibrate);
+        checkBox.setChecked(WnMeasurement.vibrate);
 
         return rootView;
     }
@@ -58,13 +57,13 @@ public class WindooMeasureFragment3 extends android.support.v4.app.Fragment impl
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Wn2nacMeasure.vibrate = isChecked;
+        WnMeasurement.vibrate = isChecked;
     }
 
     @Override
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-        Wn2nacMeasure.min = minPicker.getValue();
-        Wn2nacMeasure.sec = secPicker.getValue();
+        WnMeasurement.min = minPicker.getValue();
+        WnMeasurement.sec = secPicker.getValue();
     }
 
 }

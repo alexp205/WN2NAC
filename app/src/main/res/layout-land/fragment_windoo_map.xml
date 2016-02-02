@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/windoo_map_menu"
-        android:name="org.cook_team.wn2nac.WindooMapMenuFragment"
+        android:name="org.cook_team.wn2nac.FragmentWindooMapMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
@@ -28,7 +28,7 @@
 
         <fragment
             android:id="@+id/windoo_bar"
-            android:name="org.cook_team.wn2nac.WindooBarFragment"
+            android:name="org.cook_team.wn2nac.FragmentWindooBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -36,7 +36,7 @@
 
         <fragment
             android:id="@+id/windoo_measure"
-            android:name="org.cook_team.wn2nac.WindooMeasureFragment"
+            android:name="org.cook_team.wn2nac.FragmentWindooMeasure"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"

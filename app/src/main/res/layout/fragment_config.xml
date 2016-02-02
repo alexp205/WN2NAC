@@ -39,7 +39,8 @@
                 android:text="0"
                 android:layout_gravity="center_horizontal"
                 android:inputType="number"
-                android:numeric="integer" />
+                android:numeric="integer"
+                android:layout_marginBottom="16dp" />
 
             <!--ID-->
             <TextView
@@ -55,11 +56,20 @@
                 android:text="0"
                 android:layout_gravity="center_horizontal"
                 android:inputType="number"
-                android:numeric="integer" />
+                android:numeric="integer"
+                android:layout_marginBottom="16dp" />
 
             <!--NETWORK-->
 
             <!--Server IP-->
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="顯示偵錯訊息"
+                android:id="@+id/checkBoxDebug"
+                android:checked="false"
+                android:layout_marginBottom="16dp" />
 
             <Button
                 android:layout_width="wrap_content"
