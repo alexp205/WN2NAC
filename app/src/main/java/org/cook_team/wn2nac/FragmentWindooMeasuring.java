@@ -31,7 +31,7 @@ public class FragmentWindooMeasuring extends android.support.v4.app.Fragment imp
         donut_progress = (DonutProgress) rootView.findViewById(R.id.donut_progress);
         countdown = (TextView) rootView.findViewById(R.id.countdown);
 
-        bus.post(new WnMeasurement.UpdateEvent());
+        refreshView();
 
         return rootView;
     }
@@ -40,7 +40,7 @@ public class FragmentWindooMeasuring extends android.support.v4.app.Fragment imp
     public void onResume() {
         super.onResume();
         if (!bus.isRegistered(this)) bus.register(this);
-        bus.post(new WnMeasurement.UpdateEvent());
+        refreshView();
     }
 
     @Override
@@ -53,16 +53,25 @@ public class FragmentWindooMeasuring extends android.support.v4.app.Fragment imp
     public void onClick(View view) {
     }
 
-    public void onEventMainThread(WnMeasurement.UpdateEvent event) {
+    public void onEventMainThread(WnMeasure.StartedEvent event) {
+        refreshView();
+    }
+    public void onEventMainThread(WnMeasure.TickEvent event) {
+        refreshView();
+    }
+    public void onEventMainThread(WnMeasure.FinishedEvent event) {
+        refreshView();
+    }
+    public void onEventMainThread(WnMeasure.AbandonedEvent event) {
         refreshView();
     }
 
     private void refreshView() {
-        if(WnMeasurement.measuring) {
-            countdown.setText("測量中... \n請勿移動\n" + String.format("%02d", WnMeasurement.tick / 1000 / 60) + ":" + String.format("%02d", WnMeasurement.tick / 1000 % 60));
-            donut_progress.setProgress(100 - 100 * (int) WnMeasurement.tick / 1000 / WnMeasurement.duration);
+        if(WnMeasure.measuring) {
+            countdown.setText("測量中... \n請勿移動\n" + String.format("%02d", WnMeasure.getLastTick() / 1000 / 60) + ":" + String.format("%02d", WnMeasure.getLastTick() / 1000 % 60));
+            donut_progress.setProgress((int) (100 - 100 *  WnMeasure.getLastTick() / 1000 / WnMeasure.getDuration()));
         }
-        else if (WnMeasurement.measured) {
+        else {
             countdown.setText("測量完畢\n\n");
             donut_progress.setProgress(100);
         }

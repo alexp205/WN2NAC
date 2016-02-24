@@ -39,7 +39,7 @@ public class FragmentWindooMeasure2 extends android.support.v4.app.Fragment impl
         heading_degrees = (TextView) rootView.findViewById(R.id.heading_degrees);
         buttonWind = (Button) rootView.findViewById(R.id.buttonWind);
         buttonWind.setOnClickListener(this);
-        buttonWind.setEnabled(!WnMeasurement.hasHeading);
+        buttonWind.setEnabled(WnMeasure.measurement.getOrientation() == -9999);
 
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -100,7 +100,7 @@ public class FragmentWindooMeasure2 extends android.support.v4.app.Fragment impl
 
             ra.setFillAfter(true);
 
-            if (!WnMeasurement.hasHeading) {
+            if (WnMeasure.measurement.getOrientation() == -9999) {
                 heading_pointer.startAnimation(ra);
                 mCurrentDegree = -azimuthInDegress;
                 heading_degrees.setText(String.format("%.0f", (double) azimuthInDegress));
@@ -115,8 +115,7 @@ public class FragmentWindooMeasure2 extends android.support.v4.app.Fragment impl
 
     @Override
     public void onClick(View view) {
-        WnMeasurement.hasHeading = true;
-        WnMeasurement.heading = mCurrentDegree;
+        WnMeasure.measurement.setOrientation(mCurrentDegree);
         buttonWind.setEnabled(false);
     }
 

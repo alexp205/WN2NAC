@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
@@ -14,43 +15,36 @@ import de.greenrobot.event.EventBus;
 public class ActivityMain extends AppCompatActivity
 implements FragmentNavigationDrawer.NavigationDrawerCallbacks {
 
-    /** Fragment managing the behaviors, interactions and presentation of the navigation drawer. */
-    private FragmentNavigationDrawer mFragmentNavigationDrawer;
-
-    /** Used to store the last screen title. For use in {@link #restoreActionBar()}. */
-    private CharSequence mTitle;
-
     private static EventBus bus = EventBus.getDefault();
 
-    static public int pos = 0;
+    /** NAVIGATION DRAWER **/
+    private FragmentNavigationDrawer fragmentNavigationDrawer; // Fragment managing the behaviors, interactions and presentation of the navigation drawer.
+    private static int screenPosition = 0; // Used to store the last screen position.
+
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*// Set up toolbar
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);*/
-
-        mTitle = getResources().getStringArray(R.array.titles)[pos];
-
         // Set up the drawer.
-        mFragmentNavigationDrawer = (FragmentNavigationDrawer) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mFragmentNavigationDrawer.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+        fragmentNavigationDrawer = (FragmentNavigationDrawer) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        fragmentNavigationDrawer.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        /*// Set up toolbar
+        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);*/
 
         if (!bus.isRegistered(this)) bus.register(this);
 
         /** Start Windoo service */
-        Intent intent = new Intent(this, WnService.class);
-        startService(intent);
-
+        startService(new Intent(this, WnService.class));
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment;
-        pos = position;
         switch(position) {
             default:
             case 0:
@@ -61,22 +55,28 @@ implements FragmentNavigationDrawer.NavigationDrawerCallbacks {
                 fragment = new FragmentConfig(); break;
             case 3:
                 fragment = new FragmentAbout(); break;
+            case 4:
+                fragment = new FragmentWindooGraph(); break;
         }
+        screenPosition = position;
+        getSupportActionBar().setTitle(getResources().getStringArray(R.array.titles)[screenPosition]);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-        mTitle = getResources().getStringArray(R.array.titles)[position];
     }
+    public static class NavigateEvent {
+        final int position;
+        NavigateEvent(int position) { this.position = position ;}
+    }
+    public void onEventMainThread(NavigateEvent event) { onNavigationDrawerItemSelected(event.position); }
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        mTitle = getResources().getStringArray(R.array.titles)[pos];
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        actionBar.setTitle(getResources().getStringArray(R.array.titles)[screenPosition]);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mFragmentNavigationDrawer.isDrawerOpen()) {
+        if (!fragmentNavigationDrawer.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen if the drawer is not showing.
             // Otherwise, let the drawer decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.main_navigation, menu);
@@ -88,24 +88,15 @@ implements FragmentNavigationDrawer.NavigationDrawerCallbacks {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will automatically handle clicks on the Home/Up button,
-        // so long as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
-            return true;
-        }*/
-
+        // Handle action bar item clicks here.
+        // if (item.getItemId() == R.id.action_settings) return true;
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Intent intent = new Intent(this, WnService.class);
-        startService(intent);
-        mTitle = getResources().getStringArray(R.array.titles)[pos];
+        startService(new Intent(this, WnService.class));
         if (!bus.isRegistered(this)) bus.register(this);
     }
 
@@ -117,33 +108,18 @@ implements FragmentNavigationDrawer.NavigationDrawerCallbacks {
 
     @Override
     public void onDestroy() {
-        Intent intent = new Intent(this, WnService.class);
-        stopService(intent);
-        //bus.unregister(this);
+        stopService(new Intent(this, WnService.class)); // TODO: Let service run in background
+        bus.unregister(this);
         super.onDestroy();
     }
 
-    public void onEventMainThread(WnMap.GotoEvent event) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new FragmentWindooMap()).commit();
-        pos = 0;
-        mTitle = getResources().getStringArray(R.array.titles)[pos];
-        getSupportActionBar().setTitle(mTitle);
-    }
-
-    public void onEventMainThread(WnMap.OpenEvent event) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new FragmentWindooMap()).commit();
-        pos = 0;
-        mTitle = getResources().getStringArray(R.array.titles)[pos];
-        getSupportActionBar().setTitle(mTitle);
-    }
-
-    public void onEventMainThread(WnSettings.SetIDEvent event) {
+    /*public void onEventMainThread(WnSettings.SetIDEvent event) {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new FragmentConfig()).commit();
         pos = 2;
         mTitle = getResources().getStringArray(R.array.titles)[pos];
         getSupportActionBar().setTitle(mTitle);
         WnService.toast("ID未設定，請先設定ID");
-    }
+    }*/
 
    /* @Override
     protected void onNewIntent(Intent intent) {

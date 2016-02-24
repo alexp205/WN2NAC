@@ -11,10 +11,10 @@
     tools:context=".AboutFragment"
     android:id="@+id/about">
 
-    <TextView
+    <me.grantland.widget.AutofitTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=" Windoo Network \n to NTU-AS COOK Lab \n (WN2NAC) "
+        android:text="@string/about_title"
         android:id="@+id/aboutTextView"
         android:layout_gravity="center_horizontal|top"
         style="@style/Base.TextAppearance.AppCompat.Large"
@@ -24,17 +24,17 @@
         android:layout_width="wrap_content"
         android:layout_height="10dip" />
 
-    <TextView
+    <me.grantland.widget.AutofitTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=" Laboratory of Instrumentation and Measurement \n (COOK Team), \n Department of Atmospheric Sciences, \n National Taiwan University "
+        android:text="@string/about_organization"
         android:layout_gravity="center_horizontal|top"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:gravity="center_horizontal" />
-    <TextView
+    <me.grantland.widget.AutofitTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="www.cook-team.org"
+        android:text="@string/about_website"
         android:layout_gravity="center_horizontal|top"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:gravity="center_horizontal"
@@ -46,17 +46,17 @@
         android:layout_width="wrap_content"
         android:layout_height="30dip" />
 
-    <TextView
+    <me.grantland.widget.AutofitTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=" 連繫: \n 林博雄  "
+        android:text="@string/about_contact"
         android:layout_gravity="center_horizontal|top"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:gravity="center_horizontal" />
-    <TextView
+    <me.grantland.widget.AutofitTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="polin@ntu.edu.tw"
+        android:text="@string/about_contact_email"
         android:layout_gravity="center_horizontal|top"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:gravity="center_horizontal"
@@ -67,10 +67,10 @@
         android:layout_width="wrap_content"
         android:layout_height="30dip" />
 
-    <TextView
+    <me.grantland.widget.AutofitTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=" 版本: \n 2016/2/2"
+        android:text="@string/about_date"
         android:layout_gravity="center_horizontal|top"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:gravity="center_horizontal" />
@@ -79,17 +79,17 @@
         android:layout_width="wrap_content"
         android:layout_height="30dip" />
 
-    <TextView
+    <me.grantland.widget.AutofitTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=" 程式撰寫: \n 石恩"
+        android:text="@string/about_author"
         android:layout_gravity="center_horizontal|top"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:gravity="center_horizontal" />
-    <TextView
+    <me.grantland.widget.AutofitTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="r01222055@ntu.edu.tw"
+        android:text="@string/about_author_email"
         android:layout_gravity="center_horizontal|top"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:gravity="center_horizontal"

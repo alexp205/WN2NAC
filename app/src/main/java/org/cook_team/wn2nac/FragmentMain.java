@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import de.greenrobot.event.EventBus;
 
+// TODO
 public class FragmentMain extends android.support.v4.app.Fragment implements View.OnClickListener {
 
     private static EventBus bus = EventBus.getDefault();

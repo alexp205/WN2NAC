@@ -10,11 +10,19 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
+import ch.skywatch.windoo.api.JDCWindooManager;
 import de.greenrobot.event.EventBus;
 
 public class WnLocation {
 
     private static final EventBus bus = EventBus.getDefault();
+
+    /** WnLocation **/
+    private static WnLocation instance = new WnLocation(); // Singleton instance
+    private WnLocation(){
+        if (!bus.isRegistered(this)) bus.register(this);
+        locationManager = (LocationManager) WnApp.getContext().getSystemService(Context.LOCATION_SERVICE);
+    }
 
     /** LOCATION **/
     public static boolean locationEnabled = false;
@@ -24,62 +32,55 @@ public class WnLocation {
     private static final LocationListener locationListenerNetwork = new MyLocationListener();
     private static final LocationListener locationListenerGPS = new MyLocationListener();
 
-    public static void init() {
-        locationManager = (LocationManager) WnService.context().getSystemService(Context.LOCATION_SERVICE);
-        bus.post(new WnService.DebugEvent("Location initialized"));
-    }
-
     /** Enable location **/
-    public static class EnableLocationEvent {}
-    public static boolean enable() {
-        if (ActivityCompat.checkSelfPermission(WnService.context(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+    public static class EnableEvent {}
+    public void onEventMainThread(EnableEvent event)  { enable(); }
+    public void enable() {
+        if (ActivityCompat.checkSelfPermission(WnApp.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListenerNetwork);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListenerGPS);
             locationEnabled = true;
             bus.post(new WnService.DebugEvent("Location enabled"));
-            return true;
         } else {
             bus.post(new WnService.DebugEvent("Failed to enable location"));
-            return false;
         }
     }
 
     /** Disable location **/
-    public static class DisableLocationEvent {}
-    public static boolean disable() {
-        if (ActivityCompat.checkSelfPermission(WnService.context(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+    public static class DisableEvent {}
+    public void onEventBackgroundThread(DisableEvent event) { disable(); }
+    public void disable() {
+        if (ActivityCompat.checkSelfPermission(WnApp.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.removeUpdates(locationListenerNetwork);
             locationManager.removeUpdates(locationListenerGPS);
             locationEnabled = false;
             bus.post(new WnService.DebugEvent("Location disabled"));
-            return true;
         } else {
             bus.post(new WnService.DebugEvent("Failed to disable location"));
-            return false;
         }
     }
 
     /** Fetch location **/
-    public static class FetchLocationEvent {}
-    public static boolean fetch() {
-        if (ActivityCompat.checkSelfPermission(WnService.context(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+    public static class GetLastKnownLocationEvent {}
+    public void onEventBackgroundThread(GetLastKnownLocationEvent event) { getLastKnownLocation(); }
+    public void getLastKnownLocation() {
+        if (ActivityCompat.checkSelfPermission(WnApp.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             bus.post(new WnService.DebugEvent("Last location fetched"));
-            return true;
         } else {
             bus.post(new WnService.DebugEvent("Failed to fetch last location"));
-            return false;
         }
     }
 
     /** Location updated **/
-    public static class LocationUpdatedEvent {}
+    public static class NewLocationEvent {}
     private static class MyLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
             if (isBetterLocation(location, lastLocation)) {
                 lastLocation = location;
-                bus.post(new LocationUpdatedEvent());
+                bus.post(new NewLocationEvent());
+                bus.post(new DisableEvent());
                 bus.post(new WnService.DebugEvent("New location:\n"
                         + String.valueOf(location.getLatitude()) + ", "
                         + String.valueOf(location.getLongitude()) + "\n"

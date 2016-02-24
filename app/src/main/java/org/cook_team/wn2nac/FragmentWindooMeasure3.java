@@ -13,6 +13,8 @@ public class FragmentWindooMeasure3 extends android.support.v4.app.Fragment impl
 
     //private static EventBus bus = EventBus.getDefault();
 
+    public static int min = 1, sec = 0;
+
     NumberPicker minPicker, secPicker;
     CheckBox checkBox;
 
@@ -31,14 +33,13 @@ public class FragmentWindooMeasure3 extends android.support.v4.app.Fragment impl
         secPicker = (NumberPicker) rootView.findViewById(R.id.secPicker);
         minPicker.setMinValue(0); minPicker.setMaxValue(60);
         secPicker.setMinValue(0); secPicker.setMaxValue(59);
-        minPicker.setValue(WnMeasurement.min);
-        secPicker.setValue(WnMeasurement.sec);
         minPicker.setOnValueChangedListener(this);
         secPicker.setOnValueChangedListener(this);
 
         checkBox = (CheckBox) rootView.findViewById(R.id.checkBox);
         checkBox.setOnCheckedChangeListener(this);
-        checkBox.setChecked(WnMeasurement.vibrate);
+
+        updateDisplay();
 
         return rootView;
     }
@@ -46,6 +47,7 @@ public class FragmentWindooMeasure3 extends android.support.v4.app.Fragment impl
     @Override
     public void onResume() {
         super.onResume();
+        updateDisplay();
         //if (!bus.isRegistered(this)) bus.register(this);
     }
 
@@ -57,13 +59,19 @@ public class FragmentWindooMeasure3 extends android.support.v4.app.Fragment impl
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        WnMeasurement.vibrate = isChecked;
+        WnMeasure.vibrateOnFinish = isChecked;
     }
 
     @Override
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-        WnMeasurement.min = minPicker.getValue();
-        WnMeasurement.sec = secPicker.getValue();
+        min = minPicker.getValue();
+        sec = secPicker.getValue();
+    }
+
+    public void updateDisplay() {
+        minPicker.setValue(min);
+        secPicker.setValue(sec);
+        checkBox.setChecked(WnMeasure.vibrateOnFinish);
     }
 
 }

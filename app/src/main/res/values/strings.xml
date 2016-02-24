@@ -1,20 +1,73 @@
 <resources>
+    <!-- APPLICATION -->
     <string name="app_name">微氣象觀測網實驗</string>
     <string name="token">4a38879a-ff50-4103-8f44-ab9a84b72c21</string>
     <string name="default_server_address">http://mospc.cook.as.ntu.edu.tw/post.php</string>
 
+    <!--MENU-->
     <string-array name="titles">
         <item>Windoo測量</item>
         <item>測量記錄</item>
         <item>設定</item>
         <item>關於</item>
+        <item>圖表(測試中)</item>
     </string-array>
 
+    <!--NAVIGATION DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!--ACTION BAR-->
     <string name="action_settings">Settings</string>
     <string name="action_example">Example</string>
+
+    <!--ABOUT-->
+    <string name="about_title">
+        Windoo Network\n
+        to NTU-AS COOK Lab\n
+        (WN2NAC)
+    </string>
+    <string name="about_organization">
+        Laboratory of Instrumentation and Measurement\n
+        (COOK Team),\n
+        Department of Atmospheric Sciences,\n
+        National Taiwan University
+    </string>
+    <string name="about_website">www.cook-team.org</string>
+    <string name="about_contact">
+        連繫:\n
+        林博雄
+    </string>
+    <string name="about_contact_email">polin@ntu.edu.tw</string>
+    <string name="about_date">
+        版本:\n
+        2016/2/21
+    </string>
+    <string name="about_author">
+        程式撰寫:\n
+        石恩
+    </string>
+    <string name="about_author_email">r01222055@ntu.edu.tw</string>
+
+    <!--WINDOO STATUS-->
+    <string-array name="windooStatus">
+        <item>Windoo儀器未連接</item>
+        <item>Windoo儀器已連接 (需校正)</item>
+        <item>Windoo儀器已校正</item>
+    </string-array>
+
+    <!--WINDOO MEASUREMENT-->
+    <string name="temperature">溫度 (°C)</string>
+    <string name="humidity">濕度 (%)</string>
+    <string name="pressure">壓力 (hPa)</string>
+    <string name="wind">風速 (m/s)</string>
+    <string name="val_null">- -</string>
+    <string name="measure">測量</string>
+
+    <!--WINDOO HISTORY-->
+    <string name="history_goto">查看</string>
+    <string name="history_send">傳送</string>
+    <string name="history_sent">已傳送</string>
 
     <string name="preference_file_key">org.cook_team.wn2nac.PREFERENCE_FILE_KEY</string>
 

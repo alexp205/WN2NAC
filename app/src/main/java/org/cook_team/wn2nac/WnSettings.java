@@ -10,29 +10,37 @@ public class WnSettings {
     private static final EventBus bus = EventBus.getDefault();
 
     /** SETTINGS */
-    public static boolean debugOn = false;
-    public static String UserID = "";
-    public static String WindooID = "";
+    private static WindooUser windooUser = new WindooUser();
+    private static int windooID = -1;
 
-    /** Save SETTINGS **/
+    /** DEVELOPMENT settings **/
+    public static boolean debugOn = false;
+
+    /** GETTERs **/
+    public static WindooUser getWindooUser()    { return windooUser; }
+    public static int getWindooUserID()         { return windooUser.getUserID(); }
+    public static int getWindooID()             { return windooID; }
+
+    /** SETTERs **/
+    public static void setWindooUserID(int userID)  { windooUser.setUserID(userID); }
+    public static void setWindooID(int id)          { windooID = id; }
+
+    /** SAVE settings **/
     public static void save() {
         SharedPreferences sharedPref = WnService.context().getSharedPreferences(WnService.context().getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("ID", String.valueOf(windooUser.getUserID()));
+        editor.putString("WindooID", String.valueOf(windooID));
         editor.putBoolean("debugOn", debugOn);
-        editor.putString("ID", UserID);
-        editor.putString("WindooID", WindooID);
-        editor.putInt("nextSeq", WnHistory.nextSeq);
         editor.commit();
+        bus.post(new WnService.ToastEvent("設定已儲存"));
     }
 
-    /** Read SETTINGS **/
+    /** READ settings **/
     public static void read() {
         SharedPreferences sharedPref = WnService.context().getSharedPreferences(WnService.context().getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        windooUser.setUserID(Integer.valueOf(sharedPref.getString("ID", "0")));
+        windooID = Integer.valueOf(sharedPref.getString("WindooID", "0"));
         debugOn = sharedPref.getBoolean("debugOn", false);
-        UserID = sharedPref.getString("ID", "");
-        WindooID = sharedPref.getString("WindooID", "");
-        WnHistory.nextSeq = sharedPref.getInt("nextSeq", 1);
     }
-
-    public static class SetIDEvent {}
 }

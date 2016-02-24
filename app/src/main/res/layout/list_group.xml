@@ -8,6 +8,7 @@
     <!--android:background="#000000"-->
 
     <LinearLayout
+        android:baselineAligned="false"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,21 +21,23 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2016/1/26"
+                android:text="@string/val_null"
+                android:singleLine="true"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 style="@android:style/TextAppearance.DeviceDefault.Large"
                 android:textColor="@android:color/primary_text_dark" />
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/time2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="17:24:00 ~ 17:25:00"
+                android:text="@string/val_null"
+                android:singleLine="true"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:textColor="@android:color/primary_text_dark" />
@@ -48,11 +51,11 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/latlon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="25.017988\n121.533779"
+                android:text="@string/val_null"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:textColor="@android:color/primary_text_dark" />
@@ -60,7 +63,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="前往"
+                    android:text="@string/history_goto"
                     android:id="@+id/buttonGo"
                     android:minHeight="0dp"
                     android:layout_gravity="center_horizontal"
@@ -76,11 +79,11 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/sent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="已傳送"
+                android:text="@string/history_sent"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:textColor="@android:color/primary_text_dark" />
@@ -88,7 +91,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="傳送"
+                android:text="@string/history_send"
                 android:id="@+id/buttonSend"
                 android:minHeight="0dp"
                 android:layout_gravity="center_horizontal"
@@ -107,37 +110,41 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="溫度 (°C)"
+                android:text="@string/temperature"
+                android:singleLine="true"
                 android:layout_column="0"
                 android:layout_weight="1"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal" />
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="濕度 (%)"
+                android:text="@string/humidity"
+                android:singleLine="true"
                 android:layout_column="1"
                 android:layout_weight="1"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal" />
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="壓力 (hPa)"
+                android:text="@string/pressure"
+                android:singleLine="true"
                 android:layout_column="2"
                 android:layout_weight="1"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal" />
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="風速 (m/s)"
+                android:text="@string/wind"
+                android:singleLine="true"
                 android:layout_column="3"
                 android:layout_weight="1"
                 android:layout_gravity="center_horizontal"
@@ -148,11 +155,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N/A"
+                android:text="@string/val_null"
+                android:singleLine="true"
                 style="@android:style/TextAppearance.DeviceDefault.Large"
                 android:textColor="@android:color/primary_text_dark"
                 android:layout_column="0"
@@ -160,11 +168,12 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal" />
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/humidity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N/A"
+                android:text="@string/val_null"
+                android:singleLine="true"
                 style="@android:style/TextAppearance.DeviceDefault.Large"
                 android:textColor="@android:color/primary_text_dark"
                 android:layout_column="1"
@@ -172,11 +181,12 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal" />
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/pressure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N/A"
+                android:text="@string/val_null"
+                android:singleLine="true"
                 style="@android:style/TextAppearance.DeviceDefault.Large"
                 android:textColor="@android:color/primary_text_dark"
                 android:layout_column="2"
@@ -184,11 +194,12 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal" />
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/wind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N/A"
+                android:text="@string/val_null"
+                android:singleLine="true"
                 style="@android:style/TextAppearance.DeviceDefault.Large"
                 android:textColor="@android:color/primary_text_dark"
                 android:layout_column="3"

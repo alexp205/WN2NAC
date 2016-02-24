@@ -8,13 +8,9 @@ import android.view.ViewGroup;
 
 public class FragmentAbout extends android.support.v4.app.Fragment {
 
-    public FragmentAbout() {
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_about, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_about, container, false); // Inflate the layout for this fragment
         return rootView;
     }
 }

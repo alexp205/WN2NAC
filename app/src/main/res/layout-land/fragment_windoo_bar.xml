@@ -23,10 +23,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="溫度 (°C)"
+                android:text="@string/temperature"
                 android:layout_column="0"
                 android:layout_weight="1"
                 android:layout_gravity="center_horizontal"
@@ -38,11 +38,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/bar_temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N/A"
+                android:text="@string/val_null"
                 style="@android:style/TextAppearance.DeviceDefault.Large"
                 android:textColor="@android:color/primary_text_dark"
                 android:layout_column="0"
@@ -56,10 +56,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="濕度 (%)"
+                android:text="@string/humidity"
                 android:layout_column="0"
                 android:layout_weight="1"
                 android:layout_gravity="center_horizontal"
@@ -70,11 +70,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/bar_humidity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N/A"
+                android:text="@string/val_null"
                 style="@android:style/TextAppearance.DeviceDefault.Large"
                 android:textColor="@android:color/primary_text_dark"
                 android:layout_column="0"
@@ -87,10 +87,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="壓力 (hPa)"
+                android:text="@string/pressure"
                 android:layout_column="0"
                 android:layout_weight="1"
                 android:layout_gravity="center_horizontal"
@@ -101,11 +101,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/bar_pressure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N/A"
+                android:text="@string/val_null"
                 style="@android:style/TextAppearance.DeviceDefault.Large"
                 android:textColor="@android:color/primary_text_dark"
                 android:layout_column="0"
@@ -118,10 +118,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="風速 (m/s)"
+                android:text="@string/wind"
                 android:layout_column="0"
                 android:layout_weight="1"
                 android:layout_gravity="center_horizontal"
@@ -132,11 +132,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/bar_wind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N/A"
+                android:text="@string/val_null"
                 style="@android:style/TextAppearance.DeviceDefault.Large"
                 android:textColor="@android:color/primary_text_dark"
                 android:layout_column="0"
@@ -152,11 +152,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <me.grantland.widget.AutofitTextView
             android:id="@+id/bar_status"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Windoo儀器未連接"
+            android:text="@string/val_null"
             android:layout_gravity="center_vertical"
             android:textColor="@android:color/primary_text_dark"
             android:layout_weight="1"
@@ -167,7 +167,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="測量"
+        android:text="@string/measure"
         android:id="@+id/button_start"
         android:layout_weight="0" />
 

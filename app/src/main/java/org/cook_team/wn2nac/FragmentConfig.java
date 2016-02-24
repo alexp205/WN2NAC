@@ -20,9 +20,6 @@ public class FragmentConfig extends android.support.v4.app.Fragment implements V
     private Button applyButton;
     private CheckBox debugOn;
 
-    public FragmentConfig() {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,16 +31,16 @@ public class FragmentConfig extends android.support.v4.app.Fragment implements V
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_config, container, false);
 
-        idEditText = (EditText) rootView.findViewById(R.id.idEditText);
-        windooEditText = (EditText) rootView.findViewById(R.id.windooEditText);
+        idEditText      = (EditText) rootView.findViewById(R.id.idEditText);
+        windooEditText  = (EditText) rootView.findViewById(R.id.windooEditText);
         applyButton = (Button) rootView.findViewById(R.id.applyButton);
         applyButton.setOnClickListener(this);
         debugOn = (CheckBox) rootView.findViewById(R.id.checkBoxDebug);
         debugOn.setOnCheckedChangeListener(this);
         debugOn.setChecked(WnSettings.debugOn);
 
-        idEditText.setText(WnSettings.UserID);
-        windooEditText.setText(WnSettings.WindooID);
+        idEditText.setText(String.valueOf(WnSettings.getWindooUserID()));
+        windooEditText.setText(String.valueOf(WnSettings.getWindooID()));
 
         return rootView;
     }
@@ -64,11 +61,9 @@ public class FragmentConfig extends android.support.v4.app.Fragment implements V
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.applyButton:
-                WnSettings.UserID = String.valueOf(idEditText.getText());
-                WnSettings.WindooID = String.valueOf(windooEditText.getText());
+                WnSettings.setWindooUserID(Integer.valueOf(String.valueOf(idEditText.getText())));
+                WnSettings.setWindooID(Integer.valueOf(String.valueOf(windooEditText.getText())));
                 WnSettings.save();
-                WnService.toast("設定已儲存");
-                //bus.post(new WnMap.OpenEvent());
                 break;
         }
     }
