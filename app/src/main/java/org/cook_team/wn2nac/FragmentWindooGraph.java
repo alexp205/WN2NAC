@@ -95,10 +95,10 @@ public class FragmentWindooGraph extends android.support.v4.app.Fragment {
     public static class TimeValueFormatter implements XAxisValueFormatter {
         @Override
         public String getXValue(String original, int index, ViewPortHandler viewPortHandler) {
-            float ago = (System.currentTimeMillis()-Long.valueOf(original))/1000.0f;
+            int ago = Math.round((System.currentTimeMillis()-Long.valueOf(original))/1000.0f);
             return ago < 60 ?
-                    String.valueOf(Math.round(ago)) + "秒前" :
-                    String.valueOf(Math.round(ago/60.0f)) + "分前"; // + (timeFormat2).format(new Date(Long.valueOf(original))) + ")";
+                    String.valueOf(ago) + "秒前" :
+                    String.valueOf(ago/60) + "分" + String.valueOf(ago%60) + "秒前"; // + (timeFormat2).format(new Date(Long.valueOf(original))) + ")";
         }
     }
 
@@ -110,7 +110,7 @@ public class FragmentWindooGraph extends android.support.v4.app.Fragment {
     }
 
     /** Chart LISTENERs **/
-    private abstract static class OnChartTranslateListener implements OnChartGestureListener {
+    private abstract static class chartGestureListener implements OnChartGestureListener {
         @Override
         public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {}
         @Override
@@ -126,10 +126,9 @@ public class FragmentWindooGraph extends android.support.v4.app.Fragment {
         @Override
         public void onChartScale(MotionEvent me, float scaleX, float scaleY) {}
         @Override
-        public void onChartTranslate(MotionEvent me, float dX, float dY) {
-        }
+        public void onChartTranslate(MotionEvent me, float dX, float dY) {}
     }
-    private static class chartTranslateListener extends OnChartTranslateListener {
+    private static class chartTranslateListener extends chartGestureListener {
         private LineChart originChart;
         public chartTranslateListener(LineChart chart) { originChart = chart; }
         @Override
@@ -143,7 +142,9 @@ public class FragmentWindooGraph extends android.support.v4.app.Fragment {
         public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
             for (LineChart chart:charts) chart.highlightValue(h.getXIndex(), dataSetIndex);
         }
-        public void onNothingSelected() {}
+        public void onNothingSelected() {
+            for (LineChart chart:charts) chart.highlightValues(null);
+        }
     }
 
     /** INIT **/
@@ -179,6 +180,7 @@ public class FragmentWindooGraph extends android.support.v4.app.Fragment {
         chart.setScaleEnabled(false);
         chart.setOnChartGestureListener(new chartTranslateListener(chart));
         chart.setOnChartValueSelectedListener(new chartSelectListener());
+        chart.setDragDecelerationEnabled(false);
 
         /** X axis **/
         chart.getXAxis().setPosition(XAxis.XAxisPosition.TOP);
