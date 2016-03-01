@@ -21,9 +21,11 @@ import com.github.mikephil.charting.data.ScatterData;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.formatter.XAxisValueFormatter;
 import com.github.mikephil.charting.formatter.YAxisValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.text.SimpleDateFormat;
@@ -36,72 +38,6 @@ import de.greenrobot.event.EventBus;
 public class FragmentWindooGraph extends android.support.v4.app.Fragment {
 
     private static EventBus bus = EventBus.getDefault();
-
-    private static SimpleDateFormat
-            timeFormat1 = new SimpleDateFormat("HH:mm:ss"),
-            timeFormat2 = new SimpleDateFormat("HH:mm");
-
-    /** CHARTs **/
-    LineChart chartTemperature, chartHumidity, chartPressure, chartWind;
-
-    private static boolean autoscroll = true;
-
-    /** Chart DATA **/
-    private static ArrayList<String> timeData = new ArrayList<>();
-    private static LineDataSet
-            temperatureData = new LineDataSet(new ArrayList<Entry>(), "Temperature"),
-            humidityData = new LineDataSet(new ArrayList<Entry>(), "Humidity"),
-            pressureData = new LineDataSet(new ArrayList<Entry>(), "Pressure"),
-            windData = new LineDataSet(new ArrayList<Entry>(), "Wind speed");
-
-    /** Chart VALUE FORMATTERs **/
-    public static class TimeValueFormatter implements XAxisValueFormatter {
-        @Override
-        public String getXValue(String original, int index, ViewPortHandler viewPortHandler) {
-            float ago = (System.currentTimeMillis()-Long.valueOf(original))/1000.0f;
-            return ago < 60 ?
-                    String.valueOf(Math.round(ago)) + "秒前" :
-                    String.valueOf(Math.round(ago/60.0f)) + "分前"; // + (timeFormat2).format(new Date(Long.valueOf(original))) + ")";
-        }
-    }
-    public static class WindooValueFormatter implements YAxisValueFormatter {
-        @Override
-        public String getFormattedValue(float value, YAxis yAxis) {
-            return value<100 || yAxis.getAxisMaxValue()-yAxis.getAxisMinValue()<10 ? String.format("%.1f", value) : String.format("%.0f", value);
-        }
-    }
-    private abstract static class OnChartTranslateListener implements OnChartGestureListener {
-        @Override
-        public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {}
-        @Override
-        public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {}
-        @Override
-        public void onChartLongPressed(MotionEvent me) {}
-        @Override
-        public void onChartDoubleTapped(MotionEvent me) {}
-        @Override
-        public void onChartSingleTapped(MotionEvent me) {}
-        @Override
-        public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {}
-        @Override
-        public void onChartScale(MotionEvent me, float scaleX, float scaleY) {}
-        @Override
-        public void onChartTranslate(MotionEvent me, float dX, float dY) {
-        }
-    }
-    private class chartTranslateListener extends OnChartTranslateListener {
-        private LineChart chart;
-        public chartTranslateListener(LineChart chart) { this.chart = chart; }
-        @Override
-        public void onChartTranslate(MotionEvent me, float dX, float dY) {
-            autoscroll = (chart.getHighestVisibleXIndex() == chart.getXValCount()-1);
-            float offset = chart.getLowestVisibleXIndex()-1;
-            chartTemperature.moveViewToX(offset);
-            chartHumidity.moveViewToX(offset);
-            chartPressure.moveViewToX(offset);
-            chartWind.moveViewToX(offset);
-        }
-    }
 
     /** FRAGMENT **/
 
@@ -133,27 +69,106 @@ public class FragmentWindooGraph extends android.support.v4.app.Fragment {
         chartPressure = (LineChart) rootView.findViewById(R.id.chartPressure);
         chartWind = (LineChart) rootView.findViewById(R.id.chartWind);
 
-        initChart(chartTemperature);
-        initChart(chartHumidity);
-        initChart(chartPressure);
-        initChart(chartWind);
+        init();
 
-        chartTemperature.setOnChartGestureListener(new chartTranslateListener(chartTemperature));
-        chartHumidity.setOnChartGestureListener(new chartTranslateListener(chartHumidity));
-        chartPressure.setOnChartGestureListener(new chartTranslateListener(chartPressure));
-        chartWind.setOnChartGestureListener(new chartTranslateListener(chartWind));
+        return rootView;
+    }
+
+    /** DATE FORMAT **/
+    private static SimpleDateFormat timeFormat1 = new SimpleDateFormat("HH:mm:ss"),
+                                    timeFormat2 = new SimpleDateFormat("HH:mm");
+
+    /** CHARTs **/
+    private static ArrayList<LineChart> charts = new ArrayList<>();
+    private LineChart chartTemperature, chartHumidity, chartPressure, chartWind;
+
+    private static boolean autoscroll = true;
+
+    /** Chart DATA SETs **/
+    private static ArrayList<String> timeData = new ArrayList<>();
+    private static LineDataSet temperatureData = new LineDataSet(new ArrayList<Entry>(), "Temperature"),
+                                humidityData = new LineDataSet(new ArrayList<Entry>(), "Humidity"),
+                                pressureData = new LineDataSet(new ArrayList<Entry>(), "Pressure"),
+                                windData = new LineDataSet(new ArrayList<Entry>(), "Wind speed");
+
+    /** Chart VALUE FORMATTERs **/
+    public static class TimeValueFormatter implements XAxisValueFormatter {
+        @Override
+        public String getXValue(String original, int index, ViewPortHandler viewPortHandler) {
+            float ago = (System.currentTimeMillis()-Long.valueOf(original))/1000.0f;
+            return ago < 60 ?
+                    String.valueOf(Math.round(ago)) + "秒前" :
+                    String.valueOf(Math.round(ago/60.0f)) + "分前"; // + (timeFormat2).format(new Date(Long.valueOf(original))) + ")";
+        }
+    }
+
+    public static class WindooValueFormatter implements YAxisValueFormatter {
+        @Override
+        public String getFormattedValue(float value, YAxis yAxis) {
+            return value<100 || yAxis.getAxisMaxValue()-yAxis.getAxisMinValue()<10 ? String.format("%.1f", value) : String.format("%.0f", value);
+        }
+    }
+
+    /** Chart LISTENERs **/
+    private abstract static class OnChartTranslateListener implements OnChartGestureListener {
+        @Override
+        public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {}
+        @Override
+        public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {}
+        @Override
+        public void onChartLongPressed(MotionEvent me) {}
+        @Override
+        public void onChartDoubleTapped(MotionEvent me) {}
+        @Override
+        public void onChartSingleTapped(MotionEvent me) {}
+        @Override
+        public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {}
+        @Override
+        public void onChartScale(MotionEvent me, float scaleX, float scaleY) {}
+        @Override
+        public void onChartTranslate(MotionEvent me, float dX, float dY) {
+        }
+    }
+    private static class chartTranslateListener extends OnChartTranslateListener {
+        private LineChart originChart;
+        public chartTranslateListener(LineChart chart) { originChart = chart; }
+        @Override
+        public void onChartTranslate(MotionEvent me, float dX, float dY) {
+            autoscroll = (originChart.getHighestVisibleXIndex() == originChart.getXValCount()-1);
+            for (LineChart chart:charts) chart.moveViewToX(originChart.getLowestVisibleXIndex()-1);
+        }
+    }
+    private static class chartSelectListener implements OnChartValueSelectedListener {
+        @Override
+        public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+            for (LineChart chart:charts) chart.highlightValue(h.getXIndex(), dataSetIndex);
+        }
+        public void onNothingSelected() {}
+    }
+
+    /** INIT **/
+
+    private void init() {
+        charts.clear();
+        charts.add(chartTemperature);
+        charts.add(chartHumidity);
+        charts.add(chartPressure);
+        charts.add(chartWind);
+
+        chartTemperature.setData(new LineData(timeData, temperatureData));
+        chartHumidity.setData(new LineData(timeData, humidityData));
+        chartPressure.setData(new LineData(timeData, pressureData));
+        chartWind.setData(new LineData(timeData, windData));
+
+        for (LineChart chart:charts) {
+            initChart(chart);
+            initDataSet((LineDataSet) chart.getData().getDataSetByIndex(0));
+        }
 
         chartTemperature.getXAxis().setDrawLabels(true);
         chartTemperature.setViewPortOffsets(120, 54, 18, 22);
 
-        initDataSet(temperatureData);
-        initDataSet(humidityData);
-        initDataSet(pressureData);
-        initDataSet(windData);
-
         updateChart();
-
-        return rootView;
     }
 
     private static void initChart(LineChart chart) {
@@ -162,6 +177,8 @@ public class FragmentWindooGraph extends android.support.v4.app.Fragment {
         chart.getLegend().setEnabled(false);
         chart.setViewPortOffsets(120, 22, 18, 22);
         chart.setScaleEnabled(false);
+        chart.setOnChartGestureListener(new chartTranslateListener(chart));
+        chart.setOnChartValueSelectedListener(new chartSelectListener());
 
         /** X axis **/
         chart.getXAxis().setPosition(XAxis.XAxisPosition.TOP);
@@ -229,71 +246,122 @@ public class FragmentWindooGraph extends android.support.v4.app.Fragment {
 
     private static int chartTimeRange = 15;
     private void setTimeRange(int sec) {
-        chartTemperature.getXAxis().setLabelsToSkip(sec/3);
-        chartTemperature.setVisibleXRangeMinimum(sec);
-        chartTemperature.setVisibleXRangeMaximum(sec);
-        chartHumidity.getXAxis().setLabelsToSkip(sec/3);
-        chartHumidity.setVisibleXRangeMinimum(sec);
-        chartHumidity.setVisibleXRangeMaximum(sec);
-        chartPressure.getXAxis().setLabelsToSkip(sec / 3);
-        chartPressure.setVisibleXRangeMinimum(sec);
-        chartPressure.setVisibleXRangeMaximum(sec);
-        chartWind.getXAxis().setLabelsToSkip(sec / 3);
-        chartWind.setVisibleXRangeMinimum(sec);
-        chartWind.setVisibleXRangeMaximum(sec);
+        for(LineChart chart:charts) {
+            chart.getXAxis().setLabelsToSkip(sec / 3);
+            chart.setVisibleXRangeMinimum(sec);
+            chart.setVisibleXRangeMaximum(sec);
+        }
     }
     private void updateTemperatureChart() {
         updateTemperatureData();
         if (temperatureData.getYVals().size() > 0) {
-            chartTemperature.setData(new LineData(timeData, temperatureData));
             chartTemperature.notifyDataSetChanged();
             chartTemperature.invalidate(); // refresh
             float padding = 1.0f;
             chartTemperature.getAxisLeft().setAxisMinValue((float) Math.floor(temperatureData.getYMin()) - padding);
             chartTemperature.getAxisLeft().setAxisMaxValue((float) Math.ceil(temperatureData.getYMax()) + padding);
             if(autoscroll) chartTemperature.moveViewToX(timeData.size()); // move to newest data
+
+            chartTemperature.getAxisLeft().removeAllLimitLines();
+            ArrayList<LimitLine> limitLines = new ArrayList<>();
+            limitLines.add(new LimitLine(temperatureData.getYMax(), "最高"));
+            limitLines.add(new LimitLine((float) (double) WnObserver.getInstance().getAvgTemperature(), "平均"));
+            limitLines.add(new LimitLine(temperatureData.getYMin(), "最低"));
+            float pos = 0;
+            for (LimitLine line:limitLines) {
+                line.setLineColor(Color.MAGENTA);
+                line.setLineWidth(1f);
+                line.setTextColor(Color.WHITE);
+                line.setTextSize(11f);
+                line.setXOffset(pos += 40);
+                chartTemperature.getAxisLeft().addLimitLine(line);
+            }
         }
     }
     private void updateHumidityChart() {
         updateHumidityData();
         if (humidityData.getYVals().size() > 0) {
-            chartHumidity.setData(new LineData(timeData, humidityData));
             chartHumidity.notifyDataSetChanged();
             chartHumidity.invalidate(); // refresh
             float padding = 1.0f;
             chartHumidity.getAxisLeft().setAxisMinValue((float) Math.floor(humidityData.getYMin()) - padding);
             chartHumidity.getAxisLeft().setAxisMaxValue((float) Math.ceil(humidityData.getYMax()) + padding);
             if(autoscroll) chartHumidity.moveViewToX(timeData.size()); // move to newest data
+
+            chartHumidity.getAxisLeft().removeAllLimitLines();
+            ArrayList<LimitLine> limitLines = new ArrayList<>();
+            limitLines.add(new LimitLine(humidityData.getYMax(), "最高"));
+            limitLines.add(new LimitLine((float) (double) WnObserver.getInstance().getAvgHumidity(), "平均"));
+            limitLines.add(new LimitLine(humidityData.getYMin(), "最低"));
+            float pos = 0;
+            for (LimitLine line:limitLines) {
+                line.setLineColor(Color.MAGENTA);
+                line.setLineWidth(1f);
+                line.setTextColor(Color.WHITE);
+                line.setTextSize(11f);
+                line.setXOffset(pos += 40);
+                chartHumidity.getAxisLeft().addLimitLine(line);
+            }
         }
     }
     private void updatePressureChart() {
         updatePressureData();
         if (pressureData.getYVals().size() > 0) {
-            chartPressure.setData(new LineData(timeData, pressureData));
             chartPressure.notifyDataSetChanged();
             chartPressure.invalidate(); // refresh
-            float padding = 2.0f;
+            float padding = 1.0f;
             chartPressure.getAxisLeft().setAxisMinValue((float) Math.floor(pressureData.getYMin()) - padding);
             chartPressure.getAxisLeft().setAxisMaxValue((float) Math.ceil(pressureData.getYMax()) + padding);
             if(autoscroll) chartPressure.moveViewToX(timeData.size()); // move to newest data
+
+            chartPressure.getAxisLeft().removeAllLimitLines();
+            ArrayList<LimitLine> limitLines = new ArrayList<>();
+            limitLines.add(new LimitLine(pressureData.getYMax(), "最高"));
+            limitLines.add(new LimitLine((float) (double) WnObserver.getInstance().getAvgPressure(), "平均"));
+            limitLines.add(new LimitLine(pressureData.getYMin(), "最低"));
+            float pos = 0;
+            for (LimitLine line:limitLines) {
+                line.setLineColor(Color.MAGENTA);
+                line.setLineWidth(1f);
+                line.setTextColor(Color.WHITE);
+                line.setTextSize(11f);
+                line.setXOffset(pos += 40);
+                chartPressure.getAxisLeft().addLimitLine(line);
+            }
         }
     }
     private void updateWindChart() {
         updateWindData();
         if (windData.getYVals().size() > 0) {
-            chartWind.setData(new LineData(timeData, windData));
             chartWind.notifyDataSetChanged();
             chartWind.invalidate(); // refresh
             float padding = 1.0f;
             chartWind.getAxisLeft().setAxisMinValue(0);
             chartWind.getAxisLeft().setAxisMaxValue((float) Math.ceil(windData.getYMax()) + padding);
             if(autoscroll) chartWind.moveViewToX(timeData.size()); // move to newest data
+
+            chartWind.getAxisLeft().removeAllLimitLines();
+            ArrayList<LimitLine> limitLines = new ArrayList<>();
+            limitLines.add(new LimitLine(windData.getYMax(), "最高"));
+            limitLines.add(new LimitLine((float) (double) WnObserver.getInstance().getAvgWind(), "平均"));
+            limitLines.add(new LimitLine(windData.getYMin(), "最低"));
+            float pos = 0;
+            for (LimitLine line:limitLines) {
+                line.setLineColor(Color.MAGENTA);
+                line.setLineWidth(1f);
+                line.setTextColor(Color.WHITE);
+                line.setTextSize(11f);
+                line.setXOffset(pos += 40);
+                chartWind.getAxisLeft().addLimitLine(line);
+            }
         }
     }
 
     private void updateChart() {
 
         updateTimeData();
+
+        WnObserver.getInstance().calcAverages();
 
         updateTemperatureChart();
         updateHumidityChart();
@@ -307,13 +375,6 @@ public class FragmentWindooGraph extends android.support.v4.app.Fragment {
         }
         setTimeRange(chartTimeRange);
 
-        /*LimitLine ll = new LimitLine(WnObserver, "");
-        ll.setLineColor(Color.RED);
-        ll.setLineWidth(4f);
-        ll.setTextColor(Color.BLACK);
-        ll.setTextSize(12f);
-        leftAxis.addLimitLine(ll);
-        break;*/
     }
 
     public void onEventMainThread(WnObserver.WindooEvent event) {

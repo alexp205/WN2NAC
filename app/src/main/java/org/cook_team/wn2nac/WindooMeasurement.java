@@ -108,23 +108,25 @@ public class WindooMeasurement implements Comparable<WindooMeasurement> {
         timeStarted = System.currentTimeMillis();
     }
 
+    public void calcAverages() {
+        // Calculate averages
+        avgTemperature = avgHumidity = avgPressure = avgWind = 0;
+        for (double val: temperature.values())    avgTemperature += val;
+        for (double val: humidity.values())       avgHumidity += val;
+        for (double val: pressure.values())       avgPressure += val;
+        for (double val: wind.values())           avgWind += val;
+        avgTemperature /= temperature.size();
+        avgHumidity /= humidity.size();
+        avgPressure /= pressure.size();
+        avgWind /= wind.size();
+    }
+
     /** FINISH measurement **/
     public boolean finish() {
         if (temperature.size()>0 && humidity.size()>0 && pressure.size()>0 && wind.size()>0 ) {
             newMeasurementID();
             timeFinished = System.currentTimeMillis();
-
-            // Calculate averages
-            avgTemperature = avgHumidity = avgPressure = avgWind = 0;
-            for (double val: temperature.values())    avgTemperature += val;
-            for (double val: humidity.values())       avgHumidity += val;
-            for (double val: pressure.values())       avgPressure += val;
-            for (double val: wind.values())           avgWind += val;
-            avgTemperature /= temperature.size();
-            avgHumidity /= humidity.size();
-            avgPressure /= pressure.size();
-            avgWind /= wind.size();
-
+            calcAverages();
             return true;
         }
         else return false;
