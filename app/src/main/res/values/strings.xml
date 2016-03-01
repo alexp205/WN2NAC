@@ -58,11 +58,26 @@
 
     <!--WINDOO MEASUREMENT-->
     <string name="temperature">溫度 (°C)</string>
-    <string name="humidity">濕度 (%)</string>
+    <string name="humidity">濕度 (%RH)</string>
     <string name="pressure">壓力 (hPa)</string>
     <string name="wind">風速 (m/s)</string>
     <string name="val_null">- -</string>
     <string name="measure">測量</string>
+
+    <string name="temperature_unit">(°C)</string>
+    <string name="humidity_unit">(%RH)</string>
+    <string name="pressure_unit">(hPa)</string>
+    <string name="wind_unit">(m/s)</string>
+
+    <string name="max_val">最大值</string>
+    <string name="avg_val">平均值</string>
+    <string name="min_val">最小值</string>
+
+    <string name="wind_chill">寒風整數</string>
+    <string name="dew_point">露點</string>
+    <string name="qnh">Qnh</string>
+    <string name="wind_dir">風向</string>
+
 
     <!--WINDOO HISTORY-->
     <string name="history_goto">查看</string>
