@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import ch.skywatch.windoo.api.JDCWindooEvent;
 import de.greenrobot.event.EventBus;
 
 public class FragmentWindooMeasure extends android.support.v4.app.Fragment implements View.OnClickListener {
@@ -14,14 +15,18 @@ public class FragmentWindooMeasure extends android.support.v4.app.Fragment imple
     private static EventBus bus = EventBus.getDefault();
     public static class ShowEvent {}
     public static class HideEvent {}
+    public static class ToggleEvent {}
 
-    public static int currentStep = 2;
-    Button buttonLast, buttonNext, buttonClose;
+    private static int minStep = 1, maxStep = 4;
+    private static int currentStep = minStep;
+    private static boolean visible = false;
+
+    private Button buttonLast, buttonNext, buttonClose;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //if (!bus.isRegistered(this)) bus.register(this);
+        if (!bus.isRegistered(this)) bus.register(this);
     }
 
     @Override
@@ -35,32 +40,27 @@ public class FragmentWindooMeasure extends android.support.v4.app.Fragment imple
         buttonNext.setOnClickListener(this);
         buttonClose.setOnClickListener(this);
 
-        getChildFragmentManager().beginTransaction().replace(R.id.container, new FragmentWindooMeasure2()).commit();
-        buttonLast.setVisibility(View.INVISIBLE);
-
         return rootView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        updateStep();
-        if (WnMap.measureFragmentVisible)
-            bus.post(new FragmentWindooMeasure.ShowEvent());
-        else
-            bus.post(new FragmentWindooMeasure.HideEvent());
+        updateVisibility();
+        switchStep(currentStep);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //if (!bus.isRegistered(this)) bus.register(this);
-        updateDisplay();
+        if (!bus.isRegistered(this)) bus.register(this);
+        updateVisibility();
+        switchStep(currentStep);
     }
 
     @Override
     public void onPause() {
-        //bus.unregister(this);
+        bus.unregister(this);
         super.onPause();
     }
 
@@ -68,79 +68,78 @@ public class FragmentWindooMeasure extends android.support.v4.app.Fragment imple
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.buttonNext:
-                if (currentStep<4) currentStep++;
-                else if (currentStep==4) currentStep = 2;
-                //if (currentStep==4) bus.post(new WnMeasure.StartEvent());
+                if (currentStep < maxStep) currentStep++;
+                if (currentStep == 4) bus.post(new WnMeasure.StartEvent(FragmentWindooMeasure3.min*60 + FragmentWindooMeasure3.sec));
                 break;
             case R.id.buttonLast:
-                if (currentStep==4) bus.post(new WnMeasure.AbandonEvent());
-                if (currentStep>2) currentStep--;
+                if (currentStep > minStep) currentStep--;
+                if (currentStep == 3) bus.post(new WnMeasure.AbandonEvent());
                 break;
             case R.id.buttonClose:
                 bus.post(new HideEvent());
                 break;
         }
-        updateStep();
+        switchStep(currentStep);
     }
 
-    public void updateStep() {
-        Fragment fragment = new FragmentWindooMeasure1();
-        switch(currentStep) {
+    private void switchStep(int step) {
+        Fragment fragment;
+        switch(step) {
+            default:
             case 1:
-                buttonLast.setVisibility(View.INVISIBLE);
-                buttonNext.setVisibility(View.VISIBLE);
-                buttonClose.setVisibility(View.VISIBLE);
                 buttonNext.setText("下一步");
                 fragment = new FragmentWindooMeasure1();
                 break;
             case 2:
                 WnMeasure.measuring = false;
-                buttonLast.setVisibility(View.INVISIBLE);
-                buttonNext.setVisibility(View.VISIBLE);
-                buttonClose.setVisibility(View.VISIBLE);
                 buttonLast.setText("上一步");
                 buttonNext.setText("下一步");
                 fragment = new FragmentWindooMeasure2();
                 break;
             case 3:
-                buttonLast.setVisibility(View.VISIBLE);
-                buttonNext.setVisibility(View.VISIBLE);
-                buttonClose.setVisibility(View.VISIBLE);
                 buttonLast.setText("上一步");
                 buttonNext.setText("開始測量");
                 fragment = new FragmentWindooMeasure3();
                 break;
             case 4:
-                buttonLast.setVisibility(View.VISIBLE);
-                buttonNext.setVisibility(View.INVISIBLE);
-                buttonClose.setVisibility(View.INVISIBLE);
                 buttonLast.setText("取消測量");
-                //bus.post(new WnMeasure.StartEvent());
                 fragment = new FragmentWindooMeasuring();
                 break;
         }
         getChildFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+        buttonLast.setVisibility(step > minStep ? View.VISIBLE : View.INVISIBLE);
+        buttonNext.setVisibility(step < maxStep ? View.VISIBLE : View.INVISIBLE);
+        buttonClose.setVisibility(step < maxStep ? View.VISIBLE : View.INVISIBLE);
+        buttonNext.setEnabled(currentStep != 3 || WnObserver.getWindooStatus() == WnObserver.WINDOO_CALIBRATED);
     }
 
-    public void updateDisplay() {
-        if(WnMeasure.measuring) {
-            buttonLast.setVisibility(View.VISIBLE);
-            buttonNext.setVisibility(View.INVISIBLE);
-            buttonClose.setVisibility(View.INVISIBLE);
-            buttonLast.setText("取消測量");
-        }
-        else {
-            /*buttonLast.setVisibility(View.INVISIBLE);
-            buttonNext.setVisibility(View.VISIBLE);
-            buttonClose.setVisibility(View.VISIBLE);
-            buttonNext.setText("重新測量");*/
-            bus.post(new HideEvent());
-            buttonLast.setVisibility(View.INVISIBLE);
-            buttonNext.setVisibility(View.VISIBLE);
-            buttonClose.setVisibility(View.VISIBLE);
-            buttonNext.setText("下一步");
-            getChildFragmentManager().beginTransaction().replace(R.id.container, new FragmentWindooMeasure2()).commit();
+    public void onEventMainThread(ShowEvent event) {
+        visible = true;
+    }
+    public void onEventMainThread(HideEvent event) {
+        visible = false;
+    }
+    public void onEventMainThread(ToggleEvent event) {
+        visible = !visible;
+        updateVisibility();
+    }
+    private void updateVisibility() {
+        bus.post(visible ? new FragmentWindooMeasure.ShowEvent() : new FragmentWindooMeasure.HideEvent());
+    }
+
+    public void onEventMainThread(WnObserver.WindooEvent event) {
+        switch(event.getType()) {
+            case JDCWindooEvent.JDCWindooAvailable:
+                break;
+            case JDCWindooEvent.JDCWindooNotAvailable:
+                if (currentStep == 3) buttonNext.setEnabled(false);
+                    break;
+            case JDCWindooEvent.JDCWindooCalibrated:
+                if (currentStep == 3) buttonNext.setEnabled(true);
         }
     }
 
+    public void onEventMainThread(WnMeasure.AbandonEvent event) {
+        switchStep(3);
+    }
 }

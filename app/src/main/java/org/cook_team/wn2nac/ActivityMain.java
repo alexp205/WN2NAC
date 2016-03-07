@@ -6,9 +6,12 @@ import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import de.greenrobot.event.EventBus;
 
@@ -22,11 +25,17 @@ implements FragmentNavigationDrawer.NavigationDrawerCallbacks {
     private static int screenPosition = 0; // Used to store the last screen position.
 
     private Toolbar toolbar;
+    private TextView debug;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        debug = (TextView) findViewById(R.id.debug);
+        debug.setMovementMethod(new ScrollingMovementMethod());
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
 
         // Set up the drawer.
         fragmentNavigationDrawer = (FragmentNavigationDrawer) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -139,4 +148,9 @@ implements FragmentNavigationDrawer.NavigationDrawerCallbacks {
         stopService(new Intent(this, WnService.class));
         finish();
     }*/
+
+    public void onEventMainThread(WnService.DebugEvent event) {
+        debug.append(event.message + "\n");
+        scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+    }
 }

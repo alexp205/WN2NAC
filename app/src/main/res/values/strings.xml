@@ -10,7 +10,7 @@
         <item>測量記錄</item>
         <item>設定</item>
         <item>關於</item>
-        <item>圖表(測試中)</item>
+        <item>圖表</item>
     </string-array>
 
     <!--NAVIGATION DRAWER-->
@@ -35,13 +35,13 @@
     </string>
     <string name="about_website">www.cook-team.org</string>
     <string name="about_contact">
-        連繫:\n
         林博雄
     </string>
     <string name="about_contact_email">polin@ntu.edu.tw</string>
     <string name="about_date">
         版本:\n
-        2016/2/21
+        1.0.18\n
+        2016/3/6
     </string>
     <string name="about_author">
         程式撰寫:\n
@@ -57,13 +57,12 @@
     </string-array>
 
     <!--WINDOO MEASUREMENT-->
-    <string name="temperature">溫度 (°C)</string>
-    <string name="humidity">濕度 (%RH)</string>
-    <string name="pressure">壓力 (hPa)</string>
-    <string name="wind">風速 (m/s)</string>
+    <string name="temperature">溫度</string>
+    <string name="humidity">濕度</string>
+    <string name="pressure">壓力</string>
+    <string name="wind">風速</string>
     <string name="val_null">- -</string>
     <string name="measure">測量</string>
-
     <string name="temperature_unit">(°C)</string>
     <string name="humidity_unit">(%RH)</string>
     <string name="pressure_unit">(hPa)</string>
@@ -90,5 +89,13 @@
     <string name="display_name">名稱</string>
     <string name="display_server_ip">伺服器 IP</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="limitLine_high">最高</string>
+    <string name="limitLine_avg">平均</string>
+    <string name="limitLine_low">最低</string>
+
+    <string name="step1">1. 確認與環境達平衡</string>
+    <string name="step2">2. 紀錄風向</string>
+    <string name="step3">3. 定時測量</string>
 
 </resources>

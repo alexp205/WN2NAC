@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <fragment
+        android:id="@+id/windooChart"
+        android:name="org.cook_team.wn2nac.FragmentWindooGraph"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:layout_marginRight="8dp" />
+
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:paddingTop="16dp">
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="16dp"
+        android:gravity="center">
 
         <com.github.lzyzsd.circleprogress.DonutProgress
             android:id="@+id/donut_progress"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             custom:donut_progress="30"
             android:layout_gravity="center"
             android:layout_marginBottom="8dp" />
@@ -23,12 +33,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/val_null"
             android:id="@+id/countdown"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal" />
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:textColor="@android:color/primary_text_dark"
+            android:paddingLeft="16dp" />
 
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

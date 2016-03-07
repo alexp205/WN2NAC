@@ -21,7 +21,6 @@ public class WnMap {
     public static LatLng userPos = null;
     public static CameraPosition mCam;
     public static boolean init = false;
-    public static boolean measureFragmentVisible = false;
     public static WindooMeasurement goTo;
 
     public static class GotoEvent {}

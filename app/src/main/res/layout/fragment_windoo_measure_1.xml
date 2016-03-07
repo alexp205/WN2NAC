@@ -3,23 +3,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="1. 測量說明"
+        android:text="@string/step1"
         style="@android:style/TextAppearance.DeviceDefault.Large"
         android:gravity="center_horizontal"
         android:layout_marginBottom="16dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="手伸直1分鐘保持不動 "
-        style="@android:style/TextAppearance.DeviceDefault.Large"
-        android:id="@+id/textView"
-        android:layout_gravity="center_horizontal" />
+    <fragment
+        android:id="@+id/windooChart"
+        android:name="org.cook_team.wn2nac.FragmentWindooGraph"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="8dp" />
 
 </LinearLayout>

@@ -50,7 +50,7 @@ public class JDCWindooManager extends Observable implements Observer {
         activity.registerReceiver(this.headsetReceiver, new IntentFilter("android.intent.action.HEADSET_PLUG"));
         this.mediaButtonReceiver = new ReceiverMediaButton();
         activity.registerReceiver(this.mediaButtonReceiver, new IntentFilter("android.media.VOLUME_CHANGED_ACTION"));
-        startDongleCommunication();
+        //startDongleCommunication();
     }
 
     public void disable(Context activity) {
@@ -75,7 +75,6 @@ public class JDCWindooManager extends Observable implements Observer {
     }
 
     private JDCWindooManager() {
-        ToolWaveAnalysis.getInstance().addObserver(this);
         this.dateFormat.setTimeZone(Calendar.getInstance().getTimeZone());
     }
 
@@ -191,6 +190,7 @@ public class JDCWindooManager extends Observable implements Observer {
 
     private void startDongleCommunication() {
         this.active = true;
+        ToolWaveAnalysis.getInstance().addObserver(this);
         ToolWaveAnalysis.getInstance().start();
         ToolWaveGenerator.getInstance().start();
     }

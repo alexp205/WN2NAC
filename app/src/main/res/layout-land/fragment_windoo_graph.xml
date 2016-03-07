@@ -1,76 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:stretchColumns="1">
+    android:orientation="vertical">
 
-    <TableRow
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_gravity="center_horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/temperature_unit"
-            android:layout_gravity="center_vertical" />
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/chartTemperature"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </TableRow>
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|center_horizontal">
 
-    <TableRow
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自動捲動"
+                android:paddingLeft="8dp"
+                android:paddingStart="8dp"
+                android:id="@+id/autoScrollSwitch"
+                android:checked="true" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="顯示最低/平均/最高值"
+                android:id="@+id/drawLimitLinesCheckbox"
+                android:textSize="12sp"
+                android:checked="false" />
+        </LinearLayout>
+
+        <RadioGroup
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:id="@+id/timeDisplayGroup">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="距今時間"
+                android:id="@+id/timeDisplay1"
+                android:minHeight="0dp"
+                android:checked="true" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="時:分:秒"
+                android:id="@+id/timeDisplay2"
+                android:minHeight="0dp" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="檢視時間長度"
+                android:id="@+id/textView2"
+                android:gravity="center_horizontal" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/timeRangeSpinner"
+                android:minHeight="0dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_gravity="center_horizontal">
-        <TextView
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <ToggleButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/humidity_unit"
-            android:layout_gravity="center_vertical" />
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/chartHumidity"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </TableRow>
+            android:id="@+id/temperatureToggleButton"
+            android:minHeight="0dp"
+            android:checked="true"
+            android:textOn="@string/temperature"
+            android:textOff="@string/temperature" />
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/humidityToggleButton"
+            android:minHeight="0dp"
+            android:checked="true"
+            android:textOn="@string/humidity"
+            android:textOff="@string/humidity" />
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/pressureToggleButton"
+            android:minHeight="0dp"
+            android:textOff="@string/pressure"
+            android:textOn="@string/pressure"
+            android:checked="true" />
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/windToggleButton"
+            android:minHeight="0dp"
+            android:textOn="@string/wind"
+            android:textOff="@string/wind"
+            android:checked="true" />
 
-    <TableRow
-        android:orientation="horizontal"
+    </LinearLayout>
+
+    <TableLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_gravity="center_horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pressure_unit"
-            android:layout_gravity="center_vertical" />
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/chartPressure"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </TableRow>
+        android:layout_height="match_parent"
+        android:stretchColumns="1">
 
-    <TableRow
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_gravity="center_horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/wind_unit"
-            android:layout_gravity="center_vertical" />
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/chartWind"
+        <TableRow
+            android:id="@+id/temperature"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </TableRow>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/temperatureUnit"
+                android:text="@string/temperature_unit"
+                android:layout_gravity="center_vertical"
+                android:textColor="@android:color/primary_text_dark"
+                android:textSize="12sp"
+                android:paddingLeft="8dp"
+                android:paddingStart="8dp"/>
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chartTemperature"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </TableRow>
 
-</TableLayout>
+        <TableRow
+            android:id="@+id/humidity"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/humidityUnit"
+                android:text="@string/humidity_unit"
+                android:layout_gravity="center_vertical"
+                android:textColor="@android:color/primary_text_dark"
+                android:textSize="12sp"
+                android:paddingLeft="8dp"
+                android:paddingStart="8dp"/>
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chartHumidity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/pressure"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pressureUnit"
+                android:text="@string/pressure_unit"
+                android:layout_gravity="center_vertical"
+                android:textColor="@android:color/primary_text_dark"
+                android:textIsSelectable="false"
+                android:textSize="12sp"
+                android:paddingLeft="8dp"
+                android:paddingStart="8dp"/>
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chartPressure"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/wind"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/windUnit"
+                android:text="@string/wind_unit"
+                android:layout_gravity="center_vertical"
+                android:textColor="@android:color/primary_text_dark"
+                android:textSize="12sp"
+                android:paddingLeft="8dp"
+                android:paddingStart="8dp"/>
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chartWind"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </TableRow>
+
+    </TableLayout>
+
+</LinearLayout>

@@ -11,6 +11,7 @@ class ReceiverMediaButton extends BroadcastReceiver {
     }
 
     public void onReceive(Context context, Intent intent) {
-        JDCWindooManager.getInstance().checkVolume(context);
+        if (ReceiverHeadset.connected)
+            JDCWindooManager.getInstance().checkVolume(context);
     }
 }

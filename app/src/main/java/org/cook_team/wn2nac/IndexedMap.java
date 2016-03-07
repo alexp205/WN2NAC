@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 
 public class IndexedMap<K,V> extends LinkedHashMap<K,V> {
     ArrayList<K> keys = new ArrayList<>();
+    V avg;
     @Override
     public V put(K key,V val) {
         keys.add(key);
@@ -24,4 +25,6 @@ public class IndexedMap<K,V> extends LinkedHashMap<K,V> {
     public K getKey(int i){ return keys.get(i); }
     public V getLast(){ return keys.size() > 0 ? super.get(keys.get(keys.size()-1)) : null; }
     public K getLastKey(){ return keys.size() > 0 ? keys.get(keys.size() - 1) : null; }
+    public V getAvg() { return avg; }
+    public void setAvg(V avg) { this.avg = avg; }
 }

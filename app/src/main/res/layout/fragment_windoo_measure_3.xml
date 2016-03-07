@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="2. 定時測量"
+        android:text="@string/step3"
         style="@android:style/TextAppearance.DeviceDefault.Large"
         android:gravity="center_horizontal"
         android:layout_marginBottom="16dp" />

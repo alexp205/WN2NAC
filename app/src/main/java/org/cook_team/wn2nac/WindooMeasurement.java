@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class WindooMeasurement implements Comparable<WindooMeasurement> {
@@ -29,14 +32,21 @@ public class WindooMeasurement implements Comparable<WindooMeasurement> {
 
     /** INTERNAL: Measurement DATA**/
     private long timeStarted = 0, timeFirstWindooData = 0, timeFinished = 0, timeSent = 0;
-    private ArrayList<Location> location = new ArrayList<>();
+    private List<Location> location = new ArrayList<>();
     private float orientation = -9999.0f;
     private IndexedMap<Long, Double> temperature = new IndexedMap<>(),
-                                humidity = new IndexedMap<>(),
-                                pressure = new IndexedMap<>(),
-                                wind = new IndexedMap<>();
-    private double avgTemperature, avgHumidity, avgPressure, avgWind;
+                                        humidity = new IndexedMap<>(),
+                                        pressure = new IndexedMap<>(),
+                                        wind = new IndexedMap<>();
+    private List<IndexedMap<Long, Double>> windoo = new ArrayList<>();
     //picture, pictureGUID
+
+    public WindooMeasurement() {
+        windoo.add(temperature);
+        windoo.add(humidity);
+        windoo.add(pressure);
+        windoo.add(wind);
+    }
 
     /** COMPARATOR **/
     @Override
@@ -53,12 +63,12 @@ public class WindooMeasurement implements Comparable<WindooMeasurement> {
     public long  getTimeFirstWindooData() { return timeFirstWindooData; }
     public long getTimeFinished() { return timeFinished; }
     public long getTimeSent() { return timeSent; }
-    public ArrayList<Location> getLocation() { return location; }
+    public List<Location> getLocation() { return location; }
     public Float getOrientation()     { return orientation; }
-    public Double getAvgTemperature()   { return avgTemperature; }
-    public Double getAvgHumidity()      { return avgHumidity; }
-    public Double getAvgPressure()      { return avgPressure; }
-    public Double getAvgWind()          { return avgWind; }
+    public Double getAvgTemperature()   { return temperature.getAvg(); }
+    public Double getAvgHumidity()      { return humidity.getAvg(); }
+    public Double getAvgPressure()      { return pressure.getAvg(); }
+    public Double getAvgWind()          { return wind.getAvg(); }
     public IndexedMap<Long, Double> getTemperature()   { return temperature; }
     public IndexedMap<Long, Double> getHumidity()      { return humidity; }
     public IndexedMap<Long, Double> getPressure()      { return pressure; }
@@ -110,22 +120,22 @@ public class WindooMeasurement implements Comparable<WindooMeasurement> {
 
     public void calcAverages() {
         // Calculate averages
-        avgTemperature = avgHumidity = avgPressure = avgWind = 0;
-        for (double val: temperature.values())    avgTemperature += val;
-        for (double val: humidity.values())       avgHumidity += val;
-        for (double val: pressure.values())       avgPressure += val;
-        for (double val: wind.values())           avgWind += val;
-        avgTemperature /= temperature.size();
-        avgHumidity /= humidity.size();
-        avgPressure /= pressure.size();
-        avgWind /= wind.size();
+        double sumTemperature = 0.0, sumHumidity = 0.0, sumPressure = 0.0, sumWind = 0.0;
+        for (double val: temperature.values())    sumTemperature += val;
+        for (double val: humidity.values())       sumHumidity += val;
+        for (double val: pressure.values())       sumPressure += val;
+        for (double val: wind.values())           sumWind += val;
+        temperature.setAvg(sumTemperature/temperature.size());
+        humidity.setAvg(sumHumidity/humidity.size());
+        pressure.setAvg(sumPressure/pressure.size());
+        wind.setAvg(sumWind/wind.size());
     }
 
     /** FINISH measurement **/
     public boolean finish() {
         if (temperature.size()>0 && humidity.size()>0 && pressure.size()>0 && wind.size()>0 ) {
-            newMeasurementID();
             timeFinished = System.currentTimeMillis();
+            newMeasurementID();
             calcAverages();
             return true;
         }
@@ -140,9 +150,9 @@ public class WindooMeasurement implements Comparable<WindooMeasurement> {
                 .title(measurementID)
                 .snippet(dateFormat.format(new Date(timeStarted)) + "," +
                         timeFormat.format(new Date(timeStarted)) + " ~ " + timeFormat.format(new Date(timeFinished)) + "," +
-                        String.format("%.2f", avgTemperature) + "," +
-                        String.format("%.2f", avgHumidity) + "," +
-                        String.format("%.2f", avgPressure) + "," +
-                        String.format("%.2f", avgWind));
+                        String.format("%.2f", getAvgTemperature()) + "," +
+                        String.format("%.2f", getAvgHumidity()) + "," +
+                        String.format("%.2f", getAvgPressure()) + "," +
+                        String.format("%.2f", getAvgWind()));
     }
 }

@@ -19,10 +19,33 @@
     <!--app:popupTheme="@style/ThemeOverlay.AppCompat"/>-->
 
     <LinearLayout
-        android:id="@+id/container"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:id="@+id/scrollView"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/debug"
+                android:textSize="8dp"
+                android:gravity="bottom" />
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </LinearLayout>
+
     </LinearLayout>
 
     <!-- android:layout_gravity="start" tells DrawerLayout to treat

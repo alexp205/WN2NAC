@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonClose"
-            android:layout_gravity="top|right"
+            android:layout_gravity="top|end"
             android:minHeight="0dp"
             android:minWidth="0dp"
             android:background="@android:drawable/ic_menu_close_clear_cancel" />
@@ -27,7 +27,7 @@
             android:orientation="vertical"
             android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
         </LinearLayout>
 
     </FrameLayout>

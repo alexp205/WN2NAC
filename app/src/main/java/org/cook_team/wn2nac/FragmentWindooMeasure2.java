@@ -24,6 +24,8 @@ public class FragmentWindooMeasure2 extends android.support.v4.app.Fragment impl
 
     Button buttonWind;
 
+    private FragmentWindooGraph fragmentWindooChart;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +41,20 @@ public class FragmentWindooMeasure2 extends android.support.v4.app.Fragment impl
         heading_degrees = (TextView) rootView.findViewById(R.id.heading_degrees);
         buttonWind = (Button) rootView.findViewById(R.id.buttonWind);
         buttonWind.setOnClickListener(this);
-        buttonWind.setEnabled(WnMeasure.measurement.getOrientation() == -9999);
+        buttonWind.setEnabled(true);
 
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
+        fragmentWindooChart = (FragmentWindooGraph) getChildFragmentManager().findFragmentById(R.id.windooChart);
+        fragmentWindooChart.controlsBarVisible = false;
+        fragmentWindooChart.chartBarVisible = false;
+        fragmentWindooChart.pressureToggleButton.setChecked(false);
+        fragmentWindooChart.temperatureToggleButton.setChecked(false);
+        fragmentWindooChart.humidityToggleButton.setChecked(false);
+        fragmentWindooChart.onClick(fragmentWindooChart.pressureToggleButton);
+        fragmentWindooChart.initView();
 
         return rootView;
     }

@@ -3,65 +3,86 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="1. 紀錄風向"
+        android:text="@string/step2"
         style="@android:style/TextAppearance.DeviceDefault.Large"
         android:gravity="center_horizontal"
         android:layout_marginBottom="16dp" />
+
+    <fragment
+        android:id="@+id/windooChart"
+        android:name="org.cook_team.wn2nac.FragmentWindooGraph"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:layout_marginRight="8dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="將手機平放，轉到逆風方向，按「紀錄風向」"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="8dp" />
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginRight="16dp">
+        <View
+            android:id="@+id/round"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:background="@drawable/round"
+            android:layout_gravity="center" />
 
-            <ImageView
-                android:id="@+id/heading_pointer"
-                android:layout_width="30dip"
-                android:layout_height="30dip"
-                android:src="@drawable/pointer" />
+        <ImageView
+            android:id="@+id/heading_pointer"
+            android:layout_width="115dp"
+            android:layout_height="115dp"
+            android:src="@drawable/rose"
+            android:cropToPadding="false"
+            android:layout_gravity="center" />
 
-            <TextView
-                android:id="@+id/heading_degrees"
-                style="@android:style/TextAppearance.DeviceDefault.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:layout_gravity="center_horizontal" />
+        <View
+            android:id="@+id/round2"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:background="@drawable/round"
+            android:layout_gravity="center" />
 
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/wind"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/wind"
+            android:layout_gravity="center" />
 
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="16dp" />
+    </FrameLayout>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="紀錄風向"
-            android:id="@+id/buttonWind"
-            android:layout_gravity="center_horizontal" />
+    <TextView
+        android:id="@+id/heading_degrees"
+        style="@android:style/TextAppearance.DeviceDefault.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone" />
 
-    </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="紀錄風向"
+        android:id="@+id/buttonWind"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp" />
+
 
 </LinearLayout>

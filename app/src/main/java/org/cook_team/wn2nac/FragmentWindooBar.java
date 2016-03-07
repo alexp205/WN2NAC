@@ -71,21 +71,16 @@ public class FragmentWindooBar extends android.support.v4.app.Fragment implement
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.button_start:
-                if (!WnMap.measureFragmentVisible)
-                    bus.post(new FragmentWindooMeasure.ShowEvent());
-                else
-                    bus.post(new FragmentWindooMeasure.HideEvent());
+                bus.post(new FragmentWindooMeasure.ToggleEvent());
                 break;
         }
     }
 
     public void onEventMainThread(FragmentWindooMeasure.ShowEvent event) {
         button_start.setText("回到地圖");
-        WnMap.measureFragmentVisible = true;
     }
 
     public void onEventMainThread(FragmentWindooMeasure.HideEvent event) {
         button_start.setText("測量");
-        WnMap.measureFragmentVisible = false;
     }
 }

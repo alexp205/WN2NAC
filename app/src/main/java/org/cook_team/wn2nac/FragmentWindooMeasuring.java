@@ -8,14 +8,17 @@ import android.widget.TextView;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
 
+import ch.skywatch.windoo.api.JDCWindooEvent;
 import de.greenrobot.event.EventBus;
 
 public class FragmentWindooMeasuring extends android.support.v4.app.Fragment implements View.OnClickListener {
 
     private static EventBus bus = EventBus.getDefault();
 
-    DonutProgress donut_progress;
-    TextView countdown;
+    private DonutProgress donut_progress;
+    private TextView countdown;
+
+    private FragmentWindooGraph fragmentWindooChart;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,7 +34,12 @@ public class FragmentWindooMeasuring extends android.support.v4.app.Fragment imp
         donut_progress = (DonutProgress) rootView.findViewById(R.id.donut_progress);
         countdown = (TextView) rootView.findViewById(R.id.countdown);
 
-        refreshView();
+        fragmentWindooChart = (FragmentWindooGraph) getChildFragmentManager().findFragmentById(R.id.windooChart);
+        fragmentWindooChart.controlsBarVisible = false;
+        fragmentWindooChart.chartBarVisible = false;
+        fragmentWindooChart.initView();
+
+        updateView();
 
         return rootView;
     }
@@ -40,7 +48,7 @@ public class FragmentWindooMeasuring extends android.support.v4.app.Fragment imp
     public void onResume() {
         super.onResume();
         if (!bus.isRegistered(this)) bus.register(this);
-        refreshView();
+        updateView();
     }
 
     @Override
@@ -54,19 +62,19 @@ public class FragmentWindooMeasuring extends android.support.v4.app.Fragment imp
     }
 
     public void onEventMainThread(WnMeasure.StartedEvent event) {
-        refreshView();
+        updateView();
     }
     public void onEventMainThread(WnMeasure.TickEvent event) {
-        refreshView();
+        updateView();
     }
     public void onEventMainThread(WnMeasure.FinishedEvent event) {
-        refreshView();
+        updateView();
     }
     public void onEventMainThread(WnMeasure.AbandonedEvent event) {
-        refreshView();
+        updateView();
     }
 
-    private void refreshView() {
+    private void updateView() {
         if(WnMeasure.measuring) {
             countdown.setText("測量中... \n請勿移動\n" + String.format("%02d", WnMeasure.getLastTick() / 1000 / 60) + ":" + String.format("%02d", WnMeasure.getLastTick() / 1000 % 60));
             donut_progress.setProgress((int) (100 - 100 *  WnMeasure.getLastTick() / 1000 / WnMeasure.getDuration()));
@@ -74,6 +82,17 @@ public class FragmentWindooMeasuring extends android.support.v4.app.Fragment imp
         else {
             countdown.setText("測量完畢\n\n");
             donut_progress.setProgress(100);
+        }
+    }
+
+    public void onEventMainThread(WnObserver.WindooEvent event) {
+        switch(event.getType()) {
+            case JDCWindooEvent.JDCWindooAvailable:
+                break;
+            case JDCWindooEvent.JDCWindooNotAvailable:
+                bus.post(new WnMeasure.AbandonEvent());
+                bus.post(new WnService.ToastEvent("Windoo儀器未連接，測量失敗"));
+                break;
         }
     }
 }
