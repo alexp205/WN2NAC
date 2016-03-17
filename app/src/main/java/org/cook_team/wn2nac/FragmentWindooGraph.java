@@ -61,7 +61,7 @@ public class FragmentWindooGraph extends android.support.v4.app.Fragment
 
     public static boolean autoScroll = true;
     private static int[] timeRanges = {15, 30, 60, 120, 300, 600};
-    public static int chartTimeRange = timeRanges[0];
+    public static int chartTimeRange = timeRanges[2];
     public static boolean drawLimitLines = false;
     private static int timeFormat = 1;
 

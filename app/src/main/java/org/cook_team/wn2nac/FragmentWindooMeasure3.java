@@ -16,7 +16,7 @@ public class FragmentWindooMeasure3 extends android.support.v4.app.Fragment impl
     public static int min = 1, sec = 0;
 
     NumberPicker minPicker, secPicker;
-    CheckBox checkBox;
+    CheckBox checkBox, autoSend;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,8 +36,12 @@ public class FragmentWindooMeasure3 extends android.support.v4.app.Fragment impl
         minPicker.setOnValueChangedListener(this);
         secPicker.setOnValueChangedListener(this);
 
+
         checkBox = (CheckBox) rootView.findViewById(R.id.checkBox);
         checkBox.setOnCheckedChangeListener(this);
+
+        autoSend = (CheckBox) rootView.findViewById(R.id.autoSend);
+        autoSend.setOnCheckedChangeListener(this);
 
         updateDisplay();
 
@@ -59,7 +63,8 @@ public class FragmentWindooMeasure3 extends android.support.v4.app.Fragment impl
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        WnMeasure.vibrateOnFinish = isChecked;
+        WnMeasure.vibrateOnFinish = checkBox.isChecked();
+        WnMeasure.sendOnFinish = autoSend.isChecked();
     }
 
     @Override
@@ -72,6 +77,7 @@ public class FragmentWindooMeasure3 extends android.support.v4.app.Fragment impl
         minPicker.setValue(min);
         secPicker.setValue(sec);
         checkBox.setChecked(WnMeasure.vibrateOnFinish);
+        autoSend.setChecked(WnMeasure.sendOnFinish);
     }
 
 }

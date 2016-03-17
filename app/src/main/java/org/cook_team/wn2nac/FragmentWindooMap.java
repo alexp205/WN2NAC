@@ -53,6 +53,8 @@ public class FragmentWindooMap extends android.support.v4.app.Fragment implement
         getChildFragmentManager().beginTransaction().hide(fragmentWindooMeasure).commit();
         getChildFragmentManager().beginTransaction().hide(fragmentWindooMapMenu).commit();
 
+        WnLocation.enable();
+
         return rootView;
     }
 
@@ -138,9 +140,9 @@ public class FragmentWindooMap extends android.support.v4.app.Fragment implement
                 .title("使用者")
                 .snippet("ID: 0"));*/
 
-        // User measurement history markers // TODO
-        /*for (WindooMeasurement measurement : WnHistory.getHistory())
-            mMap.addMarker(measurement.toMarkerOptions());*/
+        // User measurement history markers
+        for (int i=0; i<WnHistory.size(); i++)
+            mMap.addMarker(WnHistory.get(i).toMarkerOptions());
 
         if (WnMap.goTo != null) {
             WindooMeasurement measurement = WnMap.goTo;
@@ -148,6 +150,7 @@ public class FragmentWindooMap extends android.support.v4.app.Fragment implement
             LatLng pos = new LatLng(measurement.getLastLatitude(), measurement.getLastLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
             mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
+            marker.showInfoWindow();
             WnMap.goTo = null;
         }
     }
@@ -166,10 +169,13 @@ public class FragmentWindooMap extends android.support.v4.app.Fragment implement
 
     public void onEventMainThread(WnMeasure.FinishedEvent event) {
         WindooMeasurement measurement = WnMeasure.measurement;
+        //bus.post(new WnService.ToastEvent(String.valueOf(measurement.getLastLocation())));
+        //bus.post(new WnService.ToastEvent(String.valueOf(measurement.getLastLatitude()) + "\n" + String.valueOf(measurement.getLastLongitude())));
         LatLng pos = new LatLng(measurement.getLastLatitude(), measurement.getLastLongitude());
         Marker marker = mMap.addMarker(WnMeasure.measurement.toMarkerOptions());
         marker.showInfoWindow();
         mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
+        bus.post(new WnLocation.EnableEvent());
     }
 }

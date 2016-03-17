@@ -72,7 +72,11 @@ public class FragmentConfig extends android.support.v4.app.Fragment implements V
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch(buttonView.getId()) {
             case R.id.checkBoxDebug:
+                //if (isChecked) getChildFragmentManager().beginTransaction().show(fragmentWindooMeasure).commit();
+                //else getChildFragmentManager().beginTransaction().hide(fragmentWindooMeasure).commit();
                 WnSettings.debugOn = isChecked;
+                if (WnSettings.debugOn) bus.post(new ActivityMain.DebugOnEvent());
+                else bus.post(new ActivityMain.DebugOffEvent());
         }
     }
 }

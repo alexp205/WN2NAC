@@ -39,8 +39,8 @@ public class WnSettings {
     /** READ settings **/
     public static void read() {
         SharedPreferences sharedPref = WnService.context().getSharedPreferences(WnService.context().getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        windooUser.setUserID(Integer.valueOf(sharedPref.getString("ID", "0")));
-        windooID = Integer.valueOf(sharedPref.getString("WindooID", "0"));
+        try { windooUser.setUserID(Integer.valueOf(sharedPref.getString("ID", "0"))); } catch(Exception e) { windooUser.setUserID(0); }
+        try { windooID = Integer.valueOf(sharedPref.getString("WindooID", "0")); } catch(Exception e) { windooID = 0; }
         debugOn = sharedPref.getBoolean("debugOn", false);
     }
 }

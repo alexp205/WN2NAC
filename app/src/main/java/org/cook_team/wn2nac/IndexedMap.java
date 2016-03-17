@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class IndexedMap<K,V> extends LinkedHashMap<K,V> {
-    ArrayList<K> keys = new ArrayList<>();
+    public ArrayList<K> keys = new ArrayList<>();
     V avg;
     @Override
     public V put(K key,V val) {

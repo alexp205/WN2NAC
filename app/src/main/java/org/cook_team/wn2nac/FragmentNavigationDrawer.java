@@ -177,7 +177,7 @@ public class FragmentNavigationDrawer extends Fragment {
         mDrawerLayout.closeDrawer(mFragmentContainerView);
     }
 
-    private void selectItem(int position) {
+    public void selectItem(int position) {
         // Highlight the selected item and close the drawer
         mCurrentSelectedPosition = position;
         if (mDrawerListView != null) {

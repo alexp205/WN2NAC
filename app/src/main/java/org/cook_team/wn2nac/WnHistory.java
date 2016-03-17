@@ -37,38 +37,48 @@ public class WnHistory {
     /** Add single measurement  record **/
     public static void add(WindooMeasurement measurement) {
         history.put(measurement.getMeasurementID(), measurement);
-        bus.post(new DatasetChangedEvent());
-        saveVersion1(measurement);
+        save(measurement);
     }
 
     /** Read all measurement records **/
     public static void readAll() {
         try {
-            history.clear();
+            history = new IndexedMap<>();
             File files[] = new File(WnService.context().getApplicationInfo().dataDir,"shared_prefs").listFiles();
-            if(files != null) for (File file : files) {
+            bus.post(new WnService.DebugEvent("[HISTORY] Reading..."));
+            bus.post(new WnService.DebugEvent("\tFound " + String.valueOf(files.length) + " files:"));
+            if(files != null) for (int i=files.length-1; i>=0; i--) {
+                File file = files[i];
+                bus.post(new WnService.DebugEvent("\t\tFile: " + file.getName()));
                 if(file.getName().startsWith("org.cook_team.wn2nac.HISTORY.")) {
+                    bus.post(new WnService.DebugEvent("\t\t\tReading " + file.getName()));
                     readVersion1(file.getName());
                 }
-                bus.post(new DatasetChangedEvent());
             }
-        } catch (Exception e) { bus.post(new WnService.ToastEvent("測量記錄讀取失敗")); }
+        } catch (Exception e) { bus.post(new WnService.DebugEvent("測量記錄讀取失敗\n" + e.getMessage()));  }
+        bus.post(new DatasetChangedEvent());
     }
 
     public static void save(WindooMeasurement measurement) {
-        save(measurement);
+        saveVersion2(measurement);
+        readAll();
+        bus.post(new DatasetChangedEvent());
     }
 
     /** Save single measurement record **/
-    public static void saveVersion1(WindooMeasurement measurement) {
-        try {
-            String filename = "org.cook_team.wn2nac.HISTORY." + measurement.getMeasurementID();
-            SharedPreferences.Editor editor = WnService.context().getSharedPreferences(filename, Context.MODE_PRIVATE).edit();
+    public static void saveVersion2(WindooMeasurement measurement) {
 
-            editor.putInt("ID", measurement.getUserID());
-            if (measurement.getTimeStarted() > 0)   editor.putString("StartedAt", dateFormat.format(new Date(measurement.getTimeStarted())));
-            if (measurement.getTimeFinished() > 0)  editor.putString("FinishedAt", dateFormat.format(new Date(measurement.getTimeFinished())));
-            if (measurement.getTimeSent() > 0)      editor.putString("SentAt", dateFormat.format(new Date(measurement.getTimeSent())));
+            String filename = measurement.getFilename() != null ? measurement.getFilename() : "org.cook_team.wn2nac.HISTORY." + String.valueOf(measurement.getTimeFinished()) + ".xml";
+        //bus.post(new WnService.ToastEvent(filename));
+        SharedPreferences.Editor editor = WnService.context().getSharedPreferences(filename.replace(".xml", ""), Context.MODE_PRIVATE).edit();
+
+            editor.putString("MeasurementID", measurement.getMeasurementID());
+            editor.putString("Version", String.valueOf(2));
+            editor.putString("ID", String.valueOf(measurement.getUserID()));
+            editor.putString("StartedAt", String.valueOf(measurement.getTimeStarted()));
+            editor.putString("FinishedAt", String.valueOf(measurement.getTimeFinished()));
+            editor.putString("SentAt", String.valueOf(measurement.getTimeSent()));
+            bus.post(new WnService.DebugEvent("[WRITE] Sent: " + String.valueOf(measurement.getTimeSent())));
             editor.putString("Latitude", String.valueOf(measurement.getLastLatitude()));
             editor.putString("Longitude", String.valueOf(measurement.getLastLongitude()));
             editor.putString("Altitude", String.valueOf(measurement.getLastAltitude()));
@@ -79,50 +89,85 @@ public class WnHistory {
             editor.putString("Orientation", String.valueOf(measurement.getOrientation()));
 
             editor.commit();
-        }
-        catch (Exception e) { bus.post(new WnService.ToastEvent("測量記錄儲存失敗\n" + e.getMessage() + " \n" + e.getStackTrace())); }
+
     }
 
     private static void readVersion1(String filename) {
-        SharedPreferences sharedPref = WnService.context().getSharedPreferences(filename.replace(".xml", ""), Context.MODE_PRIVATE);
 
-        WindooMeasurement measurement = new WindooMeasurement();
-        measurement.setVersion(1);
-        measurement.newMeasurementID();
+        try {
+            WindooMeasurement measurement = new WindooMeasurement();
+            measurement.setFilename(filename);
 
-        String  windooUserID = sharedPref.getString("ID", null),
-                timeStarted = sharedPref.getString("StartedAt", null),
-                timeFinished = sharedPref.getString("FinishedAt", null),
-                timeSent = sharedPref.getString("SentAt", null),
-                latitude = sharedPref.getString("Latitude", null),
-                longitude = sharedPref.getString("Longitude", null),
-                altitude = sharedPref.getString("Altitude", null),
-                temperature = sharedPref.getString("Temperature", null),
-                humidity = sharedPref.getString("Humidity", null),
-                pressure = sharedPref.getString("Pressure", null),
-                wind = sharedPref.getString("Wind", null),
-                orientation = sharedPref.getString("Orientation", null);
+            SharedPreferences sharedPref = WnService.context().getSharedPreferences(filename.replace(".xml", ""), Context.MODE_PRIVATE);
 
-        if(windooUserID != null) measurement.setWindooUserID(Integer.valueOf(windooUserID));
-        measurement.setWindooID(WnSettings.getWindooID());
+            measurement.setVersion(1);
 
-        try{ if(timeFinished != null)   measurement.setTimeFinished(dateFormat.parse(timeFinished).getTime()); }  catch(Exception e){}
-        try{ if(timeStarted != null)    measurement.setTimeStarted(dateFormat.parse(timeStarted).getTime()); }    catch(Exception e){}
-        try{ if(timeSent != null)       measurement.setTimeSent(dateFormat.parse(timeSent).getTime()); }          catch(Exception e){}
+            String measurementID = sharedPref.getString("MeasurementID", "");
+            if (measurementID != "") measurement.setMeasurementID(measurementID);
+            else
+                measurement.setMeasurementID(filename.replace(".xml", "").replace("org.cook_team.wn2nac.HISTORY.", ""));
 
-        Location location = new Location("");
-        if(latitude != null) location.setLatitude(Double.valueOf(latitude));
-        if(longitude != null) location.setLongitude(Double.valueOf(longitude));
-        if(altitude != null) location.setAltitude(Double.valueOf(altitude));
-        measurement.addLocation(location);
+            String windooUserID;
+            try {
+                windooUserID = sharedPref.getString("ID", "0");
+            } catch (Exception e) {
+                windooUserID = String.valueOf(sharedPref.getInt("ID", 0));
+            }
 
-        if(wind != null)        measurement.addWind(measurement.getTimeFinished(), Double.valueOf(wind));
-        if(temperature != null) measurement.addTemperature(measurement.getTimeFinished(), Double.valueOf(temperature));
-        if(humidity != null)    measurement.addHumidity(measurement.getTimeFinished(), Double.valueOf(humidity));
-        if(pressure != null)    measurement.addPressure(measurement.getTimeFinished(), Double.valueOf(pressure));
-        if(orientation != null) measurement.setOrientation(Float.valueOf(orientation));
+            String
+                    timeStarted = sharedPref.getString("StartedAt", "0"),
+                    timeFinished = sharedPref.getString("FinishedAt", "0"),
+                    timeSent = sharedPref.getString("SentAt", "0"),
+                    latitude = sharedPref.getString("Latitude", ""),
+                    longitude = sharedPref.getString("Longitude", ""),
+                    altitude = sharedPref.getString("Altitude", ""),
+                    temperature = sharedPref.getString("Temperature", ""),
+                    humidity = sharedPref.getString("Humidity", ""),
+                    pressure = sharedPref.getString("Pressure", ""),
+                    wind = sharedPref.getString("Wind", ""),
+                    orientation = sharedPref.getString("Orientation", "");
 
-        history.put(measurement.getMeasurementID(), measurement);
+            try {
+                measurement.setWindooUserID(Integer.valueOf(windooUserID));
+            } catch (Exception e) {
+                measurement.setWindooUserID(0);
+            }
+            measurement.setWindooID(WnSettings.getWindooID());
+
+            try {
+                measurement.setTimeFinished(Long.valueOf(timeFinished));
+                measurement.setTimeStarted(Long.valueOf(timeStarted));
+                measurement.setTimeSent(Long.valueOf(timeSent));
+                bus.post(new WnService.DebugEvent("\t\t\t[READ] Sent: " + String.valueOf(measurement.getTimeSent())));
+            } catch (Exception e) { bus.post(new WnService.ToastEvent("TIME write error\n"+e.getMessage()+"\n"+e.getStackTrace()));}
+
+            Location location = new Location("");
+            if (!latitude.equals("")) location.setLatitude(Double.valueOf(latitude));
+            if (!longitude.equals("")) location.setLongitude(Double.valueOf(longitude));
+            if (!altitude.equals("")) location.setAltitude(Double.valueOf(altitude));
+            measurement.addLocation(location);
+
+            if (wind != "") {
+                measurement.addWind(measurement.getTimeFinished(), Double.valueOf(wind));
+                measurement.getWind().setAvg(Double.valueOf(wind));
+            }
+            if (temperature != "") {
+                measurement.addTemperature(measurement.getTimeFinished(), Double.valueOf(temperature));
+                measurement.getTemperature().setAvg(Double.valueOf(temperature));
+            }
+            if (humidity != "") {
+                 measurement.addHumidity(measurement.getTimeFinished(), Double.valueOf(humidity));
+                measurement.getHumidity().setAvg(Double.valueOf(humidity));
+            }
+            if (pressure != "") {
+                measurement.addPressure(measurement.getTimeFinished(), Double.valueOf(pressure));
+                measurement.getPressure().setAvg(Double.valueOf(pressure));
+            }
+            if (orientation != "") measurement.setOrientation(Float.valueOf(orientation));
+
+            history.put(measurement.getMeasurementID(), measurement);
+            //bus.post(new WnService.DebugEvent(String.valueOf(history.keys.size())));
+        } catch (Exception e) { bus.post(new WnService.ToastEvent("測量記錄儲存失敗\n" + e.getMessage() + " \n" + e.getStackTrace())); }
     }
 
 }

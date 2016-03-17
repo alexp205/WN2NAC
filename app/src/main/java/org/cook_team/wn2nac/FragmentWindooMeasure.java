@@ -106,6 +106,7 @@ public class FragmentWindooMeasure extends android.support.v4.app.Fragment imple
                 fragment = new FragmentWindooMeasuring();
                 break;
         }
+        currentStep = step;
         getChildFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
         buttonLast.setVisibility(step > minStep ? View.VISIBLE : View.INVISIBLE);
         buttonNext.setVisibility(step < maxStep ? View.VISIBLE : View.INVISIBLE);
@@ -141,5 +142,10 @@ public class FragmentWindooMeasure extends android.support.v4.app.Fragment imple
 
     public void onEventMainThread(WnMeasure.AbandonEvent event) {
         switchStep(3);
+    }
+
+    public void onEventMainThread(WnMeasure.FinishedEvent event) {
+        switchStep(1);
+        bus.post(new HideEvent());
     }
 }

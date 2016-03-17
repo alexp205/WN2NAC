@@ -99,19 +99,19 @@ public class WnObserver extends WindooMeasurement implements Observer {
             switch(windooEvent.getType()) {
             case JDCWindooEvent.JDCWindooNewWindValue :
                 addWind((Double) windooEvent.getData());
-                bus.post(new WnService.DebugEvent("Wind: "+ String.valueOf(windooEvent.getData())));
+                //bus.post(new WnService.DebugEvent("Wind: "+ String.valueOf(windooEvent.getData())));
                 break;
             case JDCWindooEvent.JDCWindooNewTemperatureValue :
                 addTemperature((Double) windooEvent.getData());
-                bus.post(new WnService.DebugEvent("Temperature: " + String.valueOf(windooEvent.getData())));
+                //bus.post(new WnService.DebugEvent("Temperature: " + String.valueOf(windooEvent.getData())));
                 break;
             case JDCWindooEvent.JDCWindooNewHumidityValue :
                 addHumidity((Double) windooEvent.getData());
-                bus.post(new WnService.DebugEvent("Humidity: " + String.valueOf(windooEvent.getData())));
+                //bus.post(new WnService.DebugEvent("Humidity: " + String.valueOf(windooEvent.getData())));
                 break;
             case JDCWindooEvent.JDCWindooNewPressureValue :
                 addPressure((Double) windooEvent.getData());
-                bus.post(new WnService.DebugEvent("Pressure: " + String.valueOf(windooEvent.getData())));
+                //bus.post(new WnService.DebugEvent("Pressure: " + String.valueOf(windooEvent.getData())));
                 break;
         }
         bus.post(windooEvent);

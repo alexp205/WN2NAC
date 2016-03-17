@@ -29,6 +29,7 @@ public class WnNetwork {
     private WnNetwork(){
         if (!bus.isRegistered(this)) bus.register(this);
     }
+    public WnNetwork getInstance() { return instance; }
 
     /** NETWORKING **/
     private static Cache cache;
@@ -36,20 +37,16 @@ public class WnNetwork {
     private static RequestQueue requestQueue;
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private Response.ErrorListener errorListener = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            bus.post(new WnService.ToastEvent("量測資料傳送失敗\n資料已儲存\n請稍後再傳送"));
-        }
-    };
-
     /** Init networking **/
-    public static class InitEvent {}
-    public void onEventBackgroundThread(InitEvent event) {
+    public static void init() {
         cache = new DiskBasedCache(WnApp.getContext().getCacheDir(), 1024 * 1024); // Instantiate the cache (1MB cap)
         network = new BasicNetwork(new HurlStack()); // Set up the network to use HttpURLConnection as the HTTP client.
         requestQueue = new RequestQueue(cache, network); // Instantiate the RequestQueue with the cache and network.
         requestQueue.start(); // Start the queue
+    }
+    public static class InitEvent {}
+    public void onEventBackgroundThread(InitEvent event) {
+        init();
     }
 
     /** Send measurement **/
@@ -71,6 +68,16 @@ public class WnNetwork {
                 WnHistory.save(event.measurement);
             }
         };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                bus.post(new WnService.ToastEvent("量測資料傳送失敗\n資料已儲存\n請稍後再傳送"));
+               event.measurement.setTimeSent(-1);
+                WnHistory.save(event.measurement);
+            }
+        };
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 WnApp.getContext().getString(R.string.default_server_address),
                 responseListener, errorListener) {

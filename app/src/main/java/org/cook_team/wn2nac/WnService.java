@@ -25,7 +25,7 @@ public class WnService extends Service {
         WnHistory.readAll();
         bus.post(new WnObserver.StartEvent());
         bus.post(new WnLocation.GetLastKnownLocationEvent());
-        bus.post(new WnNetwork.InitEvent());
+        WnNetwork.init();
 
         /*bus.post(new WnSettings.SetIDEvent());
         if (wn2nacSettings.UserID.equals("")) {
@@ -63,12 +63,11 @@ public class WnService extends Service {
         public DebugEvent(String message) { this.message = message; }
     }
     public void onEventMainThread(DebugEvent event) {
-        if (WnSettings.debugOn)
-            Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show();
+        //if (WnSettings.debugOn)
+            //Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show();
     }
     public void onEvent(SubscriberExceptionEvent exceptionEvent) {
-        if (WnSettings.debugOn)
-            bus.post(new WnService.DebugEvent("Exception:\n" + exceptionEvent.throwable.getMessage() + "\n" + exceptionEvent.throwable.getStackTrace()));
+        bus.post(new WnService.DebugEvent("Exception:\n" + exceptionEvent.throwable.getMessage() + "\n" + exceptionEvent.throwable.getStackTrace()));
     }
     public static class VibrateEvent {
         final int millis;

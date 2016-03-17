@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -19,7 +20,7 @@ public class FragmentHistory extends android.support.v4.app.Fragment implements 
 
     private static EventBus bus = EventBus.getDefault();
 
-    private static HistoryListAdpater historyListAdpater = new HistoryListAdpater();
+    private HistoryListAdpater historyListAdpater = new HistoryListAdpater();
     ExpandableListView expListView;
 
     @Override
@@ -61,7 +62,7 @@ public class FragmentHistory extends android.support.v4.app.Fragment implements 
 
     /** HISTORY LIST ADAPTER **/
 
-    public static class HistoryListAdpater extends BaseExpandableListAdapter {
+    public class HistoryListAdpater extends BaseExpandableListAdapter {
 
         @Override
         public int getGroupCount() { return WnHistory.size(); }
@@ -125,16 +126,16 @@ public class FragmentHistory extends android.support.v4.app.Fragment implements 
         }
 
         @Override
-        public int getChildrenCount(int groupPosition) { return 12; }
+        public int getChildrenCount(int groupPosition) { return 13; }
 
         @Override
         public long getChildId(int groupPosition, int childPosition) { return childPosition; }
 
-        public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        public final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         @Override
         public Object getChild(int groupPosition, int childPosititon) {
             String[] title = {"編號: ", "測量開始時間: ", "測量結束時間: ", "緯度: ", "經度: ", "高度: ",
-                    "溫度 (°c): ", "濕度 (%): ", "壓力 (hPa): ",  "風速 (m/s): ", "風向: ", "傳送時間: "};
+                    "溫度 (°c): ", "濕度 (%): ", "壓力 (hPa): ",  "風速 (m/s): ", "風向: ", "傳送時間: ", "Filename: "};
             String text = title[childPosititon];
             WindooMeasurement measurement = WnHistory.get(groupPosition);
             switch (childPosititon) {
@@ -166,20 +167,20 @@ public class FragmentHistory extends android.support.v4.app.Fragment implements 
                     if (measurement.getTimeSent() > 0)
                         text += dateFormat.format(measurement.getTimeSent());
                     break;
+                case 12:
+                        text += measurement.getFilename();
+                    break;
             }
             return text;
         }
 
         @Override
         public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                LayoutInflater layoutInflater = (LayoutInflater) WnService.context().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = layoutInflater.inflate(R.layout.list_item, null);
-            }
-            TextView childTextView = (TextView) convertView.findViewById(R.id.lblListItem);
+            LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.list_item, null);
+            TextView childTextView = (TextView) linearLayout.findViewById(R.id.lblListItem);
             childTextView.setText(String.valueOf(getChild(groupPosition, childPosition)));
-
-            return convertView;
+            return linearLayout;
         }
 
         @Override

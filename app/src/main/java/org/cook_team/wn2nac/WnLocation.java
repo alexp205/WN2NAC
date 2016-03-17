@@ -35,7 +35,7 @@ public class WnLocation {
     /** Enable location **/
     public static class EnableEvent {}
     public void onEventMainThread(EnableEvent event)  { enable(); }
-    public void enable() {
+    public static void enable() {
         if (ActivityCompat.checkSelfPermission(WnApp.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListenerNetwork);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListenerGPS);
@@ -49,7 +49,7 @@ public class WnLocation {
     /** Disable location **/
     public static class DisableEvent {}
     public void onEventBackgroundThread(DisableEvent event) { disable(); }
-    public void disable() {
+    public static void disable() {
         if (ActivityCompat.checkSelfPermission(WnApp.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.removeUpdates(locationListenerNetwork);
             locationManager.removeUpdates(locationListenerGPS);
@@ -78,12 +78,22 @@ public class WnLocation {
         @Override
         public void onLocationChanged(Location location) {
             if (isBetterLocation(location, lastLocation)) {
-                lastLocation = location;
+                Location loc = new Location(location.getProvider());
+                loc.setAltitude(location.getAltitude());
+                loc.setLatitude(location.getLatitude());
+                loc.setLongitude(location.getLongitude());
+                loc.setTime(location.getTime());
+                loc.setAccuracy(location.getAccuracy());
+                loc.setSpeed(location.getSpeed());
+                loc.setBearing(location.getBearing());
+                loc.setExtras(location.getExtras());
+                //bus.post(new WnService.ToastEvent(String.valueOf(loc)));
+                lastLocation = loc;
                 bus.post(new NewLocationEvent());
-                bus.post(new DisableEvent());
-                bus.post(new WnService.DebugEvent("New location:\n"
+                //bus.post(new DisableEvent());
+                bus.post(new WnService.DebugEvent("New location: "
                         + String.valueOf(location.getLatitude()) + ", "
-                        + String.valueOf(location.getLongitude()) + "\n"
+                        + String.valueOf(location.getLongitude()) + ", "
                         + location.getProvider()
                 ));
             }

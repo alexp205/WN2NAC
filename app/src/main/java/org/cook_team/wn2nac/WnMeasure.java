@@ -1,6 +1,9 @@
 package org.cook_team.wn2nac;
 
 import android.os.CountDownTimer;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
 
@@ -39,7 +42,7 @@ public class WnMeasure {
     }
     public static class StartedEvent {}
     public void onEventMainThread(StartEvent event) {
-    if (!measuring) {
+        if (!measuring) {
             measuring = true;
             measurement.start();
             duration = event.duration;
@@ -50,8 +53,15 @@ public class WnMeasure {
                 }
                 public void onFinish() { bus.post(new FinishEvent()); }
             }.start();
+            if (WnLocation.lastLocation != null) {
+                measurement.addLocation(WnLocation.lastLocation);
+                bus.post(new StartedEvent());
+            }
+            else {
+                bus.post(new AbandonEvent());
+                bus.post(new WnService.ToastEvent("沒有位置資訊，請確認定位已開啟"));
+            }
         }
-        bus.post(new StartedEvent());
     }
     /** Measurement TICK  **/
     public static class TickEvent {}
@@ -83,10 +93,17 @@ public class WnMeasure {
             measuring = false;
             WnHistory.add(measurement);
             if (sendOnFinish)   { bus.post(new WnNetwork.SendEvent(measurement)); }
+            else {
+                measurement.setTimeSent(-1);
+                WnHistory.save(measurement);
+            }
             if (vibrateOnFinish) { bus.post(new WnService.VibrateEvent(300)); }
             bus.post(new FinishedEvent());
         }
-        else abandon();
+        else {
+            bus.post(new AbandonEvent());
+            bus.post(new WnService.ToastEvent("數據不足，測量失敗"));
+        }
     }
 
     /** MEASUREMENT Abandon **/
@@ -98,5 +115,10 @@ public class WnMeasure {
         countDownTimer.cancel();
         bus.post(new AbandonedEvent());
     }
+
+    public void onEventMainThread(WnLocation.NewLocationEvent event) {
+        measurement.addLocation(WnLocation.lastLocation);
+    }
+
 
 }

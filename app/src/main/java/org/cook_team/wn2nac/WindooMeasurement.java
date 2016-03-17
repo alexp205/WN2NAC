@@ -18,7 +18,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import de.greenrobot.event.EventBus;
+
 public class WindooMeasurement implements Comparable<WindooMeasurement> {
+
+    private static EventBus bus = EventBus.getDefault();
 
     /** DATE FORMAT **/
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -31,7 +35,7 @@ public class WindooMeasurement implements Comparable<WindooMeasurement> {
     private int windooID = WnSettings.getWindooID();
 
     /** INTERNAL: Measurement DATA**/
-    private long timeStarted = 0, timeFirstWindooData = 0, timeFinished = 0, timeSent = 0;
+    private Long timeStarted = 0l, timeFirstWindooData = 0l, timeFinished = 0l, timeSent = 0l;
     private List<Location> location = new ArrayList<>();
     private float orientation = -9999.0f;
     private IndexedMap<Long, Double> temperature = new IndexedMap<>(),
@@ -40,6 +44,7 @@ public class WindooMeasurement implements Comparable<WindooMeasurement> {
                                         wind = new IndexedMap<>();
     private List<IndexedMap<Long, Double>> windoo = new ArrayList<>();
     //picture, pictureGUID
+    private String filename;
 
     public WindooMeasurement() {
         windoo.add(temperature);
@@ -62,7 +67,7 @@ public class WindooMeasurement implements Comparable<WindooMeasurement> {
     public long  getTimeStarted() { return timeStarted; }
     public long  getTimeFirstWindooData() { return timeFirstWindooData; }
     public long getTimeFinished() { return timeFinished; }
-    public long getTimeSent() { return timeSent; }
+    public Long getTimeSent() { return timeSent; }
     public List<Location> getLocation() { return location; }
     public Float getOrientation()     { return orientation; }
     public Double getAvgTemperature()   { return temperature.getAvg(); }
@@ -76,23 +81,26 @@ public class WindooMeasurement implements Comparable<WindooMeasurement> {
 
     /** additional GETTERs **/
     public Location getLastLocation()   { return location.get(location.size() - 1); }
-    public Double getLastLatitude()     { return getLastLocation().getLatitude(); }
-    public Double getLastLongitude()    { return getLastLocation().getLongitude(); }
-    public Double getLastAltitude()     { return getLastLocation().getAltitude(); }
+    public Double getLastLatitude()     { return (location.get(location.size() - 1)).getLatitude(); }
+    public Double getLastLongitude()    { return (location.get(location.size() - 1)).getLongitude(); }
+    public Double getLastAltitude()     { return (location.get(location.size() - 1)).getAltitude(); }
     public Double getLastTemperature()  { return temperature.getLast(); }
     public Double getLastHumidity()     { return humidity.getLast(); }
     public Double getLastPressure()     { return pressure.getLast(); }
     public Double getLastWind()         { return wind.getLast(); }
+    public String getFilename() { return filename; }
 
     /** SETTERs **/
     public void setVersion(int version)     { this.version = version; }
+    public void setMeasurementID(String id) { measurementID = id; }
     public void newMeasurementID()          { measurementID = UUID.randomUUID().toString(); }
     public void setWindooUserID(int userID) { windooUser.setUserID(userID);}
     public void setWindooID(int windooID)   { this.windooID = windooID;}
     public void setTimeStarted(long timeStarted)    { this.timeStarted = timeStarted; }
     public void setTimeFinished(long timeFinished)  { this.timeFinished = timeFinished; }
-    public void setTimeSent(long timeSent)          { this.timeSent = timeSent; }
+    public void setTimeSent(long timeSent)          { this.timeSent = timeSent; bus.post(new WnService.DebugEvent("[SET]"+String.valueOf(this.timeSent))); }
     public void setOrientation(float orientation) { this.orientation = orientation; }
+    public void setFilename(String filename)     { this.filename = filename; }
 
     /** ADD DATA **/
     public void addTemperature(long time, Double val)   { temperature.put(time, val); }

@@ -10,8 +10,10 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import de.greenrobot.event.EventBus;
 
@@ -32,6 +34,14 @@ implements FragmentNavigationDrawer.NavigationDrawerCallbacks {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Setup handler for uncaught exceptions.
+        /*Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable e) {
+                e.printStackTrace();
+            }
+        });*/
 
         debug = (TextView) findViewById(R.id.debug);
         debug.setMovementMethod(new ScrollingMovementMethod());
@@ -122,6 +132,8 @@ implements FragmentNavigationDrawer.NavigationDrawerCallbacks {
         super.onDestroy();
     }
 
+    public void onEventMainThread(WnMap.GotoEvent event) { fragmentNavigationDrawer.selectItem(0); onNavigationDrawerItemSelected(0); }
+
     /*public void onEventMainThread(WnSettings.SetIDEvent event) {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new FragmentConfig()).commit();
         pos = 2;
@@ -153,4 +165,15 @@ implements FragmentNavigationDrawer.NavigationDrawerCallbacks {
         debug.append(event.message + "\n");
         scrollView.fullScroll(ScrollView.FOCUS_DOWN);
     }
+
+    public void onEventMainThread(DebugOnEvent event) {
+        scrollView.setVisibility(View.VISIBLE);
+    }
+
+    public void onEventMainThread(DebugOffEvent event) {
+        scrollView.setVisibility(View.GONE);
+    }
+
+    public static class DebugOnEvent {}
+    public static class DebugOffEvent {}
 }

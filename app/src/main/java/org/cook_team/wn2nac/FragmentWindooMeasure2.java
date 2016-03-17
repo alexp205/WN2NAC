@@ -56,6 +56,8 @@ public class FragmentWindooMeasure2 extends android.support.v4.app.Fragment impl
         fragmentWindooChart.onClick(fragmentWindooChart.pressureToggleButton);
         fragmentWindooChart.initView();
 
+        WnMeasure.measurement.setOrientation(-9999);
+
         return rootView;
     }
 
