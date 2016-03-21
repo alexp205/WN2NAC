@@ -136,10 +136,13 @@ public class WnHistory {
 
             try {
                 measurement.setTimeFinished(Long.valueOf(timeFinished));
+            } catch (Exception e) { measurement.setTimeFinished(dateFormat.parse(timeFinished).getTime()); }
+            try {
                 measurement.setTimeStarted(Long.valueOf(timeStarted));
+            } catch (Exception e) { measurement.setTimeFinished(dateFormat.parse(timeStarted).getTime()); }
+            try {
                 measurement.setTimeSent(Long.valueOf(timeSent));
-                bus.post(new WnService.DebugEvent("\t\t\t[READ] Sent: " + String.valueOf(measurement.getTimeSent())));
-            } catch (Exception e) { bus.post(new WnService.ToastEvent("TIME write error\n"+e.getMessage()+"\n"+e.getStackTrace()));}
+            } catch (Exception e) { measurement.setTimeFinished(dateFormat.parse(timeSent).getTime()); }
 
             Location location = new Location("");
             if (!latitude.equals("")) location.setLatitude(Double.valueOf(latitude));
