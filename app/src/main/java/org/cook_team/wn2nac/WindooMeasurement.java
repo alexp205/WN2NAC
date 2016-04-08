@@ -159,8 +159,8 @@ public class WindooMeasurement implements Comparable<WindooMeasurement> {
                 .snippet(dateFormat.format(new Date(timeStarted)) + "," +
                         timeFormat.format(new Date(timeStarted)) + " ~ " + timeFormat.format(new Date(timeFinished)) + "," +
                         String.format("%.2f", getAvgTemperature()) + "," +
-                        String.format("%.2f", getAvgHumidity()) + "," +
                         String.format("%.2f", getAvgPressure()) + "," +
+                        String.format("%.2f", getAvgHumidity()) + "," +
                         String.format("%.2f", getAvgWind()));
     }
 }

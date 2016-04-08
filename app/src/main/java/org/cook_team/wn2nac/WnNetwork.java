@@ -91,10 +91,10 @@ public class WnNetwork {
                 map.put("location_latitude",    String.valueOf(event.measurement.getLastLatitude()));
                 map.put("location_longitude",   String.valueOf(event.measurement.getLastLongitude()));
                 map.put("location_altitude",    String.valueOf(event.measurement.getLastAltitude()));
-                map.put("windoo_temperature",   String.valueOf(event.measurement.getTemperature()));
-                map.put("windoo_humidity",      String.valueOf(event.measurement.getHumidity()));
-                map.put("windoo_pressure",      String.valueOf(event.measurement.getPressure()));
-                map.put("windoo_wind",          String.valueOf(event.measurement.getWind()));
+                map.put("windoo_temperature",   String.valueOf(event.measurement.getAvgTemperature()));
+                map.put("windoo_humidity",      String.valueOf(event.measurement.getAvgHumidity()));
+                map.put("windoo_pressure",      String.valueOf(event.measurement.getAvgPressure()));
+                map.put("windoo_wind",          String.valueOf(event.measurement.getAvgWind()));
                 map.put("location_heading",     String.valueOf(event.measurement.getOrientation()));
                 map.put("time_sent",            dateFormat.format(new Date()));
                 return map;

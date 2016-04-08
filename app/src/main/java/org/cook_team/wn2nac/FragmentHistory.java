@@ -2,6 +2,7 @@ package org.cook_team.wn2nac;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,18 +11,27 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 
 import de.greenrobot.event.EventBus;
 import me.grantland.widget.AutofitTextView;
 
-public class FragmentHistory extends android.support.v4.app.Fragment implements ExpandableListView.OnChildClickListener {
+public class FragmentHistory extends android.support.v4.app.Fragment implements ExpandableListView.OnChildClickListener, View.OnClickListener {
 
     private static EventBus bus = EventBus.getDefault();
 
     private HistoryListAdpater historyListAdpater = new HistoryListAdpater();
     ExpandableListView expListView;
+    Button exportButton;
+
+    public final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +47,9 @@ public class FragmentHistory extends android.support.v4.app.Fragment implements 
         expListView = (ExpandableListView) rootView.findViewById(R.id.expandableListView);
         expListView.setAdapter(historyListAdpater);
         expListView.setOnChildClickListener(this);
+
+        exportButton = (Button) rootView.findViewById(R.id.exportButton);
+        exportButton.setOnClickListener(this);
 
         return rootView;
     }
@@ -131,7 +144,6 @@ public class FragmentHistory extends android.support.v4.app.Fragment implements 
         @Override
         public long getChildId(int groupPosition, int childPosition) { return childPosition; }
 
-        public final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         @Override
         public Object getChild(int groupPosition, int childPosititon) {
             String[] title = {"編號: ", "測量開始時間: ", "測量結束時間: ", "緯度: ", "經度: ", "高度: ",
@@ -193,6 +205,69 @@ public class FragmentHistory extends android.support.v4.app.Fragment implements 
             return false;
         }
 
+    }
+
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    public void export()
+    {
+        String FILENAME = "measurement.csv";
+        File file = new File(Environment.getExternalStorageDirectory(), FILENAME);
+
+        try {
+            FileOutputStream f = new FileOutputStream(file);
+            PrintWriter pw = new PrintWriter(f);
+            pw.println("User ID,Windoo ID,Time started,Time finished,Time sent,Latitude,Longitude,Temperature, Humidity,Pressure,Wind speed,Wind direction");
+            for(int i=0; i<WnHistory.size(); i++) {
+                WindooMeasurement measurement = WnHistory.get(i);
+                pw.println(//measurement.getMeasurementID() + "," +
+                        measurement.getUserID() + "," +
+                         measurement.getWindooID() + "," +
+                        ((measurement.getTimeStarted() > 0) ? dateFormat.format(measurement.getTimeStarted()) : "") + "," +
+                        ((measurement.getTimeFinished() > 0) ? dateFormat.format(measurement.getTimeFinished()) : "") + "," +
+                        ((measurement.getTimeSent() > 0) ? dateFormat.format(measurement.getTimeSent()) : "") + "," +
+                        measurement.getLastLatitude() + "," +
+                        measurement.getLastLongitude() + "," +
+                        measurement.getAvgTemperature() + "," +
+                        measurement.getAvgHumidity() + "," +
+                        measurement.getAvgPressure() + "," +
+                        measurement.getAvgWind() + "," +
+                        ((measurement.getOrientation() != -9999.0) ? measurement.getOrientation() : "")
+                );
+            }
+            pw.flush();
+            pw.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        bus.post(new WnService.ToastEvent("量測資料已匯出至" + FILENAME));
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == exportButton)
+            export();
     }
 }
 
