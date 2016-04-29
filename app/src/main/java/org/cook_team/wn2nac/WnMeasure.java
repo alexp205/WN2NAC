@@ -103,8 +103,10 @@ public class WnMeasure {
         else {
             bus.post(new AbandonEvent());
             bus.post(new WnService.ToastEvent("數據不足，測量失敗"));
+            measurement = new WindooMeasurement();
         }
     }
+    public void onEventMainThread(FinishedEvent event) { measurement = new WindooMeasurement(); }
 
     /** MEASUREMENT Abandon **/
     public static class AbandonEvent {}
@@ -114,6 +116,7 @@ public class WnMeasure {
         measuring = false;
         countDownTimer.cancel();
         bus.post(new AbandonedEvent());
+        measurement = new WindooMeasurement();
     }
 
     public void onEventMainThread(WnLocation.NewLocationEvent event) {
