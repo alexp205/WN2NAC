@@ -1,0 +1,47 @@
+apply plugin: 'com.android.application'
+
+android {
+
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+    defaultConfig {
+        applicationId "org.cook_team.wn2nac"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 27
+        versionName "1.0.27"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+        }
+        debug {
+            debuggable true
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+    }
+    productFlavors {
+    }
+}
+
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':windoo-api')
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'com.mcxiaoke.volley:library:1.0.19'
+    compile 'com.google.android.gms:play-services:8.3.0'
+    compile 'com.github.lzyzsd:circleprogress:1.1.0@aar'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.0'
+    compile 'me.grantland:autofittextview:0.2.+'
+}
