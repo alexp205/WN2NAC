@@ -1,7 +1,11 @@
 package org.cook_team.wn2nac;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +21,7 @@ import android.widget.Toast;
 
 import de.greenrobot.event.EventBus;
 
-public class ActivityMain extends AppCompatActivity
-implements FragmentNavigationDrawer.NavigationDrawerCallbacks {
+public class ActivityMain extends AppCompatActivity implements FragmentNavigationDrawer.NavigationDrawerCallbacks {
 
     private static EventBus bus = EventBus.getDefault();
 
@@ -29,6 +32,17 @@ implements FragmentNavigationDrawer.NavigationDrawerCallbacks {
     private Toolbar toolbar;
     private TextView debug;
     private ScrollView scrollView;
+
+    final int PERMISSION_ACCESS_FINE_LOCATION = 0, PERMISSION_WRITE_EXTERNAL_STORAGE = 1;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_ACCESS_FINE_LOCATION: case PERMISSION_WRITE_EXTERNAL_STORAGE:
+                if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED)
+                    bus.post(new WnService.ToastEvent("未獲權限，程式即將關閉"));
+            }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +56,11 @@ implements FragmentNavigationDrawer.NavigationDrawerCallbacks {
                 e.printStackTrace();
             }
         });*/
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ACCESS_FINE_LOCATION);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_WRITE_EXTERNAL_STORAGE);
 
         debug = (TextView) findViewById(R.id.debug);
         debug.setMovementMethod(new ScrollingMovementMethod());

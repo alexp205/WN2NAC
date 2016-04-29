@@ -1,6 +1,10 @@
 package org.cook_team.wn2nac;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +70,10 @@ public class FragmentWindooMap extends android.support.v4.app.Fragment implement
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            mapFragment.getMapAsync(this);
+        else
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
     }
 
     public class WindooInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
@@ -112,7 +119,9 @@ public class FragmentWindooMap extends android.support.v4.app.Fragment implement
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMyLocationEnabled(true); // Enable "My Location" layer.
+        try {
+            mMap.setMyLocationEnabled(true); // Enable "My Location" layer.
+        } catch (Exception e) { ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0); }
         mMap.setInfoWindowAdapter(new WindooInfoWindowAdapter()); // WindooInfoWindowAdapter defined above.
 
         if (!WnMap.init) {
