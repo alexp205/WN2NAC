@@ -27,7 +27,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="上一頁"
+            android:text="@string/fragmentmainxml1"
             android:id="@+id/buttonLast"
             android:layout_gravity="start"/>
 
@@ -39,7 +39,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="下一頁"
+            android:text="@string/fragmentmainxml2"
             android:id="@+id/buttonNext"
             android:layout_gravity="end"/>
 

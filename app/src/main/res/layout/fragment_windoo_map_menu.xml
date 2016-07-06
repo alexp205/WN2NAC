@@ -18,7 +18,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="顯示線上量測資料"
+                android:text="@string/fragmentwindoomapmenuxml1"
                 android:id="@+id/checkBoxOnline"
                 android:checked="false"
                 android:layout_weight="0"/>
@@ -46,14 +46,14 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="顯示本機量測記錄"
+                android:text="@string/fragmentwindoomapmenuxml2"
                 android:id="@+id/checkBoxLocal"
                 android:checked="false" />
             <Button
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="檢視"
+                android:text="@string/fragmentwindoomapmenuxml3"
                 android:id="@+id/buttonRecord"
                 android:minHeight="0dp"
                 android:minWidth="0dp" />
@@ -69,7 +69,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="地圖選項"
+        android:text="@string/fragmentwindoomapmenuxml4"
         android:id="@+id/buttonMenu"
         android:layout_gravity="center_horizontal"
         android:minHeight="0dp"

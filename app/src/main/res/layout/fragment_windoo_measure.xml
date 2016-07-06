@@ -40,7 +40,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="上一步"
+            android:text="@string/fragmentwindoomeasure1"
             android:id="@+id/buttonLast"
             android:layout_gravity="start"/>
 
@@ -52,7 +52,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="下一步"
+            android:text="@string/fragmentwindoomeasure2"
             android:id="@+id/buttonNext"
             android:layout_gravity="end"/>
 

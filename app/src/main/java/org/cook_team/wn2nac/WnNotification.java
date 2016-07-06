@@ -37,8 +37,8 @@ public class WnNotification {
 
     private void showNotification() {
         mNotificationBuilder
-                .setTicker("Windoo儀器觀測中，按X以關閉")
-                .setContentText("Windoo儀器觀測中，按X以關閉");
+                .setTicker(WnApp.getInstance().getWnnotification())
+                .setContentText(WnApp.getInstance().getWnnotification());
         if (mNotificationManager != null) {
             mNotificationManager.notify(NOTIFICATION, mNotificationBuilder.build());
         }

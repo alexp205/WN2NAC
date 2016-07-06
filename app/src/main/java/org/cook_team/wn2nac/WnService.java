@@ -27,6 +27,9 @@ public class WnService extends Service {
         bus.post(new WnLocation.GetLastKnownLocationEvent());
         WnNetwork.init();
 
+        //TESTING
+        //Toast.makeText(context, "Service created", Toast.LENGTH_SHORT).show();
+
         /*bus.post(new WnSettings.SetIDEvent());
         if (wn2nacSettings.UserID.equals("")) {
             bus.post(new WnSettings.SetIDEvent());
@@ -38,12 +41,16 @@ public class WnService extends Service {
         context = this;
         if (!bus.isRegistered(this)) bus.register(this);
         bus.post(new WnObserver.StartEvent());
+        //TESTING
+        //Toast.makeText(context, "Service started", Toast.LENGTH_SHORT).show();
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
         bus.post(new WnObserver.StopEvent());
+        //TESTING
+        //Toast.makeText(context, "Service destroyed", Toast.LENGTH_SHORT).show();
         bus.unregister(this);
     }
 
@@ -67,7 +74,7 @@ public class WnService extends Service {
             //Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show();
     }
     public void onEvent(SubscriberExceptionEvent exceptionEvent) {
-        bus.post(new WnService.DebugEvent("Exception:\n" + exceptionEvent.throwable.getMessage() + "\n" + exceptionEvent.throwable.getStackTrace()));
+        bus.post(new WnService.DebugEvent(getResources().getString(R.string.wnservice) + exceptionEvent.throwable.getMessage() + "\n" + exceptionEvent.throwable.getStackTrace()));
     }
     public static class VibrateEvent {
         final int millis;

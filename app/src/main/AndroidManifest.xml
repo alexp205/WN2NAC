@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".WnApp"
+        android:name="org.cook_team.wn2nac.WnApp"
         android:allowBackup="true"
         android:icon="@mipmap/ntuas"
         android:label="@string/app_name"

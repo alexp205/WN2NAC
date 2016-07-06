@@ -77,10 +77,10 @@ public class FragmentWindooBar extends android.support.v4.app.Fragment implement
     }
 
     public void onEventMainThread(FragmentWindooMeasure.ShowEvent event) {
-        button_start.setText("回到地圖");
+        button_start.setText(getResources().getString(R.string.fragmentwindoobar1));
     }
 
     public void onEventMainThread(FragmentWindooMeasure.HideEvent event) {
-        button_start.setText("測量");
+        button_start.setText(getResources().getString(R.string.fragmentwindoobar2));
     }
 }

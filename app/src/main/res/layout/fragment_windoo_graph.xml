@@ -21,16 +21,16 @@
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="自動捲動"
-                android:paddingLeft="8dp"
-                android:paddingStart="8dp"
+                android:text="@string/fragmentwindoographxml1"
+                android:paddingLeft="6dp"
+                android:paddingStart="6dp"
                 android:id="@+id/autoScrollSwitch"
                 android:checked="true" />
 
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="顯示最低/平均/最高值"
+                android:text="@string/fragmentwindoographxml2"
                 android:id="@+id/drawLimitLinesCheckbox"
                 android:textSize="12sp"
                 android:checked="false" />
@@ -46,7 +46,7 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="距今時間"
+                android:text="@string/fragmentwindoographxml3"
                 android:id="@+id/timeDisplay1"
                 android:minHeight="0dp"
                 android:checked="true" />
@@ -54,7 +54,7 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="時:分:秒"
+                android:text="@string/fragmentwindoographxml4"
                 android:id="@+id/timeDisplay2"
                 android:minHeight="0dp" />
         </RadioGroup>
@@ -69,7 +69,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="檢視時間長度"
+                android:text="@string/fragmentwindoographxml5"
                 android:id="@+id/textView2"
                 android:gravity="center_horizontal" />
 
@@ -96,8 +96,8 @@
             android:id="@+id/temperatureToggleButton"
             android:minHeight="0dp"
             android:checked="true"
-            android:textOn="@string/temperature"
-            android:textOff="@string/temperature" />
+            android:textOn="@string/temperatureedit"
+            android:textOff="@string/temperatureedit" />
         <ToggleButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

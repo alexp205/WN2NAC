@@ -1,8 +1,10 @@
 package org.cook_team.wn2nac;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -133,7 +135,7 @@ public class FragmentWindooGraph extends android.support.v4.app.Fragment
 
         timeRangeSpinner = (Spinner) rootView.findViewById(R.id.timeRangeSpinner);
         ArrayList<String> timeRangeStrings = new ArrayList<>();
-        for (int timeRange : timeRanges) timeRangeStrings.add(timeRange<60 ? String.valueOf(timeRange)+"秒" : String.valueOf(timeRange/60)+"分");
+        for (int timeRange : timeRanges) timeRangeStrings.add(timeRange<60 ? String.valueOf(timeRange)+getResources().getString(R.string.fragmentwindoograph1) : String.valueOf(timeRange/60)+getResources().getString(R.string.fragmentwindoograph2));
         ArrayAdapter<String> timeRangeList = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, timeRangeStrings);
         timeRangeSpinner.setAdapter(timeRangeList);
         timeRangeSpinner.setOnItemSelectedListener(this);
@@ -377,8 +379,8 @@ public class FragmentWindooGraph extends android.support.v4.app.Fragment
                     case 1:
                         int secsAgo = Math.round((System.currentTimeMillis()-Long.valueOf(original))/1000.0f);
                         return secsAgo < 60 ?
-                                String.valueOf(secsAgo) + "秒前" :
-                                String.valueOf(secsAgo/60) + "分" + String.valueOf(secsAgo%60) + "秒前";
+                                String.valueOf(secsAgo) + WnApp.getInstance().getFragmentwindoograph3() :
+                                String.valueOf(secsAgo/60) + WnApp.getInstance().getFragmentwindoograph2() + String.valueOf(secsAgo%60) + WnApp.getInstance().getFragmentwindoograph3();
                     case 2:
                         return timeFormatter.format(new Date(Long.valueOf(original)));
                 }
@@ -451,10 +453,10 @@ public class FragmentWindooGraph extends android.support.v4.app.Fragment
 
         charts = Arrays.asList(chartTemperature, chartHumidity, chartPressure, chartWind);
         windoo = Arrays.asList(
-                new WindooChart("Temperature", chartTemperature, WnObserver.getInstance().getTemperature(), 25.0f),
-                new WindooChart("Humidity", chartHumidity, WnObserver.getInstance().getHumidity(), 50.0f),
-                new WindooChart("Pressure", chartPressure, WnObserver.getInstance().getPressure(), 1013.0f),
-                new WindooChart("Wind", chartWind, WnObserver.getInstance().getWind(), 0.0f)
+                new WindooChart(getResources().getString(R.string.temperature), chartTemperature, WnObserver.getInstance().getTemperature(), 25.0f),
+                new WindooChart(getResources().getString(R.string.humidity), chartHumidity, WnObserver.getInstance().getHumidity(), 50.0f),
+                new WindooChart(getResources().getString(R.string.pressure), chartPressure, WnObserver.getInstance().getPressure(), 1013.0f),
+                new WindooChart(getResources().getString(R.string.wind), chartWind, WnObserver.getInstance().getWind(), 0.0f)
         );
         chartTemperature.getAxisLeft().setAxisMinValue(20);
         chartTemperature.getAxisLeft().setAxisMaxValue(30);

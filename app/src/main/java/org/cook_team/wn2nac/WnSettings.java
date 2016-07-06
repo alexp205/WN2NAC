@@ -33,7 +33,7 @@ public class WnSettings {
         editor.putString("WindooID", String.valueOf(windooID));
         editor.putBoolean("debugOn", debugOn);
         editor.commit();
-        bus.post(new WnService.ToastEvent("設定已儲存"));
+        bus.post(new WnService.ToastEvent(WnApp.getInstance().getWnsettings()));
     }
 
     /** READ settings **/

@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="時間長度"
+        android:text="@string/fragmentwindoomeasure3xml1"
         style="@android:style/TextAppearance.DeviceDefault.Large"
         android:gravity="center_horizontal"
         android:textColor="@android:color/secondary_text_dark" />
@@ -38,7 +38,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="分"
+            android:text="@string/fragmentwindoograph2"
             android:layout_gravity="center_vertical" />
 
         <NumberPicker
@@ -49,7 +49,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="秒"
+            android:text="@string/fragmentwindoograph1"
             android:layout_gravity="center_vertical" />
 
     </LinearLayout>
@@ -57,7 +57,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="測量結束後震動提示"
+        android:text="@string/fragmentwindoomeasure3xml2"
         android:id="@+id/checkBox"
         android:layout_gravity="center_horizontal"
         android:checked="false"
@@ -66,7 +66,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="測量結束後自動傳送"
+        android:text="@string/fragmentwindoomeasure3xml3"
         android:id="@+id/autoSend"
         android:layout_gravity="center_horizontal"
         android:checked="false"
@@ -77,7 +77,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="測量期間請保持儀器不動"
+        android:text="@string/fragmentwindoomeasure3xml4"
         style="@android:style/TextAppearance.DeviceDefault.Large"
         android:textColor="@android:color/secondary_text_dark" />
 

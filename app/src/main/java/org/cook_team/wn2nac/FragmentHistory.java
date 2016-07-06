@@ -127,11 +127,11 @@ public class FragmentHistory extends android.support.v4.app.Fragment implements 
             pressure.setText(String.format("%.2f", (double) measurement.getAvgPressure()));
             wind.setText(String.format("%.2f", (double) measurement.getAvgWind()));
             if (measurement.getTimeSent() > 0) {
-                sent.setText("已傳送");
+                sent.setText(getResources().getString(R.string.fragmenthistory1));
                 buttonSend.setVisibility(View.GONE);
             }
             else {
-                sent.setText("未傳送");
+                sent.setText(getResources().getString(R.string.fragmenthistory2));
                 buttonSend.setVisibility(View.VISIBLE);
             }
 
@@ -146,8 +146,19 @@ public class FragmentHistory extends android.support.v4.app.Fragment implements 
 
         @Override
         public Object getChild(int groupPosition, int childPosititon) {
-            String[] title = {"編號: ", "測量開始時間: ", "測量結束時間: ", "緯度: ", "經度: ", "高度: ",
-                    "溫度 (°c): ", "濕度 (%): ", "壓力 (hPa): ",  "風速 (m/s): ", "風向: ", "傳送時間: ", "Filename: "};
+            String[] title = {getResources().getString(R.string.fragmenthistory3),
+                    getResources().getString(R.string.fragmenthistory4),
+                    getResources().getString(R.string.fragmenthistory5),
+                    getResources().getString(R.string.fragmenthistory6),
+                    getResources().getString(R.string.fragmenthistory7),
+                    getResources().getString(R.string.fragmenthistory8),
+                    getResources().getString(R.string.fragmenthistory9),
+                    getResources().getString(R.string.fragmenthistory10),
+                    getResources().getString(R.string.fragmenthistory11),
+                    getResources().getString(R.string.fragmenthistory12),
+                    getResources().getString(R.string.fragmenthistory13),
+                    getResources().getString(R.string.fragmenthistory14),
+                    "Filename: "};
             String text = title[childPosititon];
             WindooMeasurement measurement = WnHistory.get(groupPosition);
             switch (childPosititon) {
@@ -261,7 +272,7 @@ public class FragmentHistory extends android.support.v4.app.Fragment implements 
             e.printStackTrace();
         }
 
-        bus.post(new WnService.ToastEvent("量測資料已匯出至" + FILENAME));
+        bus.post(new WnService.ToastEvent(getResources().getString(R.string.fragmenthistory15) + FILENAME));
     }
 
     @Override

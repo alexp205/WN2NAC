@@ -76,11 +76,11 @@ public class FragmentWindooMeasuring extends android.support.v4.app.Fragment imp
 
     private void updateView() {
         if(WnMeasure.measuring) {
-            countdown.setText("測量中... \n請勿移動\n" + String.format("%02d", WnMeasure.getLastTick() / 1000 / 60) + ":" + String.format("%02d", WnMeasure.getLastTick() / 1000 % 60));
+            countdown.setText(getResources().getString(R.string.fragmentwindoomeasuring1) + String.format("%02d", WnMeasure.getLastTick() / 1000 / 60) + ":" + String.format("%02d", WnMeasure.getLastTick() / 1000 % 60));
             donut_progress.setProgress((int) (100 - 100 *  WnMeasure.getLastTick() / 1000 / WnMeasure.getDuration()));
         }
         else {
-            countdown.setText("測量完畢\n\n");
+            countdown.setText(getResources().getString(R.string.fragmentwindoomeasuring2));
             donut_progress.setProgress(100);
         }
     }
@@ -91,7 +91,7 @@ public class FragmentWindooMeasuring extends android.support.v4.app.Fragment imp
                 break;
             case JDCWindooEvent.JDCWindooNotAvailable:
                 bus.post(new WnMeasure.AbandonEvent());
-                bus.post(new WnService.ToastEvent("Windoo儀器未連接，測量失敗"));
+                bus.post(new WnService.ToastEvent(getResources().getString(R.string.fragmentwindoomeasuring3)));
                 break;
         }
     }

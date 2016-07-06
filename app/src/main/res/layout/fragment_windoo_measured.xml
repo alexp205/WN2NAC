@@ -53,7 +53,7 @@
                 style="@style/Base.TextAppearance.AppCompat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="溫度 (°C)"
+                android:text="@string/fragmentwindoomeasuredxml1"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:paddingRight="24dp" />
@@ -62,7 +62,7 @@
                 style="@style/Base.TextAppearance.AppCompat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="壓力 (hPa)"
+                android:text="@string/fragmentwindoomeasuredxml2"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal" />
         </TableRow>
@@ -76,7 +76,7 @@
                 android:id="@+id/temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N/A"
+                android:text="@string/NA"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:paddingRight="24dp"
@@ -87,7 +87,7 @@
                 android:id="@+id/pressure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N/A"
+                android:text="@string/NA"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal" />
         </TableRow>
@@ -100,7 +100,7 @@
                 style="@style/Base.TextAppearance.AppCompat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="濕度 (%)"
+                android:text="@string/fragmentwindoomeasuredxml3"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:layout_column="0"
@@ -110,7 +110,7 @@
                 style="@style/Base.TextAppearance.AppCompat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="風速 (m/s)"
+                android:text="@string/fragmentwindoomeasuredxml4"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:layout_column="1" />
@@ -125,7 +125,7 @@
                 android:id="@+id/humidity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N/A"
+                android:text="@string/NA"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:layout_column="0"
@@ -136,7 +136,7 @@
                 android:id="@+id/wind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N/A"
+                android:text="@string/NA"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:layout_column="1" />

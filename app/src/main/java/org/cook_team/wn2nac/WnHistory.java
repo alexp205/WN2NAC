@@ -55,7 +55,7 @@ public class WnHistory {
                     readVersion1(file.getName());
                 }
             }
-        } catch (Exception e) { bus.post(new WnService.DebugEvent("測量記錄讀取失敗\n" + e.getMessage()));  }
+        } catch (Exception e) { bus.post(new WnService.DebugEvent(WnApp.getInstance().getWnhistory1() + e.getMessage()));  }
         bus.post(new DatasetChangedEvent());
     }
 
@@ -170,7 +170,7 @@ public class WnHistory {
 
             history.put(measurement.getMeasurementID(), measurement);
             //bus.post(new WnService.DebugEvent(String.valueOf(history.keys.size())));
-        } catch (Exception e) { bus.post(new WnService.ToastEvent("測量記錄儲存失敗\n" + e.getMessage() + " \n" + e.getStackTrace())); }
+        } catch (Exception e) { bus.post(new WnService.ToastEvent(WnApp.getInstance().getWnhistory2() + e.getMessage() + " \n" + e.getStackTrace())); }
     }
 
 }

@@ -146,7 +146,7 @@ public class FragmentWindooMap extends android.support.v4.app.Fragment implement
 
         /*userMarker = mMap.addMarker(new MarkerOptions()
                 .position(userPos)
-                .title("使用者")
+                .title(getResources().getString(R.string.fragmentwindoomap))
                 .snippet("ID: 0"));*/
 
         // User measurement history markers

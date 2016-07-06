@@ -59,7 +59,7 @@ public class WnMeasure {
             }
             else {
                 bus.post(new AbandonEvent());
-                bus.post(new WnService.ToastEvent("沒有位置資訊，請確認定位已開啟"));
+                bus.post(new WnService.ToastEvent(WnApp.getInstance().getWnmeasure1()));
             }
         }
     }
@@ -102,7 +102,7 @@ public class WnMeasure {
         }
         else {
             bus.post(new AbandonEvent());
-            bus.post(new WnService.ToastEvent("數據不足，測量失敗"));
+            bus.post(new WnService.ToastEvent(WnApp.getInstance().getWnmeasure2()));
             measurement = new WindooMeasurement();
         }
     }

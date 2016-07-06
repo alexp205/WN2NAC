@@ -3,6 +3,7 @@ package org.cook_team.wn2nac;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -19,6 +20,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 import de.greenrobot.event.EventBus;
 
 public class ActivityMain extends AppCompatActivity implements FragmentNavigationDrawer.NavigationDrawerCallbacks {
@@ -32,6 +35,9 @@ public class ActivityMain extends AppCompatActivity implements FragmentNavigatio
     private Toolbar toolbar;
     private TextView debug;
     private ScrollView scrollView;
+    private WnApp a = WnApp.getInstance();
+
+    private boolean flagDestroy = true;
 
     final int PERMISSION_ACCESS_FINE_LOCATION = 0, PERMISSION_WRITE_EXTERNAL_STORAGE = 1;
 
@@ -40,7 +46,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentNavigatio
         switch (requestCode) {
             case PERMISSION_ACCESS_FINE_LOCATION: case PERMISSION_WRITE_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED)
-                    bus.post(new WnService.ToastEvent("未獲權限，程式即將關閉"));
+                    bus.post(new WnService.ToastEvent(getResources().getString(R.string.activitymainmsg1)));
             }
     }
 
@@ -48,7 +54,12 @@ public class ActivityMain extends AppCompatActivity implements FragmentNavigatio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //startService(new Intent(this, WnService.class));
 
+        startUp();
+    }
+
+    public void startUp() {
         // Setup handler for uncaught exceptions.
         /*Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
@@ -134,19 +145,23 @@ public class ActivityMain extends AppCompatActivity implements FragmentNavigatio
     @Override
     public void onResume() {
         super.onResume();
-        startService(new Intent(this, WnService.class));
+        //startService(new Intent(this, WnService.class));
         if (!bus.isRegistered(this)) bus.register(this);
     }
 
     @Override
     public void onPause() {
+        //stopService(new Intent(this, WnService.class)); // TODO: Let service run in background
         bus.unregister(this);
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        stopService(new Intent(this, WnService.class)); // TODO: Let service run in background
+        if (flagDestroy) {
+            stopService(new Intent(this, WnService.class)); // TODO: Let service run in background
+            flagDestroy = true;
+        }
         bus.unregister(this);
         super.onDestroy();
     }
@@ -158,7 +173,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentNavigatio
         pos = 2;
         mTitle = getResources().getStringArray(R.array.titles)[pos];
         getSupportActionBar().setTitle(mTitle);
-        WnService.toast("ID未設定，請先設定ID");
+        WnService.toast(getResources().getString(R.string.idset));
     }*/
 
    /* @Override
@@ -195,4 +210,32 @@ public class ActivityMain extends AppCompatActivity implements FragmentNavigatio
 
     public static class DebugOnEvent {}
     public static class DebugOffEvent {}
+
+    //LANGUAGE SELECT CLASSES HERE (MOVE LATER)
+    public void exitFrag(Fragment frag, boolean show) {
+        getSupportFragmentManager().beginTransaction().hide(frag).remove(frag).commit();
+        if (show) {
+            WnApp a = WnApp.getInstance();
+            if (a.getUse_en()) {
+                changeLang("en");
+            } else if (a.getUse_zh()) {
+                changeLang("zh");
+            }
+        }
+    }
+
+    private void changeLang(String langCode) {
+        Locale locale = new Locale(langCode);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+        a.getInstance().turnOffShow_screen();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Intent refresh = new Intent(this, ActivityMain.class);
+        flagDestroy = false;
+        startActivity(refresh);
+        finish();
+    }
 }

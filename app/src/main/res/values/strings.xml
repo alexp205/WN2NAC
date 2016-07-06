@@ -14,8 +14,8 @@
     </string-array>
 
     <!--NAVIGATION DRAWER-->
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">打開抽屜</string>
+    <string name="navigation_drawer_close">關上抽屜</string>
 
     <!--ACTION BAR-->
     <string name="action_settings">Settings</string>
@@ -57,7 +57,9 @@
     </string-array>
 
     <!--WINDOO MEASUREMENT-->
+    <string name="w">風</string>
     <string name="temperature">溫度</string>
+    <string name="temperatureedit">溫度</string>
     <string name="humidity">濕度</string>
     <string name="pressure">壓力</string>
     <string name="wind">風速</string>
@@ -97,5 +99,114 @@
     <string name="step1">1. 確認與環境達平衡</string>
     <string name="step2">2. 紀錄風向</string>
     <string name="step3">3. 定時測量</string>
+
+    <!--CLASS SPECIFIC - JAVA-->
+    <!--ActivityMain-->
+    <string name="activitymainmsg1">未獲權限，程式即將關閉</string>
+    <!--FragmentHistory-->
+    <string name="fragmenthistory1">已傳送</string>
+    <string name="fragmenthistory2">未傳送</string>
+    <string name="fragmenthistory3">編號: </string>
+    <string name="fragmenthistory4">測量開始時間: </string>
+    <string name="fragmenthistory5">測量結束時間: </string>
+    <string name="fragmenthistory6">緯度: </string>
+    <string name="fragmenthistory7">經度: </string>
+    <string name="fragmenthistory8">高度: </string>
+    <string name="fragmenthistory9">溫度: </string>
+    <string name="fragmenthistory10">濕度: </string>
+    <string name="fragmenthistory11">壓力: </string>
+    <string name="fragmenthistory12">風速: </string>
+    <string name="fragmenthistory13">風向: </string>
+    <string name="fragmenthistory14">傳送時間: </string>
+    <string name="fragmenthistory15">量測資料已匯出至</string>
+    <!--FragmentWindooBar-->
+    <string name="fragmentwindoobar1">回到地圖</string>
+    <string name="fragmentwindoobar2">測量</string>
+    <!--FragmentWindooGraph-->
+    <string name="fragmentwindoograph1">秒</string>
+    <string name="fragmentwindoograph2">分</string>
+    <string name="fragmentwindoograph3">秒前</string>
+    <!--FragmentWIndooMap-->
+    <string name="fragmentwindoomap">使用者</string>
+    <!--FragmentWindooMeasure-->
+    <string name="fragmentwindoomeasure1">上一步</string>
+    <string name="fragmentwindoomeasure2">下一步</string>
+    <string name="fragmentwindoomeasure3">開始測量</string>
+    <string name="fragmentwindoomeasure4">取消測量</string>
+    <!--FragmentWindooMeasuring-->
+    <string name="fragmentwindoomeasuring1">測量中&#8230;\n請勿移動\n</string>
+    <string name="fragmentwindoomeasuring2">測量完畢\n\n</string>
+    <string name="fragmentwindoomeasuring3">Windoo儀器未連接，測量失敗</string>
+    <!--WnHistory-->
+    <string name="wnhistory1">測量記錄讀取失敗\n</string>
+    <string name="wnhistory2">測量記錄儲存失敗\n</string>
+    <!--WnLocation-->
+    <string name="wnlocation1">位置啟用</string>
+    <string name="wnlocation2">無法啟用定位</string>
+    <string name="wnlocation3">位置禁用</string>
+    <string name="wnlocation4">無法停用位置</string>
+    <string name="wnlocation5">最後位置檢索</string>
+    <string name="wnlocation6">無法檢索最後位置</string>
+    <string name="wnlocation7">新位置: </string>
+    <string name="wnlocation8">位置提供商啟用:\n</string>
+    <string name="wnlocation9">位置提供者禁用:\n</string>
+    <!--WnMeasure-->
+    <string name="wnmeasure1">沒有位置資訊，請確認定位已開啟</string>
+    <string name="wnmeasure2">數據不足，測量失敗</string>
+    <!--WnNetwork-->
+    <string name="wnnetwork1">傳送中&#8230;</string>
+    <string name="wnnetwork2">量測資料傳送成功</string>
+    <string name="wnnetwork3">量測資料傳送失敗\n資料已儲存\n請稍後再傳送</string>
+    <!--WnNotification-->
+    <string name="wnnotification">Windoo儀器觀測中，按X以關閉</string>
+    <!--WnService-->
+    <string name="wnservice">例外:\n</string>
+    <!--WnSettings-->
+    <string name="wnsettings">設定已儲存</string>
+
+    <string name="NA">N/A</string>
+    <string name="zero">0</string>
+    <!--CLASS SPECIFIC - XML-->
+    <!--fragment_config-->
+    <string name="fragmentconfigxml1">使用者ID</string>
+    <string name="fragmentconfigxml2">儀器ID</string>
+    <string name="fragmentconfigxml3">顯示偵錯訊息</string>
+    <string name="fragmentconfigxml4">套用</string>
+    <!--fragment_history-->
+    <string name="fragmenthistoryxml">匯出量測記錄</string>
+    <!--fragment_main-->
+    <string name="fragmentmainxml1">上一頁</string>
+    <string name="fragmentmainxml2">下一頁</string>
+    <!--fragment_windoo_graph-->
+    <string name="fragmentwindoographxml1">自動捲動</string>
+    <string name="fragmentwindoographxml2">顯示最低/平均/最高值</string>
+    <string name="fragmentwindoographxml3">距今時間</string>
+    <string name="fragmentwindoographxml4">時:分:秒</string>
+    <string name="fragmentwindoographxml5">檢視時間長度</string>
+    <!--fragment_windoo_map_menu-->
+    <string name="fragmentwindoomapmenuxml1">顯示線上量測資料</string>
+    <string name="fragmentwindoomapmenuxml2">顯示本機量測記錄</string>
+    <string name="fragmentwindoomapmenuxml3">檢視</string>
+    <string name="fragmentwindoomapmenuxml4">地圖選項</string>
+    <!--fragment_windoo_measure_2-->
+    <string name="fragmentwindoomeasure2xml1">將手機平放，轉到逆風方向，按「紀錄風向」</string>
+    <string name="fragmentwindoomeasure2xml2">紀錄風向</string>
+    <!--fragment_windoo_measure_3-->
+    <string name="fragmentwindoomeasure3xml1">時間長度</string>
+    <string name="fragmentwindoomeasure3xml2">測量結束後震動提示</string>
+    <string name="fragmentwindoomeasure3xml3">測量結束後自動傳送</string>
+    <string name="fragmentwindoomeasure3xml4">測量期間請保持儀器不動</string>
+    <!--fragment_windoo_measured-->
+    <string name="fragmentwindoomeasuredxml1">溫度 (°C)</string>
+    <string name="fragmentwindoomeasuredxml2">壓力 (hPa)</string>
+    <string name="fragmentwindoomeasuredxml3">濕度 (%)</string>
+    <string name="fragmentwindoomeasuredxml4">風速 (m/s)</string>
+
+    <!--LANGUAGE SELECTION-->
+    <string name="lang_en_us">English(US)</string>
+    <string name="lang_zh_tw">中文（繁體）</string>
+
+    <!--UNUSED-->
+    <string name="idset">ID未設定，請先設定ID</string>
 
 </resources>

@@ -29,14 +29,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="使用者ID"
+                android:text="@string/fragmentconfigxml1"
                 android:layout_gravity="start" />
             <EditText
                 android:id="@+id/idEditText"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="0"
+                android:text="@string/zero"
                 android:layout_gravity="center_horizontal"
                 android:inputType="number"
                 android:numeric="integer"
@@ -46,14 +46,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="儀器ID"
+                android:text="@string/fragmentconfigxml2"
                 android:layout_gravity="start" />
             <EditText
                 android:id="@+id/windooEditText"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="0"
+                android:text="@string/zero"
                 android:layout_gravity="center_horizontal"
                 android:inputType="number"
                 android:numeric="integer"
@@ -66,7 +66,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="顯示偵錯訊息"
+                android:text="@string/fragmentconfigxml3"
                 android:id="@+id/checkBoxDebug"
                 android:checked="false"
                 android:layout_marginBottom="16dp"
@@ -75,7 +75,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="套用"
+                android:text="@string/fragmentconfigxml4"
                 android:id="@+id/applyButton"
                 android:layout_gravity="center_horizontal" />
 

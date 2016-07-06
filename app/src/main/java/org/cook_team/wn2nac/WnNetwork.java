@@ -58,12 +58,12 @@ public class WnNetwork {
     }
     public void onEventBackgroundThread(final SendEvent event) {
 
-        bus.post(new WnService.ToastEvent("傳送中..."));
+        bus.post(new WnService.ToastEvent(WnApp.getInstance().getWnnetwork1()));
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                bus.post(new WnService.ToastEvent("量測資料傳送成功"));
+                bus.post(new WnService.ToastEvent(WnApp.getInstance().getWnnetwork2()));
                 event.measurement.setTimeSent(System.currentTimeMillis());
                 WnHistory.save(event.measurement);
             }
@@ -72,7 +72,7 @@ public class WnNetwork {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                bus.post(new WnService.ToastEvent("量測資料傳送失敗\n資料已儲存\n請稍後再傳送"));
+                bus.post(new WnService.ToastEvent(WnApp.getInstance().getWnnetwork3()));
                event.measurement.setTimeSent(-1);
                 WnHistory.save(event.measurement);
             }

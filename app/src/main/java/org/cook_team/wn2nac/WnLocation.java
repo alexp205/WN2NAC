@@ -40,9 +40,9 @@ public class WnLocation {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListenerNetwork);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListenerGPS);
             locationEnabled = true;
-            bus.post(new WnService.DebugEvent("Location enabled"));
+            bus.post(new WnService.DebugEvent(WnApp.getInstance().getWnlocation1()));
         } else {
-            bus.post(new WnService.DebugEvent("Failed to enable location"));
+            bus.post(new WnService.DebugEvent(WnApp.getInstance().getWnlocation2()));
         }
     }
 
@@ -54,9 +54,9 @@ public class WnLocation {
             locationManager.removeUpdates(locationListenerNetwork);
             locationManager.removeUpdates(locationListenerGPS);
             locationEnabled = false;
-            bus.post(new WnService.DebugEvent("Location disabled"));
+            bus.post(new WnService.DebugEvent(WnApp.getInstance().getWnlocation3()));
         } else {
-            bus.post(new WnService.DebugEvent("Failed to disable location"));
+            bus.post(new WnService.DebugEvent(WnApp.getInstance().getWnlocation4()));
         }
     }
 
@@ -66,9 +66,9 @@ public class WnLocation {
     public void getLastKnownLocation() {
         if (ActivityCompat.checkSelfPermission(WnApp.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            bus.post(new WnService.DebugEvent("Last location fetched"));
+            bus.post(new WnService.DebugEvent(WnApp.getInstance().getWnlocation5()));
         } else {
-            bus.post(new WnService.DebugEvent("Failed to fetch last location"));
+            bus.post(new WnService.DebugEvent(WnApp.getInstance().getWnlocation6()));
         }
     }
 
@@ -91,7 +91,7 @@ public class WnLocation {
                 lastLocation = loc;
                 bus.post(new NewLocationEvent());
                 //bus.post(new DisableEvent());
-                bus.post(new WnService.DebugEvent("New location: "
+                bus.post(new WnService.DebugEvent(WnApp.getInstance().getWnlocation7()
                         + String.valueOf(location.getLatitude()) + ", "
                         + String.valueOf(location.getLongitude()) + ", "
                         + location.getProvider()
@@ -117,11 +117,11 @@ public class WnLocation {
         }
         @Override
         public void onProviderEnabled(String provider) {
-            bus.post(new WnService.DebugEvent("Location provider enabled:\n" + provider));
+            bus.post(new WnService.DebugEvent(WnApp.getInstance().getWnlocation8() + provider));
         }
         @Override
         public void onProviderDisabled(String provider) {
-            bus.post(new WnService.DebugEvent("Location provider disabled:\n" + provider));
+            bus.post(new WnService.DebugEvent(WnApp.getInstance().getWnlocation9() + provider));
         }
     }
 

@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="將手機平放，轉到逆風方向，按「紀錄風向」"
+        android:text="@string/fragmentwindoomeasure2xml1"
         android:layout_marginBottom="8dp" />
 
     <FrameLayout
@@ -72,14 +72,14 @@
         style="@android:style/TextAppearance.DeviceDefault.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0"
+        android:text="@string/zero"
         android:layout_gravity="center_horizontal"
         android:visibility="gone" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="紀錄風向"
+        android:text="@string/fragmentwindoomeasure2xml2"
         android:id="@+id/buttonWind"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="8dp" />

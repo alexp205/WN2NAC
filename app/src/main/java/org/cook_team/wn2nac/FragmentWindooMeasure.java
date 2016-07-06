@@ -87,22 +87,22 @@ public class FragmentWindooMeasure extends android.support.v4.app.Fragment imple
         switch(step) {
             default:
             case 1:
-                buttonNext.setText("下一步");
+                buttonNext.setText(getResources().getString(R.string.fragmentwindoomeasure2));
                 fragment = new FragmentWindooMeasure1();
                 break;
             case 2:
                 WnMeasure.measuring = false;
-                buttonLast.setText("上一步");
-                buttonNext.setText("下一步");
+                buttonLast.setText(getResources().getString(R.string.fragmentwindoomeasure1));
+                buttonNext.setText(getResources().getString(R.string.fragmentwindoomeasure2));
                 fragment = new FragmentWindooMeasure2();
                 break;
             case 3:
-                buttonLast.setText("上一步");
-                buttonNext.setText("開始測量");
+                buttonLast.setText(getResources().getString(R.string.fragmentwindoomeasure1));
+                buttonNext.setText(getResources().getString(R.string.fragmentwindoomeasure3));
                 fragment = new FragmentWindooMeasure3();
                 break;
             case 4:
-                buttonLast.setText("取消測量");
+                buttonLast.setText(getResources().getString(R.string.fragmentwindoomeasure4));
                 fragment = new FragmentWindooMeasuring();
                 break;
         }
